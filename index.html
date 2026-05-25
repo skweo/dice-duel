@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>骰子决斗 - Dice Duel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="title-card">
+      <p class="eyebrow">Prototype 01</p>
+      <h1>骰子决斗</h1>
+      <p class="subtitle">掷骰、分配、预判敌人，用最简单的规则打出漂亮的连胜。</p>
+    </section>
+
+    <section class="status-grid" aria-label="战斗状态">
+      <article class="fighter player-card">
+        <div class="fighter-head">
+          <span class="avatar">◆</span>
+          <div>
+            <h2>玩家</h2>
+            <p>回合 <span id="turn">1</span> · 连胜 <span id="wins">0</span></p>
+          </div>
+        </div>
+        <div class="hp-row">
+          <span>HP</span>
+          <div class="hp-bar"><div id="player-hp-bar"></div></div>
+          <strong id="player-hp">24/24</strong>
+        </div>
+      </article>
+
+      <article class="fighter enemy-card">
+        <div class="fighter-head">
+          <span class="avatar">◇</span>
+          <div>
+            <h2 id="enemy-name">训练木偶</h2>
+            <p id="enemy-intent">正在观察你</p>
+          </div>
+        </div>
+        <div class="hp-row">
+          <span>HP</span>
+          <div class="hp-bar"><div id="enemy-hp-bar"></div></div>
+          <strong id="enemy-hp">18/18</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="board">
+      <div class="dice-panel">
+        <div class="panel-heading">
+          <h2>本回合骰子</h2>
+          <button id="roll-btn">掷骰</button>
+        </div>
+        <div id="dice-tray" class="dice-tray" aria-label="骰子列表"></div>
+      </div>
+
+      <div class="slots" aria-label="行动槽">
+        <button class="slot attack" data-slot="attack">
+          <span>攻击</span>
+          <strong id="attack-total">0</strong>
+          <small>造成等同点数的伤害</small>
+        </button>
+        <button class="slot guard" data-slot="guard">
+          <span>防御</span>
+          <strong id="guard-total">0</strong>
+          <small>抵消敌人伤害</small>
+        </button>
+        <button class="slot heal" data-slot="heal">
+          <span>治疗</span>
+          <strong id="heal-total">0</strong>
+          <small>每 2 点恢复 1 HP</small>
+        </button>
+      </div>
+
+      <div class="actions">
+        <button id="resolve-btn" disabled>执行回合</button>
+        <button id="reset-btn" class="ghost">重新开始</button>
+      </div>
+    </section>
+
+    <section class="log-card">
+      <h2>战斗记录</h2>
+      <div id="battle-log" class="battle-log"></div>
+    </section>
+
+    <section class="rules-card">
+      <h2>玩法</h2>
+      <p>每回合掷 3 个骰子。点击骰子选择它，再点击攻击、防御或治疗槽。三个骰子都分配后执行回合。</p>
+      <p>敌人会提前显示意图。赢下一场会遇到更强的敌人。</p>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
