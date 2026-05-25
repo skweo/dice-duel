@@ -17,7 +17,7 @@
     <section class="status-grid" aria-label="战斗状态">
       <article class="fighter player-card">
         <div class="fighter-head">
-          <span class="avatar">◆</span>
+          <div class="portrait player-portrait" id="player-portrait" aria-label="玩家画像"></div>
           <div>
             <h2>玩家</h2>
             <p>回合 <span id="turn">1</span> · 连胜 <span id="wins">0</span></p>
@@ -32,7 +32,7 @@
 
       <article class="fighter enemy-card">
         <div class="fighter-head">
-          <span class="avatar">◇</span>
+          <div class="portrait enemy-portrait" id="enemy-portrait" aria-label="敌人画像"></div>
           <div>
             <h2 id="enemy-name">训练木偶</h2>
             <p id="enemy-intent">正在观察你</p>
