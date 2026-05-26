@@ -1294,7 +1294,7 @@ function renderThrowDice(values) {
     const die = document.createElement("span");
     die.className = "physics-die";
     die.style.setProperty("--die-index", index);
-    die.style.setProperty("--die-offset", `${(index - 1) * 82}px`);
+    die.style.setProperty("--die-offset", `${(index - 1) * 70}px`);
     die.innerHTML = renderDieCube(value);
     els.dicePhysicsLayer.appendChild(die);
   });
@@ -1311,6 +1311,7 @@ function renderDieCube(value) {
       <i class="cube-face face-bottom">${renderPips(((value + 2) % 6) + 1)}</i>
     </span>
     <span class="physics-shadow"></span>
+    <span class="die-impact"></span>
   `;
 }
 
@@ -1326,53 +1327,306 @@ function playThrowAnimation(values) {
   els.diceTheater.classList.add("throwing");
 
   const dice = [...els.dicePhysicsLayer.querySelectorAll(".physics-die")];
+  const bounds = getDiceTableBounds();
+  const seed = Date.now() + values.reduce((sum, value, index) => sum + value * (index + 11), 0);
+  const random = seededRandom(seed);
+  const bodies = dice.map((die, index) => createDiceBody(index, random, bounds));
   const start = performance.now();
-  const duration = 1180;
-  const lanes = [
-    { sx: -310, sy: -94, fx: -98, fy: 18, arc: 86, spin: 540 },
-    { sx: 20, sy: -210, fx: 8, fy: 64, arc: 112, spin: -650 },
-    { sx: 310, sy: -82, fx: 112, fy: -8, arc: 78, spin: 760 }
-  ];
+  let previous = start;
+  let settledFrames = 0;
 
   function frame(now) {
-    const elapsed = now - start;
-    const t = Math.min(1, elapsed / duration);
-    dice.forEach((die, index) => {
-      const lane = lanes[index] || lanes[0];
-      let x = lerp(lane.sx, lane.fx, easeOutCubic(t));
-      let y = lerp(lane.sy, lane.fy, t) - Math.sin(Math.PI * t) * lane.arc;
-      const bounceOne = Math.max(0, Math.sin((t - 0.62) * Math.PI * 7)) * Math.max(0, 1 - t) * -38;
-      const bounceTwo = Math.max(0, Math.sin((t - 0.82) * Math.PI * 10)) * Math.max(0, 1 - t) * -18;
-      y += bounceOne + bounceTwo;
-      const scale = 1.05 - 0.08 * t;
-      const lift = Math.sin(Math.PI * t) * 82;
-      const rx = 62 + lane.spin * t;
-      const ry = 24 + lane.spin * 0.58 * t;
-      const rz = -18 + lane.spin * 0.34 * t;
-      die.style.transform = `translate3d(${x}px, ${y - lift * 0.16}px, ${lift}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
-      die.style.setProperty("--shadow-scale", 0.56 + t * 0.44);
-      die.style.setProperty("--shadow-alpha", 0.15 + t * 0.32);
-    });
-    if (t < 1) {
+    const dt = Math.min(0.034, Math.max(0.012, (now - previous) / 1000));
+    previous = now;
+    stepDicePhysics(bodies, bounds, dt);
+    bodies.forEach((body, index) => renderDiceBody(dice[index], body));
+    const allSettled = bodies.every(isDiceBodySettled);
+    settledFrames = allSettled ? settledFrames + 1 : 0;
+    if (settledFrames < 10 && now - start < 2600) {
       requestAnimationFrame(frame);
     } else {
       els.diceTheater.classList.remove("throwing");
       els.diceTheater.classList.add("settled");
-      dice.forEach((die, index) => {
-        const lane = lanes[index] || lanes[0];
-        die.style.transform = `translate3d(${lane.fx}px, ${lane.fy}px, 0) rotateX(0deg) rotateY(0deg) rotateZ(${index * 10 - 8}deg)`;
+      relaxDiceBodies(bodies, bounds);
+      bodies.forEach((body, index) => {
+        settleDiceBody(body, index);
+        renderDiceBody(dice[index], body);
       });
     }
   }
   requestAnimationFrame(frame);
 }
 
-function easeOutCubic(value) {
-  return 1 - Math.pow(1 - value, 3);
+function getDiceTableBounds() {
+  const width = Math.min(760, Math.max(320, (els.diceTheater?.clientWidth || 720) - 72));
+  const height = Math.min(230, Math.max(170, (els.diceTheater?.clientHeight || 320) - 96));
+  return {
+    left: -width / 2,
+    right: width / 2,
+    top: -height / 2,
+    bottom: height / 2,
+    gravity: 1680
+  };
 }
 
-function lerp(start, end, amount) {
-  return start + (end - start) * amount;
+function createDiceBody(index, random, bounds) {
+  const entries = [
+    { x: bounds.left - 82, y: randomRange(random, bounds.top - 8, bounds.bottom * 0.16) },
+    { x: randomRange(random, bounds.left * 0.42, bounds.right * 0.42), y: bounds.top - 96 },
+    { x: bounds.right + 82, y: randomRange(random, bounds.top - 8, bounds.bottom * 0.16) }
+  ];
+  const entry = entries[index] || entries[index % entries.length];
+  const target = {
+    x: randomRange(random, -120, 120) + (index - 1) * randomRange(random, 18, 34),
+    y: randomRange(random, -42, 62)
+  };
+  const travelTime = randomRange(random, 0.62, 0.86);
+  const sideSpin = random() > 0.5 ? 1 : -1;
+  return {
+    x: entry.x + randomRange(random, -28, 28),
+    y: entry.y + randomRange(random, -22, 22),
+    z: randomRange(random, 36, 92),
+    vx: (target.x - entry.x) / travelTime + randomRange(random, -95, 95),
+    vy: (target.y - entry.y) / travelTime + randomRange(random, -75, 75),
+    vz: randomRange(random, 330, 520),
+    rx: randomRange(random, 0, 360),
+    ry: randomRange(random, 0, 360),
+    rz: randomRange(random, -25, 25),
+    avx: randomRange(random, 620, 1120) * sideSpin,
+    avy: randomRange(random, 560, 1040) * (random() > 0.5 ? 1 : -1),
+    avz: randomRange(random, 260, 560) * (random() > 0.5 ? 1 : -1),
+    radius: 33,
+    bounces: 0,
+    impact: 0,
+    restitution: randomRange(random, 0.42, 0.58),
+    wallRestitution: randomRange(random, 0.46, 0.62),
+    rollDrag: randomRange(random, 0.975, 0.987),
+    spinDrag: randomRange(random, 0.965, 0.98)
+  };
+}
+
+function stepDicePhysics(bodies, bounds, dt) {
+  const steps = Math.max(1, Math.ceil(dt / 0.011));
+  const stepDt = dt / steps;
+  for (let i = 0; i < steps; i++) {
+    stepDicePhysicsOnce(bodies, bounds, stepDt);
+  }
+}
+
+function stepDicePhysicsOnce(bodies, bounds, dt) {
+  for (const body of bodies) {
+    body.impact *= Math.pow(0.075, dt);
+    body.vz -= bounds.gravity * dt;
+    body.x += body.vx * dt;
+    body.y += body.vy * dt;
+    body.z += body.vz * dt;
+    body.avx += body.vy * 0.04 * dt;
+    body.avy -= body.vx * 0.04 * dt;
+    body.rx += body.avx * dt;
+    body.ry += body.avy * dt;
+    body.rz += body.avz * dt;
+
+    if (body.z <= 0) {
+      body.z = 0;
+      const hitSpeed = Math.abs(body.vz);
+      if (hitSpeed > 54) {
+        const impact = clamp(hitSpeed / 680, 0.16, 1);
+        const skipAngle = (body.rx * 0.73 + body.ry * 1.21 + body.bounces * 79) * Math.PI / 180;
+        const bounceLoss = Math.max(0.24, body.restitution - body.bounces * 0.055);
+        body.vz = hitSpeed * bounceLoss;
+        body.vx = body.vx * 0.82 + Math.cos(skipAngle) * hitSpeed * 0.028;
+        body.vy = body.vy * 0.82 + Math.sin(skipAngle) * hitSpeed * 0.028;
+        body.avx = body.avx * 0.74 + body.vy * 0.52;
+        body.avy = body.avy * 0.74 - body.vx * 0.52;
+        body.avz = body.avz * 0.72 + (body.vx - body.vy) * 0.24;
+        body.impact = Math.max(body.impact, impact);
+        body.bounces += 1;
+      } else {
+        body.vz = 0;
+        body.vx *= 0.88;
+        body.vy *= 0.88;
+        body.avx *= 0.8;
+        body.avy *= 0.8;
+        body.avz *= 0.8;
+      }
+    }
+
+    collideDiceWithWalls(body, bounds);
+    if (body.z === 0) {
+      body.vx *= body.rollDrag;
+      body.vy *= body.rollDrag;
+      body.avx *= body.spinDrag;
+      body.avy *= body.spinDrag;
+      body.avz *= body.spinDrag;
+    }
+  }
+  collideDiceBodies(bodies);
+}
+
+function collideDiceWithWalls(body, bounds) {
+  if (body.x - body.radius < bounds.left) {
+    body.x = bounds.left + body.radius;
+    body.impact = Math.max(body.impact, clamp(Math.abs(body.vx) / 720, 0.12, 0.7));
+    body.vx = Math.abs(body.vx) * body.wallRestitution;
+    body.vy *= 0.92;
+    body.avz += body.vy * 1.4;
+    body.avy -= Math.abs(body.vx) * 0.46;
+  } else if (body.x + body.radius > bounds.right) {
+    body.x = bounds.right - body.radius;
+    body.impact = Math.max(body.impact, clamp(Math.abs(body.vx) / 720, 0.12, 0.7));
+    body.vx = -Math.abs(body.vx) * body.wallRestitution;
+    body.vy *= 0.92;
+    body.avz -= body.vy * 1.4;
+    body.avy += Math.abs(body.vx) * 0.46;
+  }
+  if (body.y - body.radius < bounds.top) {
+    body.y = bounds.top + body.radius;
+    body.impact = Math.max(body.impact, clamp(Math.abs(body.vy) / 720, 0.12, 0.7));
+    body.vy = Math.abs(body.vy) * body.wallRestitution;
+    body.vx *= 0.92;
+    body.avz -= body.vx * 1.4;
+    body.avx += Math.abs(body.vy) * 0.46;
+  } else if (body.y + body.radius > bounds.bottom) {
+    body.y = bounds.bottom - body.radius;
+    body.impact = Math.max(body.impact, clamp(Math.abs(body.vy) / 720, 0.12, 0.7));
+    body.vy = -Math.abs(body.vy) * body.wallRestitution;
+    body.vx *= 0.92;
+    body.avz += body.vx * 1.4;
+    body.avx -= Math.abs(body.vy) * 0.46;
+  }
+}
+
+function collideDiceBodies(bodies) {
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = i + 1; j < bodies.length; j++) {
+      const a = bodies[i];
+      const b = bodies[j];
+      if (Math.max(a.z, b.z) > 48) continue;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const distance = Math.hypot(dx, dy) || 1;
+      const minDistance = a.radius + b.radius;
+      if (distance >= minDistance) continue;
+      const nx = dx / distance;
+      const ny = dy / distance;
+      const overlap = (minDistance - distance) / 2;
+      a.x -= nx * overlap;
+      a.y -= ny * overlap;
+      b.x += nx * overlap;
+      b.y += ny * overlap;
+      const relativeVelocity = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+      if (relativeVelocity > 0) continue;
+      const restitution = (a.wallRestitution + b.wallRestitution) * 0.5;
+      const impulse = -(1 + restitution) * relativeVelocity / 2;
+      a.vx -= impulse * nx;
+      a.vy -= impulse * ny;
+      b.vx += impulse * nx;
+      b.vy += impulse * ny;
+      const tangentX = -ny;
+      const tangentY = nx;
+      const scrape = (b.vx - a.vx) * tangentX + (b.vy - a.vy) * tangentY;
+      a.avx -= impulse * ny * 2.2;
+      a.avy += impulse * nx * 2.2;
+      b.avx += impulse * ny * 2.2;
+      b.avy -= impulse * nx * 2.2;
+      a.avz -= (impulse + scrape * 0.2) * 3.2;
+      b.avz += (impulse + scrape * 0.2) * 3.2;
+      const impact = clamp(Math.abs(relativeVelocity) / 440, 0.12, 0.8);
+      a.impact = Math.max(a.impact, impact);
+      b.impact = Math.max(b.impact, impact);
+      if (Math.max(a.z, b.z) < 14 && Math.abs(relativeVelocity) > 130) {
+        a.vz = Math.max(a.vz, Math.abs(relativeVelocity) * 0.055);
+        b.vz = Math.max(b.vz, Math.abs(relativeVelocity) * 0.055);
+      }
+    }
+  }
+}
+
+function renderDiceBody(element, body) {
+  const lift = body.z;
+  const cube = element.querySelector(".cube");
+  const impactSquash = body.z === 0 ? body.impact : 0;
+  const squashX = 1 + impactSquash * 0.075;
+  const squashY = 1 - impactSquash * 0.055;
+  element.style.transform = `translate3d(${body.x}px, ${body.y - lift * 0.12}px, ${lift}px)`;
+  if (cube) {
+    cube.style.transform = `rotateX(${body.rx}deg) rotateY(${body.ry}deg) rotateZ(${body.rz}deg) scale3d(${squashX}, ${squashY}, 1)`;
+  }
+  element.style.setProperty("--shadow-scale", clamp(1 - body.z / 230, 0.44, 1.08));
+  element.style.setProperty("--shadow-alpha", clamp(0.42 - body.z / 520, 0.08, 0.38));
+  element.style.setProperty("--impact-scale", 0.38 + body.impact * 1.15);
+  element.style.setProperty("--impact-alpha", clamp(body.impact * 0.72, 0, 0.62));
+}
+
+function isDiceBodySettled(body) {
+  return body.z === 0
+    && Math.hypot(body.vx, body.vy) < 18
+    && Math.abs(body.vz) < 8
+    && Math.abs(body.avx) < 55
+    && Math.abs(body.avy) < 55
+    && Math.abs(body.avz) < 45;
+}
+
+function settleDiceBody(body, index) {
+  body.z = 0;
+  if (Number.isFinite(body.tableLeft)) {
+    body.x = clamp(body.x, body.radius + body.tableLeft, body.tableRight - body.radius);
+    body.y = clamp(body.y, body.radius + body.tableTop, body.tableBottom - body.radius);
+  }
+  body.vx = 0;
+  body.vy = 0;
+  body.vz = 0;
+  body.avx = 0;
+  body.avy = 0;
+  body.avz = 0;
+  body.impact = 0;
+  body.rx = 0;
+  body.ry = 0;
+  body.rz = index * 12 - 10;
+}
+
+function relaxDiceBodies(bodies, bounds) {
+  for (const body of bodies) {
+    body.tableLeft = bounds.left;
+    body.tableRight = bounds.right;
+    body.tableTop = bounds.top;
+    body.tableBottom = bounds.bottom;
+  }
+  for (let iteration = 0; iteration < 10; iteration++) {
+    for (let i = 0; i < bodies.length; i++) {
+      const body = bodies[i];
+      body.x = clamp(body.x, bounds.left + body.radius, bounds.right - body.radius);
+      body.y = clamp(body.y, bounds.top + body.radius, bounds.bottom - body.radius);
+      for (let j = i + 1; j < bodies.length; j++) {
+        const other = bodies[j];
+        const dx = other.x - body.x;
+        const dy = other.y - body.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        const minDistance = body.radius + other.radius + 6;
+        if (distance >= minDistance) continue;
+        const nx = dx / distance;
+        const ny = dy / distance;
+        const overlap = (minDistance - distance) / 2;
+        body.x -= nx * overlap;
+        body.y -= ny * overlap;
+        other.x += nx * overlap;
+        other.y += ny * overlap;
+      }
+    }
+  }
+}
+
+function seededRandom(seed) {
+  let value = seed % 2147483647;
+  if (value <= 0) value += 2147483646;
+  return () => {
+    value = value * 16807 % 2147483647;
+    return (value - 1) / 2147483646;
+  };
+}
+
+function randomRange(random, min, max) {
+  return min + (max - min) * random();
 }
 
 function renderEnemyDice() {
