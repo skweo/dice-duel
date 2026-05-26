@@ -9,14 +9,46 @@
 <body>
   <div class="world-glow" aria-hidden="true"></div>
 
+  <section class="character-select" id="character-select" aria-label="角色选择">
+    <div class="character-select-panel">
+      <p class="eyebrow">黑礼拜堂征召令</p>
+      <h1>选择入堂者</h1>
+      <p class="subtitle">不同角色拥有独立技能、生命上限、性格和背景。击败不同终局 Boss 后，会解锁新的幸存者档案。</p>
+      <div class="character-options" id="character-options"></div>
+      <div class="select-actions">
+        <button id="start-run-btn">进入黑礼拜堂</button>
+        <button id="codex-btn" class="ghost" data-open-codex>查看图鉴</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="codex-screen" id="codex-screen" aria-label="黑礼拜堂图鉴">
+    <div class="codex-panel">
+      <div class="codex-head">
+        <div>
+          <p class="eyebrow">Archivum Obscura</p>
+          <h2>黑礼拜堂图鉴</h2>
+          <p>遭遇敌人、夺取遗物、击败 Boss 后，档案会逐步解封。</p>
+        </div>
+        <button id="codex-close-btn" class="ghost">关闭</button>
+      </div>
+      <div class="codex-tabs" id="codex-tabs">
+        <button class="active" data-tab="enemies">敌人</button>
+        <button data-tab="relics">遗物</button>
+      </div>
+      <div class="codex-grid" id="codex-grid"></div>
+    </div>
+  </section>
+
   <main class="game-shell">
     <section class="title-card">
       <div class="title-sigil" aria-hidden="true">D6</div>
       <div>
         <p class="eyebrow">黑礼拜堂 · 六轮赌局</p>
         <h1>骰誓</h1>
-        <p class="subtitle">黑礼拜堂不再只有一条走廊。第 2 轮立誓，第 4 轮才会出现一次裂隙改道；反悔需要付出生命，也会留下违誓痕迹。</p>
+        <p class="subtitle">一座随战争迁徙的黑礼拜堂，一支把债、血与梦当作弹药的审判军。选择入堂者，夺取敌人遗物，活到第六扇门之后。</p>
       </div>
+      <button id="codex-btn-main" class="title-codex-btn ghost" data-open-codex>图鉴</button>
     </section>
 
     <section class="run-map" aria-label="路线状态">
@@ -35,6 +67,14 @@
       </div>
     </section>
 
+    <section class="relic-inventory empty" id="relic-inventory" aria-label="遗物">
+      <div>
+        <p class="eyebrow">夺取的遗物</p>
+        <h2>随身圣匣</h2>
+      </div>
+      <div class="relic-list" id="relic-list"></div>
+    </section>
+
     <section class="route-panel" id="route-panel" aria-label="岔路选择">
       <div class="route-panel-head">
         <p class="eyebrow">岔路已开启</p>
@@ -50,11 +90,11 @@
           <div class="portrait player-portrait" id="player-portrait" aria-label="玩家画像"></div>
           <div class="fighter-copy">
             <p class="role-label">玩家</p>
-            <h2>誓约者</h2>
+            <h2 id="player-name">誓约者</h2>
             <p class="fighter-lore">回合 <span id="turn">1</span> · 连胜 <span id="wins">0</span></p>
-            <p class="lore-fragment">左腕烙着三枚骰印。你不记得自己输掉了什么，只记得必须把它赢回来。</p>
+            <p class="lore-fragment" id="player-lore">左腕烙着三枚骰印。你不记得自己输掉了什么，只记得必须把它赢回来。</p>
             <p class="skill-line"><span>技能</span><strong id="player-skill">三相誓约</strong></p>
-            <p class="skill-desc">若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。</p>
+            <p class="skill-desc" id="player-skill-desc">若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。</p>
           </div>
         </div>
         <div class="hp-row">
@@ -131,6 +171,8 @@
         <h2>残页</h2>
         <p>第 1 轮固定在旧前厅。第 2 轮自由立誓；第 3 轮会沿当前路线深入；第 4 轮只有一次裂隙改道机会；第 5 轮承担选择后果。</p>
         <p>改道会损失生命并留下违誓痕迹。生命不足时，礼拜堂不允许你反悔。</p>
+        <p>开局可选择不同入堂者。每名角色有独立生命、技能、性格和背景；击败特定 Boss 会解锁新角色。</p>
+        <p>击败普通敌人会夺取它的遗物。遗物会在后续战斗中自动触发，并会写入图鉴。</p>
         <p>敌人不只会变强，还会用不同规则逼迫你改变骰子分配。礼拜堂只承认选择，不承认借口。</p>
         <p>击败 Boss 即为胜利，并解锁对应结局。</p>
       </article>
