@@ -1173,7 +1173,7 @@ function render() {
   renderEnemyDice();
 }
 
-function renderCharacterSelect() {
+function renderLegacyCharacterSelect() {
   if (!els.characterOptions) return;
   els.characterOptions.innerHTML = "";
   for (const character of Object.values(characters)) {
@@ -1197,6 +1197,59 @@ function renderCharacterSelect() {
     });
     els.characterOptions.appendChild(btn);
   }
+}
+
+function renderCharacterSelect() {
+  if (!els.characterOptions) return;
+  els.characterOptions.innerHTML = "";
+  Object.values(characters).forEach((character, index) => {
+    const unlocked = unlockedCharacters.has(character.id);
+    const rarity = character.unlockBoss ? "epic" : "starter";
+    const rarityLabel = character.unlockBoss ? "Boss 契约" : "初始契约";
+    const btn = document.createElement("button");
+    btn.className = `character-card rarity-${rarity} ${state.selectedCharacterId === character.id ? "selected" : ""} ${unlocked ? "" : "locked"}`;
+    btn.style.setProperty("--card-order", index);
+    btn.disabled = !unlocked;
+    btn.innerHTML = `
+      <div class="card-rarity">${unlocked ? rarityLabel : "档案封存"}</div>
+      <div class="card-cost">${unlocked ? character.maxHp : "?"}</div>
+      <div class="character-mini-portrait">${unlocked ? character.portrait : lockedCardPortrait()}</div>
+      <div class="card-nameplate">
+        <span>${unlocked ? character.title : "击败 Boss 后解锁"}</span>
+        <strong>${unlocked ? character.name : "未解锁角色"}</strong>
+      </div>
+      <div class="card-skill">
+        <b>${unlocked ? character.skill.name : "封印技能"}</b>
+        <em>${unlocked ? character.skill.desc : character.unlock}</em>
+      </div>
+      <div class="card-story">
+        <small>${unlocked ? character.background : "这张契约仍被黑礼拜堂压在封蜡之下。"}</small>
+      </div>
+    `;
+    btn.addEventListener("click", () => {
+      if (!unlocked) return;
+      state.selectedCharacterId = character.id;
+      renderCharacterSelect();
+    });
+    els.characterOptions.appendChild(btn);
+  });
+}
+
+function lockedCardPortrait() {
+  return `
+<svg class="card-portrait locked-token" viewBox="0 0 160 210" role="img" aria-label="未解锁角色">
+  <defs>
+    <radialGradient id="locked-glow" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#6f4b22" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#080604" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="5" y="5" width="150" height="200" rx="24" fill="#15110e"/>
+  <rect x="15" y="15" width="130" height="180" rx="18" fill="url(#locked-glow)" stroke="#9f7239" stroke-opacity=".38" stroke-width="3"/>
+  <path d="M42 67c18-24 58-24 76 0v82H42z" fill="#080604" stroke="#9f7239" stroke-width="6"/>
+  <path d="M55 92h50M55 118h50M80 70v70" stroke="#d1a35c" stroke-width="7" stroke-linecap="round" opacity=".78"/>
+  <path d="M41 169c25-18 53-18 78 0" stroke="#5d3b1b" stroke-width="9" stroke-linecap="round"/>
+</svg>`;
 }
 
 function renderRelics() {
