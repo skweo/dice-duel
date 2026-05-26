@@ -51,11 +51,29 @@
 
   <main class="game-shell">
     <section class="title-card">
-      <div class="title-sigil" aria-hidden="true">D6</div>
-      <div>
-        <p class="eyebrow">黑礼拜堂 · 六轮赌局</p>
-        <h1>骰誓</h1>
+      <div class="title-sigil" aria-hidden="true">
+        <svg viewBox="0 0 120 120" role="img">
+          <path class="sigil-ring" d="M60 8 104 33v54l-44 25L16 87V33z"/>
+          <path class="sigil-blade" d="M60 22v76M34 43l52 34M86 43 34 77"/>
+          <g class="sigil-die">
+            <rect x="42" y="42" width="36" height="36" rx="8"/>
+            <circle cx="53" cy="53" r="3.4"/>
+            <circle cx="67" cy="53" r="3.4"/>
+            <circle cx="60" cy="60" r="3.4"/>
+            <circle cx="53" cy="67" r="3.4"/>
+            <circle cx="67" cy="67" r="3.4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="title-copy">
+        <p class="eyebrow title-kicker"><span>Black Chapel</span><i></i><span>Six-Fold Wager</span></p>
+        <h1><span class="title-main">骰誓</span><span class="title-roman">DICE OATH</span></h1>
         <p class="subtitle">一座随战争迁徙的黑礼拜堂，一支把债、血与梦当作弹药的审判军。选择入堂者，夺取敌人遗物，活到第六扇门之后。</p>
+        <div class="title-tags" aria-label="游戏特色">
+          <span>六轮赌局</span>
+          <span>遗物夺取</span>
+          <span>岔路终局</span>
+        </div>
       </div>
       <button id="codex-btn-main" class="title-codex-btn ghost" data-open-codex>图鉴</button>
     </section>

@@ -489,46 +489,110 @@ body.boss-mode .game-shell::before {
 }
 
 .title-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
+  gap: 24px;
   overflow: hidden;
-  padding: 24px;
-  border-radius: 30px;
+  padding: 28px 30px;
+  border-radius: 34px;
+  isolation: isolate;
 }
 
 .title-card::after {
   content: "";
   position: absolute;
-  right: -64px;
-  bottom: -116px;
-  width: 250px;
-  height: 250px;
-  border: 40px solid rgba(224, 173, 84, 0.08);
+  right: -86px;
+  bottom: -128px;
+  width: 320px;
+  height: 320px;
+  border: 46px solid rgba(224, 173, 84, 0.07);
   border-radius: 50%;
 }
 
 .title-sigil {
   display: grid;
-  flex: 0 0 86px;
-  width: 86px;
-  height: 86px;
+  position: relative;
+  z-index: 2;
+  width: 112px;
+  height: 112px;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--route-accent), transparent 54%);
-  border-radius: 26px;
-  color: var(--bone);
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: -0.08em;
+  border: 1px solid rgba(255, 221, 142, 0.28);
+  border-radius: 32px;
+  color: #fff0c8;
   background:
-    radial-gradient(circle, var(--route-stain), transparent 52%),
-    linear-gradient(145deg, #2b1a12, #0d0907);
-  box-shadow: inset 0 0 30px var(--route-ember), 0 14px 22px rgba(0, 0, 0, 0.32);
+    radial-gradient(circle at 50% 42%, rgba(255, 190, 93, 0.32), transparent 43%),
+    linear-gradient(145deg, #4b2917, #130d0a 56%, #030303);
+  box-shadow:
+    inset 0 0 0 6px rgba(255, 231, 180, 0.04),
+    inset 0 0 34px rgba(224, 120, 38, 0.2),
+    0 22px 34px rgba(0, 0, 0, 0.44),
+    0 0 32px rgba(224, 120, 38, 0.12);
+  transform: rotate(-4deg);
+}
+
+.title-sigil::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border: 1px solid rgba(205, 151, 67, 0.18);
+  border-radius: 38px;
+  transform: rotate(8deg);
+}
+
+.title-sigil svg {
+  width: 82px;
+  height: 82px;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+}
+
+.sigil-ring {
+  fill: rgba(255, 220, 146, 0.08);
+  stroke: #e0ad54;
+  stroke-width: 4;
+}
+
+.sigil-blade {
+  fill: none;
+  stroke: rgba(255, 240, 196, 0.52);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.sigil-die rect {
+  fill: #ffe3a2;
+  stroke: #3a1708;
+  stroke-width: 4;
+}
+
+.sigil-die circle {
+  fill: #2a1208;
 }
 
 .title-codex-btn {
   flex: 0 0 auto;
   margin-left: auto;
+}
+
+.title-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.title-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: #d8a652;
+}
+
+.title-kicker i {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224, 173, 84, 0.9), transparent);
 }
 
 .eyebrow {
@@ -555,6 +619,51 @@ h1 {
   text-shadow: 0 8px 26px rgba(0, 0, 0, 0.54);
 }
 
+.title-card h1 {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  line-height: 0.82;
+}
+
+.title-main {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  color: transparent;
+  background:
+    linear-gradient(180deg, #fff7d7 0%, #f2c66d 42%, #9c5c24 78%, #42200f 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-size: clamp(58px, 11vw, 118px);
+  letter-spacing: -0.13em;
+  text-shadow:
+    0 2px 0 rgba(255, 244, 205, 0.22),
+    0 9px 0 rgba(35, 14, 5, 0.88),
+    0 22px 36px rgba(0, 0, 0, 0.54);
+}
+
+.title-main::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: -12px;
+  bottom: -13px;
+  height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(224, 173, 84, 0), rgba(224, 173, 84, 0.72), rgba(240, 90, 69, 0.4), rgba(224, 173, 84, 0));
+  filter: blur(0.2px);
+}
+
+.title-roman {
+  color: rgba(255, 236, 183, 0.6);
+  font-size: clamp(13px, 2vw, 18px);
+  font-weight: 950;
+  letter-spacing: 0.42em;
+  text-shadow: none;
+}
+
 h2 {
   margin-bottom: 8px;
   color: #ffe5ad;
@@ -573,6 +682,25 @@ h2 {
   max-width: 650px;
   margin-bottom: 0;
   font-size: 16px;
+}
+
+.title-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.title-tags span {
+  padding: 7px 11px;
+  border: 1px solid rgba(205, 151, 67, 0.24);
+  border-radius: 999px;
+  color: #e3c184;
+  background:
+    linear-gradient(180deg, rgba(255, 222, 148, 0.09), rgba(0, 0, 0, 0.2));
+  box-shadow: inset 0 1px 0 rgba(255, 244, 205, 0.07);
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .status-grid {
@@ -2076,6 +2204,24 @@ body.theme-dream .enemy-card .hp-bar div {
     0 18px 46px rgba(0, 0, 0, 0.36);
 }
 
+.title-card {
+  border-color: rgba(224, 173, 84, 0.34);
+  background:
+    radial-gradient(circle at 11% 50%, rgba(255, 180, 72, 0.18), transparent 18rem),
+    radial-gradient(circle at 86% 15%, rgba(128, 24, 18, 0.24), transparent 22rem),
+    linear-gradient(115deg, rgba(255, 224, 154, 0.07), transparent 32%),
+    linear-gradient(180deg, rgba(35, 26, 20, 0.97), rgba(8, 7, 7, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 231, 180, 0.07),
+    inset 0 -34px 60px rgba(0, 0, 0, 0.34),
+    0 26px 58px rgba(0, 0, 0, 0.45);
+}
+
+.title-card::before {
+  background:
+    linear-gradient(90deg, rgba(224, 173, 84, 0.22), transparent 18%, transparent 82%, rgba(224, 173, 84, 0.16));
+}
+
 .title-card h1,
 .title-card h2,
 .run-map h2,
@@ -2089,6 +2235,11 @@ body.theme-dream .enemy-card .hp-bar div {
   text-shadow: 0 5px 18px rgba(0, 0, 0, 0.48);
 }
 
+.title-card h1 {
+  color: inherit;
+  text-shadow: none;
+}
+
 .title-card .subtitle,
 .run-map p,
 .route-panel p,
@@ -2099,12 +2250,35 @@ body.theme-dream .enemy-card .hp-bar div {
   color: #c7aa78;
 }
 
+.title-card .subtitle {
+  max-width: 760px;
+  color: #d7bb84;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
 .title-sigil {
   color: #fff0c8;
   background:
     radial-gradient(circle at 28% 18%, rgba(255, 222, 146, 0.3), transparent 28%),
+    radial-gradient(circle at 50% 50%, rgba(224, 120, 38, 0.24), transparent 54%),
     linear-gradient(145deg, #482919, #14100d 55%, #050505);
-  box-shadow: inset 0 0 30px rgba(224, 120, 38, 0.18), 0 16px 24px rgba(0, 0, 0, 0.36);
+  box-shadow:
+    inset 0 0 30px rgba(224, 120, 38, 0.2),
+    0 16px 24px rgba(0, 0, 0, 0.36),
+    0 0 26px rgba(224, 120, 38, 0.1);
+}
+
+.title-card .title-codex-btn {
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  margin-bottom: 6px;
+  border-color: rgba(255, 222, 148, 0.28);
+  color: #efd19b;
+  background:
+    linear-gradient(180deg, rgba(255, 222, 148, 0.1), rgba(0, 0, 0, 0.24));
+  box-shadow: inset 0 1px 0 rgba(255, 244, 205, 0.08), 0 12px 20px rgba(0, 0, 0, 0.26);
 }
 
 .route-stats span,
@@ -2714,7 +2888,11 @@ body::after {
   .title-card,
   .run-map {
     align-items: flex-start;
-    flex-direction: column;
+  }
+
+  .title-card {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .route-stats {
@@ -2754,8 +2932,41 @@ body::after {
   }
 
   .title-card {
-    flex-direction: column;
     border-radius: 24px;
+    padding: 22px 18px;
+  }
+
+  .title-sigil {
+    width: 88px;
+    height: 88px;
+    border-radius: 26px;
+  }
+
+  .title-sigil svg {
+    width: 66px;
+    height: 66px;
+  }
+
+  .title-kicker {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .title-kicker i {
+    width: 72px;
+  }
+
+  .title-main {
+    font-size: clamp(54px, 22vw, 82px);
+  }
+
+  .title-roman {
+    letter-spacing: 0.28em;
+  }
+
+  .title-tags {
+    gap: 6px;
   }
 
   .title-codex-btn {
