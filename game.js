@@ -823,7 +823,6 @@ const els = {
   board: document.querySelector(".board"),
   routeLockBanner: document.getElementById("route-lock-banner"),
   diceTheater: document.getElementById("dice-theater"),
-  throwHand: document.getElementById("throw-hand"),
   dicePhysicsLayer: document.getElementById("dice-physics-layer"),
   attackTotal: document.getElementById("attack-total"),
   guardTotal: document.getElementById("guard-total"),
@@ -1268,6 +1267,8 @@ function renderDice() {
   state.dice.forEach((die, index) => {
     const btn = document.createElement("button");
     btn.className = "die";
+    btn.dataset.dieIndex = index;
+    btn.draggable = !die.used && !state.roundOver && !state.routeChoicePending;
     btn.innerHTML = `<span class="die-face">${renderPips(die.value)}</span><b>${die.value}</b>`;
     btn.disabled = state.roundOver || state.routeChoicePending;
     if (state.selectedDie === index) btn.classList.add("selected");
@@ -1280,6 +1281,8 @@ function renderDice() {
       btn.appendChild(badge);
     }
     btn.addEventListener("click", () => selectDie(index));
+    btn.addEventListener("dragstart", event => handleDieDragStart(event, index));
+    btn.addEventListener("dragend", handleDieDragEnd);
     els.diceTray.appendChild(btn);
   });
 }
@@ -1291,7 +1294,7 @@ function renderThrowDice(values) {
     const die = document.createElement("span");
     die.className = "physics-die";
     die.style.setProperty("--die-index", index);
-    die.style.setProperty("--die-offset", `${(index - 1) * 74}px`);
+    die.style.setProperty("--die-offset", `${(index - 1) * 82}px`);
     die.innerHTML = renderDieCube(value);
     els.dicePhysicsLayer.appendChild(die);
   });
@@ -1321,17 +1324,14 @@ function playThrowAnimation(values) {
   els.diceTheater.classList.remove("throwing", "settled");
   void els.diceTheater.offsetWidth;
   els.diceTheater.classList.add("throwing");
-  els.throwHand?.classList.remove("throwing");
-  void els.throwHand?.offsetWidth;
-  els.throwHand?.classList.add("throwing");
 
   const dice = [...els.dicePhysicsLayer.querySelectorAll(".physics-die")];
   const start = performance.now();
-  const duration = 1320;
+  const duration = 1180;
   const lanes = [
-    { sx: -230, sy: -74, fx: -118, fy: 142, arc: 96, spin: 780 },
-    { sx: -190, sy: -54, fx: 2, fy: 154, arc: 82, spin: -920 },
-    { sx: -150, sy: -68, fx: 126, fy: 132, arc: 106, spin: 1060 }
+    { sx: -310, sy: -94, fx: -98, fy: 18, arc: 86, spin: 540 },
+    { sx: 20, sy: -210, fx: 8, fy: 64, arc: 112, spin: -650 },
+    { sx: 310, sy: -82, fx: 112, fy: -8, arc: 78, spin: 760 }
   ];
 
   function frame(now) {
@@ -1345,10 +1345,11 @@ function playThrowAnimation(values) {
       const bounceTwo = Math.max(0, Math.sin((t - 0.82) * Math.PI * 10)) * Math.max(0, 1 - t) * -18;
       y += bounceOne + bounceTwo;
       const scale = 1.05 - 0.08 * t;
-      const rx = 68 + lane.spin * t;
-      const ry = 42 + lane.spin * 0.74 * t;
-      const rz = -18 + lane.spin * 0.38 * t;
-      die.style.transform = `translate3d(${x}px, ${y}px, ${Math.sin(Math.PI * t) * 90}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
+      const lift = Math.sin(Math.PI * t) * 82;
+      const rx = 62 + lane.spin * t;
+      const ry = 24 + lane.spin * 0.58 * t;
+      const rz = -18 + lane.spin * 0.34 * t;
+      die.style.transform = `translate3d(${x}px, ${y - lift * 0.16}px, ${lift}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
       die.style.setProperty("--shadow-scale", 0.56 + t * 0.44);
       die.style.setProperty("--shadow-alpha", 0.15 + t * 0.32);
     });
@@ -1359,7 +1360,7 @@ function playThrowAnimation(values) {
       els.diceTheater.classList.add("settled");
       dice.forEach((die, index) => {
         const lane = lanes[index] || lanes[0];
-        die.style.transform = `translate3d(${lane.fx}px, ${lane.fy}px, 0) rotateX(720deg) rotateY(720deg) rotateZ(${index * 18 - 8}deg)`;
+        die.style.transform = `translate3d(${lane.fx}px, ${lane.fy}px, 0) rotateX(0deg) rotateY(0deg) rotateZ(${index * 10 - 8}deg)`;
       });
     }
   }
@@ -1473,10 +1474,58 @@ function selectDie(index) {
 
 function assignSelectedDie(slotName) {
   if (state.selectedDie === null || state.roundOver || state.routeChoicePending) return;
-  state.slots[slotName].push(state.selectedDie);
-  state.dice[state.selectedDie].used = true;
+  assignDieToSlot(state.selectedDie, slotName);
   state.selectedDie = null;
   render();
+}
+
+function assignDieToSlot(index, slotName) {
+  if (!state.dice[index] || state.dice[index].used || state.roundOver || state.routeChoicePending) return false;
+  if (!state.slots[slotName]) return false;
+  state.slots[slotName].push(index);
+  state.dice[index].used = true;
+  return true;
+}
+
+function handleDieDragStart(event, index) {
+  if (!state.dice[index] || state.dice[index].used || state.roundOver || state.routeChoicePending) {
+    event.preventDefault();
+    return;
+  }
+  state.selectedDie = index;
+  event.dataTransfer?.setData("text/plain", String(index));
+  if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+  event.currentTarget.classList.add("dragging");
+  document.body.classList.add("dragging-die");
+}
+
+function handleDieDragEnd(event) {
+  event.currentTarget.classList.remove("dragging");
+  document.body.classList.remove("dragging-die");
+  document.querySelectorAll(".slot.drag-over").forEach(slot => slot.classList.remove("drag-over"));
+}
+
+function handleSlotDragOver(event) {
+  if (state.roundOver || state.routeChoicePending) return;
+  event.preventDefault();
+  if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+  event.currentTarget.classList.add("drag-over");
+}
+
+function handleSlotDragLeave(event) {
+  event.currentTarget.classList.remove("drag-over");
+}
+
+function handleSlotDrop(event) {
+  event.preventDefault();
+  event.currentTarget.classList.remove("drag-over");
+  const rawIndex = event.dataTransfer?.getData("text/plain");
+  const index = Number(rawIndex);
+  if (!Number.isInteger(index)) return;
+  if (assignDieToSlot(index, event.currentTarget.dataset.slot)) {
+    state.selectedDie = null;
+    render();
+  }
 }
 
 function slotLabel(slotName) {
@@ -1667,6 +1716,9 @@ function hideCodex() {
 
 document.querySelectorAll(".slot").forEach(slot => {
   slot.addEventListener("click", () => assignSelectedDie(slot.dataset.slot));
+  slot.addEventListener("dragover", handleSlotDragOver);
+  slot.addEventListener("dragleave", handleSlotDragLeave);
+  slot.addEventListener("drop", handleSlotDrop);
 });
 
 els.rollBtn.addEventListener("click", rollDice);

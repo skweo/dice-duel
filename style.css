@@ -1981,20 +1981,21 @@ body.theme-dream .enemy-card .hp-bar div {
 
 .dice-theater {
   position: relative;
-  height: 316px;
+  height: 330px;
   margin: 16px 0 10px;
   overflow: hidden;
   border: 1px solid rgba(205, 151, 67, 0.28);
   border-radius: 30px;
   background:
-    radial-gradient(circle at 50% -12%, rgba(255, 180, 72, 0.25), transparent 32%),
-    radial-gradient(circle at 70% 18%, rgba(128, 24, 18, 0.26), transparent 34%),
-    linear-gradient(180deg, #1f1713 0%, #17100d 54%, #060404 100%);
+    radial-gradient(circle at 50% 50%, rgba(255, 146, 46, 0.14), transparent 28%),
+    radial-gradient(circle at 16% 18%, rgba(255, 180, 72, 0.18), transparent 22%),
+    radial-gradient(circle at 86% 22%, rgba(128, 24, 18, 0.2), transparent 28%),
+    linear-gradient(180deg, #1e1612 0%, #120d0b 54%, #060404 100%);
   box-shadow:
     inset 0 0 0 1px rgba(255, 231, 180, 0.07),
     inset 0 -30px 60px rgba(0, 0, 0, 0.52),
     0 18px 36px rgba(0, 0, 0, 0.34);
-  perspective: 900px;
+  perspective: 1200px;
 }
 
 .dice-theater::before {
@@ -2002,11 +2003,11 @@ body.theme-dream .enemy-card .hp-bar div {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, transparent 7%, rgba(255, 199, 107, 0.055) 7% 8%, transparent 8% 16%),
-    radial-gradient(circle at 18% 10%, rgba(255, 170, 70, 0.18), transparent 16%),
-    radial-gradient(circle at 82% 10%, rgba(168, 36, 28, 0.16), transparent 15%);
-  background-size: 150px 100%, auto, auto;
-  opacity: 0.45;
+    linear-gradient(rgba(255, 199, 107, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 199, 107, 0.032) 1px, transparent 1px),
+    radial-gradient(circle at center, transparent 38%, rgba(0, 0, 0, 0.34));
+  background-size: 34px 34px, 34px 34px, auto;
+  opacity: 0.58;
 }
 
 .dice-theater::after {
@@ -2015,13 +2016,13 @@ body.theme-dream .enemy-card .hp-bar div {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 180, 72, 0.08), transparent 35%),
-    radial-gradient(circle at 50% 115%, rgba(0, 0, 0, 0.62), transparent 56%);
+    radial-gradient(circle at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.5)),
+    linear-gradient(180deg, rgba(255, 180, 72, 0.07), transparent 35%);
 }
 
 .table-perspective {
   position: absolute;
-  inset: 34px 18px 14px;
+  inset: 18px;
   z-index: 2;
   transform-style: preserve-3d;
 }
@@ -2030,17 +2031,19 @@ body.theme-dream .enemy-card .hp-bar div {
   content: "";
   position: absolute;
   left: 50%;
-  top: 104px;
-  width: min(760px, 88%);
-  height: 178px;
-  transform: translateX(-50%) rotateX(64deg);
+  top: 50%;
+  width: min(760px, 92%);
+  height: min(250px, 72%);
+  transform: translate(-50%, -50%);
   transform-origin: center;
-  border: 1px solid rgba(255, 196, 103, 0.2);
-  border-radius: 50%;
+  border: 1px solid rgba(255, 196, 103, 0.22);
+  border-radius: 30px;
   background:
-    radial-gradient(circle at 45% 35%, rgba(255, 153, 58, 0.18), transparent 30%),
-    repeating-linear-gradient(90deg, rgba(255, 230, 168, 0.045) 0 2px, transparent 2px 26px),
+    radial-gradient(circle at 50% 50%, rgba(255, 153, 58, 0.16), transparent 32%),
+    linear-gradient(rgba(255, 230, 168, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 230, 168, 0.035) 1px, transparent 1px),
     linear-gradient(135deg, #3d2214, #1b0e09 58%, #070302);
+  background-size: auto, 28px 28px, 28px 28px, auto;
   box-shadow:
     inset 0 0 45px rgba(255, 163, 66, 0.1),
     inset 0 -34px 45px rgba(0, 0, 0, 0.5),
@@ -2051,19 +2054,19 @@ body.theme-dream .enemy-card .hp-bar div {
   content: "";
   position: absolute;
   left: 50%;
-  top: 236px;
-  width: min(720px, 82%);
-  height: 42px;
-  transform: translateX(-50%);
+  top: 50%;
+  width: min(620px, 76%);
+  height: min(170px, 48%);
+  transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(32, 15, 4, 0.28), transparent 66%);
-  filter: blur(2px);
+  background: radial-gradient(ellipse, rgba(32, 15, 4, 0.42), transparent 66%);
+  filter: blur(4px);
 }
 
 .dice-physics-layer {
   position: absolute;
   left: 50%;
-  top: 50px;
+  top: 50%;
   z-index: 5;
   width: 0;
   height: 0;
@@ -2080,7 +2083,7 @@ body.theme-dream .enemy-card .hp-bar div {
   top: calc(var(--die-size) * -0.5);
   width: var(--die-size);
   height: var(--die-size);
-  transform: translate3d(var(--die-offset), 166px, 0) rotateX(8deg) rotateY(-9deg) rotateZ(0deg);
+  transform: translate3d(var(--die-offset), 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -2175,11 +2178,11 @@ body.theme-dream .enemy-card .hp-bar div {
 
 .physics-shadow {
   position: absolute;
-  left: -11px;
-  top: 48px;
+  left: -10px;
+  top: 40px;
   width: 78px;
   height: 24px;
-  transform: rotateX(70deg) scale(var(--shadow-scale));
+  transform: scale(var(--shadow-scale));
   transform-origin: center;
   border-radius: 50%;
   background: rgba(35, 16, 5, var(--shadow-alpha));
@@ -2189,11 +2192,11 @@ body.theme-dream .enemy-card .hp-bar div {
 .table-impact-ring {
   position: absolute;
   left: 50%;
-  top: 190px;
+  top: 50%;
   z-index: 3;
   width: 120px;
-  height: 50px;
-  transform: translateX(-50%) rotateX(64deg) scale(0.2);
+  height: 120px;
+  transform: translate(-50%, -50%) scale(0.2);
   border: 2px solid rgba(255, 231, 168, 0.55);
   border-radius: 50%;
   opacity: 0;
@@ -2203,82 +2206,34 @@ body.theme-dream .enemy-card .hp-bar div {
   animation: impactRing 1180ms ease-out both;
 }
 
-.throw-hand {
-  position: absolute;
-  left: -150px;
-  top: 54px;
-  z-index: 8;
-  width: 176px;
-  height: 106px;
-  transform: rotate(-7deg);
-  transform-origin: 0 50%;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.throw-hand.throwing {
-  animation: handThrow 1180ms cubic-bezier(0.17, 0.76, 0.22, 1) both;
-}
-
-.throw-hand span {
-  position: absolute;
-  display: block;
-}
-
-.hand-sleeve {
-  left: 0;
-  top: 35px;
-  width: 112px;
-  height: 46px;
-  border-radius: 0 26px 26px 0;
-  background:
-    linear-gradient(90deg, #322118, #8f2f20 62%, #d49d4b);
-  box-shadow: inset -12px 0 18px rgba(255, 219, 132, 0.18), 0 12px 22px rgba(46, 24, 8, 0.18);
-}
-
-.hand-palm {
-  left: 90px;
-  top: 24px;
-  width: 58px;
-  height: 58px;
-  border-radius: 24px 34px 28px 22px;
-  background:
-    radial-gradient(circle at 38% 25%, rgba(255, 240, 208, 0.78), transparent 22%),
-    linear-gradient(145deg, #e8b58a, #b97452);
-  box-shadow: inset -6px -7px 10px rgba(91, 39, 20, 0.2), 0 10px 18px rgba(54, 27, 9, 0.18);
-}
-
-.hand-finger {
-  left: 132px;
-  width: 43px;
-  height: 13px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #eac09b, #ae6b4d);
-  box-shadow: inset -4px -3px 5px rgba(91, 39, 20, 0.22);
-}
-
-.finger-one {
-  top: 25px;
-  transform: rotate(-12deg);
-}
-
-.finger-two {
-  top: 43px;
-  width: 48px;
-  transform: rotate(0deg);
-}
-
-.finger-three {
-  top: 61px;
-  width: 38px;
-  transform: rotate(13deg);
-}
-
 .die {
   border-color: rgba(255, 217, 142, 0.36);
   box-shadow:
     inset 0 -11px 18px rgba(65, 38, 10, 0.28),
     0 12px 22px rgba(0, 0, 0, 0.32);
+}
+
+.die:not(.used) {
+  cursor: grab;
+}
+
+.die.dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+  transform: scale(0.94);
+}
+
+body.dragging-die .slot {
+  border-color: rgba(255, 217, 142, 0.42);
+}
+
+.slot.drag-over {
+  transform: translateY(-4px) scale(1.015);
+  border-color: rgba(255, 235, 170, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 231, 180, 0.1),
+    0 18px 32px rgba(0, 0, 0, 0.34),
+    0 0 28px rgba(224, 134, 46, 0.18);
 }
 
 .slots {
@@ -2438,48 +2393,21 @@ body::after {
   border-color: rgba(205, 151, 67, 0.24);
 }
 
-@keyframes handThrow {
-  0% {
-    opacity: 0;
-    transform: translateX(-35px) translateY(10px) rotate(-12deg);
-  }
-
-  14% {
-    opacity: 1;
-    transform: translateX(34px) translateY(8px) rotate(-8deg);
-  }
-
-  42% {
-    opacity: 1;
-    transform: translateX(176px) translateY(-5px) rotate(8deg);
-  }
-
-  58% {
-    opacity: 0.92;
-    transform: translateX(120px) translateY(6px) rotate(-3deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(-48px) translateY(14px) rotate(-12deg);
-  }
-}
-
 @keyframes impactRing {
   0%,
   45% {
     opacity: 0;
-    transform: translateX(-50%) rotateX(64deg) scale(0.16);
+    transform: translate(-50%, -50%) scale(0.16);
   }
 
   58% {
     opacity: 0.74;
-    transform: translateX(-50%) rotateX(64deg) scale(0.72);
+    transform: translate(-50%, -50%) scale(0.72);
   }
 
   100% {
     opacity: 0;
-    transform: translateX(-50%) rotateX(64deg) scale(1.8);
+    transform: translate(-50%, -50%) scale(1.8);
   }
 }
 
@@ -2629,11 +2557,6 @@ body::after {
 
   .dice-physics-layer {
     top: 42px;
-  }
-
-  .throw-hand {
-    top: 44px;
-    transform: scale(0.82) rotate(-7deg);
   }
 
   .panel-heading,
