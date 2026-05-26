@@ -1644,37 +1644,39 @@ body.theme-dream .enemy-card .hp-bar div {
   background: rgba(0, 0, 0, 0.22);
 }
 
-/* Premium atelier refresh: brighter entry UI, collectible cards, and tactile dice table. */
+/* Black chapel refresh: dark, readable, candlelit, and tactile instead of flat black. */
 .character-select {
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.96), transparent 22rem),
-    radial-gradient(circle at 86% 8%, rgba(190, 139, 54, 0.24), transparent 30rem),
-    radial-gradient(circle at 55% 110%, rgba(58, 79, 72, 0.2), transparent 34rem),
-    linear-gradient(135deg, #fff8e8 0%, #ead2a2 48%, #f7e9c9 100%);
+    radial-gradient(circle at 18% 12%, rgba(255, 171, 70, 0.24), transparent 18rem),
+    radial-gradient(circle at 82% 8%, rgba(112, 16, 14, 0.26), transparent 26rem),
+    radial-gradient(circle at 50% 115%, rgba(12, 33, 35, 0.72), transparent 34rem),
+    linear-gradient(135deg, rgba(18, 13, 10, 0.98), rgba(4, 5, 6, 0.98) 55%, rgba(22, 14, 11, 0.98));
 }
 
 .character-select-panel {
   width: min(1180px, 100%);
-  border-color: rgba(132, 88, 28, 0.22);
+  border-color: rgba(205, 151, 67, 0.32);
   background:
-    radial-gradient(circle at 9% 0%, rgba(255, 255, 255, 0.94), transparent 25rem),
-    linear-gradient(90deg, rgba(126, 86, 38, 0.045) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255, 252, 241, 0.99), rgba(239, 219, 177, 0.98));
+    radial-gradient(circle at 8% 0%, rgba(218, 145, 56, 0.2), transparent 25rem),
+    radial-gradient(circle at 88% 8%, rgba(128, 24, 18, 0.24), transparent 26rem),
+    repeating-linear-gradient(90deg, rgba(224, 173, 84, 0.035) 0 1px, transparent 1px 24px),
+    linear-gradient(180deg, rgba(30, 24, 20, 0.96), rgba(9, 9, 10, 0.98));
   background-size: auto, 24px 100%, auto;
   box-shadow:
-    0 34px 120px rgba(91, 58, 19, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.74);
+    0 34px 120px rgba(0, 0, 0, 0.58),
+    0 0 90px rgba(179, 92, 32, 0.1),
+    inset 0 0 0 1px rgba(255, 231, 180, 0.08);
 }
 
 .character-select h1 {
-  color: #2b1d10;
+  color: #fff0c8;
   letter-spacing: -0.08em;
-  text-shadow: none;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.72), 0 0 26px rgba(224, 143, 55, 0.18);
 }
 
 .character-select .subtitle,
 .character-select .eyebrow {
-  color: #74532a;
+  color: #cdb37a;
 }
 
 .character-select .eyebrow {
@@ -1686,12 +1688,12 @@ body.theme-dream .enemy-card .hp-bar div {
   overflow: hidden;
   min-height: 176px;
   padding: 24px;
-  border-color: rgba(132, 88, 28, 0.18);
+  border-color: rgba(205, 151, 67, 0.24);
   background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.12)),
-    radial-gradient(circle at 90% 4%, rgba(185, 130, 46, 0.32), transparent 44%),
-    linear-gradient(135deg, rgba(255, 247, 226, 0.96), rgba(224, 197, 144, 0.86));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.62), 0 18px 44px rgba(97, 63, 20, 0.12);
+    linear-gradient(115deg, rgba(255, 222, 148, 0.12), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at 90% 4%, rgba(185, 84, 46, 0.3), transparent 44%),
+    linear-gradient(135deg, rgba(41, 31, 24, 0.92), rgba(12, 11, 11, 0.94));
+  box-shadow: inset 0 0 0 1px rgba(255, 231, 180, 0.08), 0 18px 44px rgba(0, 0, 0, 0.34);
 }
 
 .select-hero::before {
@@ -1702,7 +1704,7 @@ body.theme-dream .enemy-card .hp-bar div {
   width: 170px;
   height: 310px;
   transform: rotate(17deg);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 197, 108, 0.18), transparent);
 }
 
 .hero-dice-showcase::before {
@@ -1711,23 +1713,24 @@ body.theme-dream .enemy-card .hp-bar div {
   inset: 10px 0;
   border-radius: 44px;
   background:
-    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.78), transparent 42%),
-    linear-gradient(145deg, rgba(69, 44, 18, 0.12), rgba(255, 255, 255, 0.12));
+    radial-gradient(circle at 50% 42%, rgba(255, 176, 73, 0.28), transparent 42%),
+    linear-gradient(145deg, rgba(0, 0, 0, 0.32), rgba(255, 221, 154, 0.08));
   filter: blur(1px);
 }
 
 .showcase-die {
   position: relative;
   z-index: 1;
-  border-color: rgba(88, 58, 24, 0.3);
-  color: #26180a;
+  border-color: rgba(255, 218, 143, 0.36);
+  color: #221106;
   background:
-    radial-gradient(circle at 28% 20%, #fff, transparent 25%),
-    linear-gradient(145deg, #fff9e8, #e4bf68 61%, #7d5b2f);
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.88), transparent 25%),
+    linear-gradient(145deg, #ffe0a0, #c0732e 58%, #32170a);
   box-shadow:
-    0 24px 34px rgba(88, 58, 24, 0.18),
-    inset 0 -10px 18px rgba(105, 68, 22, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 24px 34px rgba(0, 0, 0, 0.42),
+    0 0 24px rgba(227, 126, 42, 0.18),
+    inset 0 -10px 18px rgba(35, 14, 4, 0.36),
+    inset 0 1px 0 rgba(255, 244, 208, 0.82);
 }
 
 .character-select .character-options {
@@ -1740,14 +1743,14 @@ body.theme-dream .enemy-card .hp-bar div {
   overflow: hidden;
   min-height: 430px;
   padding: 15px;
-  border-color: rgba(118, 80, 32, 0.2);
-  color: #2b2116;
+  border-color: rgba(205, 151, 67, 0.24);
+  color: #f4dfb5;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.84), transparent 42%),
-    linear-gradient(180deg, rgba(255, 251, 238, 0.98), rgba(228, 202, 154, 0.92));
+    radial-gradient(circle at 50% 0%, rgba(255, 212, 135, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(38, 29, 24, 0.96), rgba(11, 9, 8, 0.94));
   box-shadow:
-    0 20px 42px rgba(91, 58, 19, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+    0 20px 42px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 231, 180, 0.07);
 }
 
 .character-select .character-card::after {
@@ -1755,63 +1758,67 @@ body.theme-dream .enemy-card .hp-bar div {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(125deg, transparent 15%, rgba(255, 255, 255, 0.34), transparent 36%);
-  opacity: 0.72;
+  background:
+    linear-gradient(125deg, transparent 15%, rgba(255, 212, 138, 0.1), transparent 36%),
+    radial-gradient(circle at 50% 105%, rgba(0, 0, 0, 0.52), transparent 44%);
+  opacity: 0.9;
 }
 
 .character-select .character-card:nth-child(1) {
   background:
-    radial-gradient(circle at 16% 4%, rgba(231, 183, 93, 0.33), transparent 42%),
-    linear-gradient(160deg, rgba(143, 47, 32, 0.16), transparent 54%),
-    linear-gradient(180deg, #fff9e8, #ead2a3);
+    radial-gradient(circle at 16% 4%, rgba(231, 183, 93, 0.22), transparent 42%),
+    linear-gradient(160deg, rgba(143, 47, 32, 0.28), transparent 54%),
+    linear-gradient(180deg, #2a1d17, #0a0807);
 }
 
 .character-select .character-card:nth-child(2) {
   background:
-    linear-gradient(90deg, rgba(96, 120, 137, 0.16), transparent 48%),
-    repeating-linear-gradient(0deg, rgba(96, 120, 137, 0.05) 0 1px, transparent 1px 14px),
-    linear-gradient(180deg, #f9fcfb, #d8e2e2);
+    linear-gradient(90deg, rgba(96, 120, 137, 0.18), transparent 48%),
+    repeating-linear-gradient(0deg, rgba(166, 191, 210, 0.045) 0 1px, transparent 1px 14px),
+    linear-gradient(180deg, #202a2f, #07090a);
 }
 
 .character-select .character-card:nth-child(3) {
   background:
-    linear-gradient(135deg, rgba(185, 138, 58, 0.2), transparent 46%),
-    repeating-linear-gradient(90deg, rgba(104, 68, 20, 0.055) 0 1px, transparent 1px 18px),
-    linear-gradient(180deg, #fff4d2, #e2c17b);
+    linear-gradient(135deg, rgba(185, 138, 58, 0.18), transparent 46%),
+    repeating-linear-gradient(90deg, rgba(217, 193, 143, 0.045) 0 1px, transparent 1px 18px),
+    linear-gradient(180deg, #2f2111, #080604);
 }
 
 .character-select .character-card:nth-child(4) {
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 116, 85, 0.24), transparent 42%),
-    linear-gradient(160deg, rgba(182, 59, 53, 0.15), transparent 54%),
-    linear-gradient(180deg, #fff3e4, #edc0a6);
+    radial-gradient(circle at 24% 0%, rgba(255, 91, 74, 0.2), transparent 42%),
+    linear-gradient(160deg, rgba(105, 12, 10, 0.5), transparent 54%),
+    linear-gradient(180deg, #270807, #070303);
 }
 
 .character-select .character-card:nth-child(5) {
   background:
-    radial-gradient(circle at 84% 0%, rgba(109, 215, 210, 0.22), transparent 38%),
-    linear-gradient(135deg, rgba(156, 134, 232, 0.18), transparent 48%),
-    linear-gradient(180deg, #f7ffff, #d6e7ef);
+    radial-gradient(circle at 84% 0%, rgba(116, 241, 212, 0.13), transparent 38%),
+    linear-gradient(135deg, rgba(156, 134, 232, 0.22), transparent 48%),
+    linear-gradient(180deg, #17112d, #070711);
 }
 
 .character-select .character-card:not(:disabled):hover,
 .character-select .character-card.selected {
-  border-color: rgba(132, 88, 28, 0.58);
+  border-color: rgba(255, 209, 125, 0.58);
   box-shadow:
-    0 28px 58px rgba(91, 58, 19, 0.2),
-    0 0 0 4px rgba(255, 255, 255, 0.62),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.88);
+    0 28px 58px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(255, 187, 82, 0.12),
+    0 0 30px rgba(227, 126, 42, 0.14),
+    inset 0 0 0 1px rgba(255, 231, 180, 0.18);
 }
 
 .character-select .character-mini-portrait {
   height: 238px;
-  border-color: rgba(89, 60, 24, 0.24);
+  border-color: rgba(205, 151, 67, 0.32);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.74), transparent 48%),
-    #f4dfb4;
+    radial-gradient(circle at 50% 0%, rgba(255, 189, 94, 0.18), transparent 46%),
+    linear-gradient(180deg, rgba(255, 235, 181, 0.08), transparent 48%),
+    #0d0a09;
   box-shadow:
-    inset 0 0 0 7px rgba(255, 255, 255, 0.38),
-    0 15px 28px rgba(75, 49, 16, 0.12);
+    inset 0 0 0 7px rgba(255, 220, 142, 0.06),
+    0 15px 28px rgba(0, 0, 0, 0.34);
 }
 
 .character-select .character-card span,
@@ -1823,32 +1830,32 @@ body.theme-dream .enemy-card .hp-bar div {
 }
 
 .character-select .character-card span {
-  color: #8d611e;
+  color: #d8a652;
 }
 
 .character-select .character-card strong {
-  color: #23170c;
+  color: #fff0c8;
 }
 
 .character-select .character-card small,
 .character-select .character-card em {
-  color: #604d34;
+  color: #c5aa75;
 }
 
 .character-select .select-actions {
-  background: linear-gradient(180deg, rgba(255, 248, 232, 0.86), rgba(238, 218, 176, 0.98));
+  background: linear-gradient(180deg, rgba(24, 18, 14, 0.82), rgba(8, 7, 7, 0.98));
 }
 
 .character-select .select-actions button {
-  border-color: rgba(78, 47, 15, 0.16);
+  border-color: rgba(255, 224, 154, 0.18);
   color: #20130a;
-  background: linear-gradient(180deg, #ffe09b, #c88932 52%, #7d491c);
-  box-shadow: 0 14px 24px rgba(91, 58, 19, 0.18), inset 0 1px 0 rgba(255, 251, 229, 0.84);
+  background: linear-gradient(180deg, #f4c878, #a9652b 52%, #552618);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 251, 229, 0.36);
 }
 
 .character-select .select-actions .ghost {
-  color: #5f4425;
-  background: rgba(255, 255, 255, 0.38);
+  color: #d5b987;
+  background: rgba(0, 0, 0, 0.22);
 }
 
 .title-card,
@@ -1859,14 +1866,14 @@ body.theme-dream .enemy-card .hp-bar div {
 .run-map,
 .route-panel,
 .relic-inventory {
-  border-color: rgba(128, 88, 38, 0.24);
+  border-color: rgba(205, 151, 67, 0.24);
   background:
-    radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.72), transparent 25rem),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.38), transparent 32%),
-    linear-gradient(180deg, rgba(255, 249, 232, 0.94), rgba(235, 214, 174, 0.9));
+    radial-gradient(circle at 10% 0%, rgba(224, 173, 84, 0.16), transparent 25rem),
+    linear-gradient(135deg, rgba(255, 224, 154, 0.055), transparent 32%),
+    linear-gradient(180deg, rgba(31, 24, 20, 0.94), rgba(10, 9, 9, 0.92));
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
-    0 18px 46px rgba(91, 58, 19, 0.14);
+    inset 0 0 0 1px rgba(255, 231, 180, 0.05),
+    0 18px 46px rgba(0, 0, 0, 0.36);
 }
 
 .title-card h1,
@@ -1878,8 +1885,8 @@ body.theme-dream .enemy-card .hp-bar div {
 .board h2,
 .log-card h2,
 .rules-card h2 {
-  color: #2b1d10;
-  text-shadow: none;
+  color: #ffe5ad;
+  text-shadow: 0 5px 18px rgba(0, 0, 0, 0.48);
 }
 
 .title-card .subtitle,
@@ -1889,87 +1896,87 @@ body.theme-dream .enemy-card .hp-bar div {
 .fighter-lore,
 .intent,
 .panel-hint {
-  color: #735c3f;
+  color: #c7aa78;
 }
 
 .title-sigil {
-  color: #29180b;
+  color: #fff0c8;
   background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.84), transparent 28%),
-    linear-gradient(145deg, #fff4d3, #d4a047 55%, #7c5226);
-  box-shadow: inset 0 -12px 22px rgba(91, 58, 19, 0.18), 0 16px 24px rgba(82, 52, 17, 0.18);
+    radial-gradient(circle at 28% 18%, rgba(255, 222, 146, 0.3), transparent 28%),
+    linear-gradient(145deg, #482919, #14100d 55%, #050505);
+  box-shadow: inset 0 0 30px rgba(224, 120, 38, 0.18), 0 16px 24px rgba(0, 0, 0, 0.36);
 }
 
 .route-stats span,
 .intent,
 .skill-line,
 .enemy-dice-row {
-  background: rgba(255, 255, 255, 0.34);
-  color: #604b32;
+  background: rgba(0, 0, 0, 0.22);
+  color: #d4b987;
 }
 
 .route-stats span {
-  border-color: rgba(128, 88, 38, 0.2);
+  border-color: rgba(205, 151, 67, 0.22);
 }
 
 .fighter {
-  color: #2b2116;
+  color: #f1dfbd;
 }
 
 .player-card,
 .enemy-card {
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, 0.46), transparent 46%),
-    linear-gradient(180deg, rgba(255, 249, 232, 0.95), rgba(226, 201, 153, 0.9));
+    radial-gradient(circle at 18% 12%, rgba(224, 173, 84, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(36, 27, 21, 0.96), rgba(12, 10, 9, 0.92));
 }
 
 .enemy-card {
   background:
-    radial-gradient(circle at 18% 12%, rgba(182, 59, 53, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(255, 247, 232, 0.95), rgba(228, 200, 159, 0.9));
+    radial-gradient(circle at 18% 12%, rgba(182, 59, 53, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(34, 22, 20, 0.96), rgba(12, 9, 9, 0.94));
 }
 
 .lore-fragment,
 .skill-desc {
-  color: #6c5637;
+  color: #d4b987;
 }
 
 .skill-line {
-  border-color: rgba(128, 88, 38, 0.18);
-  color: #2d2115;
+  border-color: rgba(205, 151, 67, 0.22);
+  color: #f1dfbd;
 }
 
 .portrait {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 44%),
-    radial-gradient(circle at 50% 20%, rgba(224, 173, 84, 0.26), transparent 56%),
-    #f0d8a6;
+    linear-gradient(180deg, rgba(255, 220, 142, 0.08), transparent 44%),
+    radial-gradient(circle at 50% 20%, rgba(224, 173, 84, 0.22), transparent 56%),
+    #120d0a;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.32),
-    inset 0 -26px 40px rgba(103, 68, 25, 0.16),
-    0 14px 28px rgba(91, 58, 19, 0.16);
+    inset 0 0 0 1px rgba(255, 231, 180, 0.05),
+    inset 0 -26px 40px rgba(0, 0, 0, 0.28),
+    0 14px 28px rgba(0, 0, 0, 0.36);
 }
 
 .portrait::after {
   background:
-    linear-gradient(120deg, transparent 10%, rgba(255, 255, 255, 0.18), transparent 34%),
-    radial-gradient(circle at 50% 110%, rgba(85, 54, 18, 0.16), transparent 42%);
+    linear-gradient(120deg, transparent 10%, rgba(255, 214, 139, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 110%, rgba(0, 0, 0, 0.62), transparent 42%);
   mix-blend-mode: normal;
 }
 
 .hp-row {
-  color: #6e5738;
+  color: #c7aa78;
 }
 
 .hp-bar {
-  border-color: rgba(128, 88, 38, 0.18);
-  background: rgba(92, 63, 24, 0.14);
+  border-color: rgba(205, 151, 67, 0.18);
+  background: rgba(0, 0, 0, 0.28);
 }
 
 .board.route-locked {
   background:
-    radial-gradient(circle at 12% 0%, rgba(240, 90, 69, 0.1), transparent 34%),
-    linear-gradient(180deg, rgba(255, 249, 232, 0.96), rgba(237, 213, 174, 0.92));
+    radial-gradient(circle at 12% 0%, rgba(240, 90, 69, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(35, 22, 18, 0.96), rgba(12, 8, 8, 0.94));
 }
 
 .dice-theater {
@@ -1977,16 +1984,16 @@ body.theme-dream .enemy-card .hp-bar div {
   height: 316px;
   margin: 16px 0 10px;
   overflow: hidden;
-  border: 1px solid rgba(128, 88, 38, 0.22);
+  border: 1px solid rgba(205, 151, 67, 0.28);
   border-radius: 30px;
   background:
-    radial-gradient(circle at 50% -12%, rgba(255, 255, 255, 0.92), transparent 32%),
-    radial-gradient(circle at 70% 18%, rgba(219, 176, 86, 0.18), transparent 34%),
-    linear-gradient(180deg, #fff5dc 0%, #dfbd7d 54%, #7a4b24 100%);
+    radial-gradient(circle at 50% -12%, rgba(255, 180, 72, 0.25), transparent 32%),
+    radial-gradient(circle at 70% 18%, rgba(128, 24, 18, 0.26), transparent 34%),
+    linear-gradient(180deg, #1f1713 0%, #17100d 54%, #060404 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
-    inset 0 -30px 60px rgba(68, 37, 12, 0.28),
-    0 18px 36px rgba(78, 48, 16, 0.16);
+    inset 0 0 0 1px rgba(255, 231, 180, 0.07),
+    inset 0 -30px 60px rgba(0, 0, 0, 0.52),
+    0 18px 36px rgba(0, 0, 0, 0.34);
   perspective: 900px;
 }
 
@@ -1995,9 +2002,9 @@ body.theme-dream .enemy-card .hp-bar div {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, transparent 7%, rgba(77, 51, 19, 0.14) 7% 8%, transparent 8% 16%),
-    radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.52), transparent 16%),
-    radial-gradient(circle at 82% 10%, rgba(255, 255, 255, 0.36), transparent 15%);
+    linear-gradient(90deg, transparent 7%, rgba(255, 199, 107, 0.055) 7% 8%, transparent 8% 16%),
+    radial-gradient(circle at 18% 10%, rgba(255, 170, 70, 0.18), transparent 16%),
+    radial-gradient(circle at 82% 10%, rgba(168, 36, 28, 0.16), transparent 15%);
   background-size: 150px 100%, auto, auto;
   opacity: 0.45;
 }
@@ -2008,8 +2015,8 @@ body.theme-dream .enemy-card .hp-bar div {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 35%),
-    radial-gradient(circle at 50% 115%, rgba(38, 20, 7, 0.42), transparent 56%);
+    linear-gradient(180deg, rgba(255, 180, 72, 0.08), transparent 35%),
+    radial-gradient(circle at 50% 115%, rgba(0, 0, 0, 0.62), transparent 56%);
 }
 
 .table-perspective {
@@ -2028,16 +2035,16 @@ body.theme-dream .enemy-card .hp-bar div {
   height: 178px;
   transform: translateX(-50%) rotateX(64deg);
   transform-origin: center;
-  border: 1px solid rgba(255, 232, 170, 0.36);
+  border: 1px solid rgba(255, 196, 103, 0.2);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 45% 35%, rgba(255, 237, 180, 0.34), transparent 30%),
-    repeating-linear-gradient(90deg, rgba(255, 230, 168, 0.08) 0 2px, transparent 2px 26px),
-    linear-gradient(135deg, #8e5529, #4a2411 58%, #251006);
+    radial-gradient(circle at 45% 35%, rgba(255, 153, 58, 0.18), transparent 30%),
+    repeating-linear-gradient(90deg, rgba(255, 230, 168, 0.045) 0 2px, transparent 2px 26px),
+    linear-gradient(135deg, #3d2214, #1b0e09 58%, #070302);
   box-shadow:
-    inset 0 0 45px rgba(255, 228, 166, 0.18),
-    inset 0 -34px 45px rgba(20, 8, 3, 0.42),
-    0 35px 60px rgba(35, 17, 6, 0.38);
+    inset 0 0 45px rgba(255, 163, 66, 0.1),
+    inset 0 -34px 45px rgba(0, 0, 0, 0.5),
+    0 35px 60px rgba(0, 0, 0, 0.48);
 }
 
 .table-perspective::after {
@@ -2092,8 +2099,8 @@ body.theme-dream .enemy-card .hp-bar div {
   border: 1px solid rgba(72, 43, 14, 0.24);
   border-radius: 13px;
   background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.86), transparent 24%),
-    linear-gradient(145deg, #fff7dc, #e0ad54 58%, #704822);
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.82), transparent 24%),
+    linear-gradient(145deg, #f6d58e, #b66c2b 58%, #281107);
   box-shadow:
     inset 0 -9px 15px rgba(67, 37, 9, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
@@ -2268,10 +2275,10 @@ body.theme-dream .enemy-card .hp-bar div {
 }
 
 .die {
-  border-color: rgba(105, 66, 21, 0.26);
+  border-color: rgba(255, 217, 142, 0.36);
   box-shadow:
-    inset 0 -11px 18px rgba(65, 38, 10, 0.2),
-    0 12px 22px rgba(91, 58, 19, 0.18);
+    inset 0 -11px 18px rgba(65, 38, 10, 0.28),
+    0 12px 22px rgba(0, 0, 0, 0.32);
 }
 
 .slots {
@@ -2279,8 +2286,8 @@ body.theme-dream .enemy-card .hp-bar div {
 }
 
 .slot {
-  border-color: rgba(128, 88, 38, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 14px 24px rgba(75, 49, 16, 0.12);
+  border-color: rgba(205, 151, 67, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(255, 231, 180, 0.04), 0 14px 24px rgba(0, 0, 0, 0.32);
 }
 
 .slot small {
@@ -2288,15 +2295,147 @@ body.theme-dream .enemy-card .hp-bar div {
 }
 
 .route-lock-banner {
-  color: #683526;
+  color: #ffcfbf;
   background:
-    linear-gradient(90deg, rgba(240, 90, 69, 0.12), transparent 52%),
-    rgba(255, 255, 255, 0.38);
+    linear-gradient(90deg, rgba(240, 90, 69, 0.18), transparent 52%),
+    rgba(0, 0, 0, 0.24);
 }
 
 .battle-log p {
-  color: #5f4a2f;
-  background: rgba(255, 255, 255, 0.36);
+  color: #dbc295;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+:root {
+  --bg: #090807;
+  --bg-2: #19120f;
+  --panel: rgba(31, 24, 20, 0.94);
+  --panel-2: rgba(18, 15, 14, 0.94);
+  --panel-3: rgba(30, 23, 18, 0.9);
+  --text: #f2dfbd;
+  --muted: #b99a68;
+  --line: #7f5a28;
+  --line-bright: #d8a652;
+  --shadow: rgba(0, 0, 0, 0.48);
+}
+
+html {
+  background: #090807;
+}
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(190, 82, 31, 0.18), transparent 24rem),
+    radial-gradient(circle at 82% 5%, rgba(105, 16, 14, 0.2), transparent 28rem),
+    radial-gradient(circle at 50% 115%, rgba(12, 33, 35, 0.46), transparent 34rem),
+    linear-gradient(145deg, #120d0a 0%, #060606 54%, #17100d 100%);
+}
+
+body::before {
+  background:
+    linear-gradient(rgba(224, 173, 84, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 173, 84, 0.018) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(255, 172, 65, 0.07), transparent 38rem);
+}
+
+body::after {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.42), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.46)),
+    radial-gradient(circle at center, transparent 34%, rgba(0, 0, 0, 0.46));
+}
+
+.world-glow {
+  background: radial-gradient(circle, rgba(224, 121, 42, 0.22), transparent 68%);
+}
+
+.codex-screen {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 171, 70, 0.2), transparent 22rem),
+    radial-gradient(circle at 82% 18%, rgba(112, 16, 14, 0.24), transparent 30rem),
+    linear-gradient(135deg, rgba(15, 11, 9, 0.96), rgba(4, 5, 6, 0.96));
+}
+
+.codex-panel {
+  border-color: rgba(205, 151, 67, 0.32);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(224, 173, 84, 0.18), transparent 24rem),
+    radial-gradient(circle at 90% 8%, rgba(128, 24, 18, 0.22), transparent 24rem),
+    repeating-linear-gradient(90deg, rgba(224, 173, 84, 0.035) 0 1px, transparent 1px 22px),
+    linear-gradient(180deg, rgba(31, 24, 20, 0.98), rgba(9, 8, 8, 0.98));
+  box-shadow:
+    0 34px 110px rgba(0, 0, 0, 0.58),
+    inset 0 0 0 1px rgba(255, 231, 180, 0.08);
+}
+
+.codex-card {
+  border-color: rgba(205, 151, 67, 0.2);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(224, 173, 84, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(25, 20, 17, 0.92), rgba(8, 7, 7, 0.9));
+}
+
+.codex-card strong {
+  color: #fff0c8;
+}
+
+.codex-card small,
+.codex-card p {
+  color: #c5aa75;
+}
+
+.codex-tabs button {
+  background: rgba(0, 0, 0, 0.28);
+  color: #c7aa78;
+}
+
+.codex-tabs button.active {
+  color: #1b0f09;
+  background: linear-gradient(180deg, #f4c878, #a9652b);
+}
+
+.run-map,
+.route-panel,
+.relic-inventory {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(224, 173, 84, 0.14), transparent 24rem),
+    linear-gradient(180deg, rgba(31, 24, 20, 0.94), rgba(10, 9, 9, 0.94));
+}
+
+.route-stats span,
+.relic-chip,
+.empty-relics {
+  background: rgba(0, 0, 0, 0.24);
+  color: #d4b987;
+}
+
+.relic-chip strong,
+.reward-toast strong {
+  color: #fff0c8;
+}
+
+.relic-chip span,
+.empty-relics,
+.reward-toast small {
+  color: #c7aa78;
+}
+
+.select-actions button,
+.codex-head button,
+.title-codex-btn,
+#roll-btn,
+#resolve-btn,
+#reset-btn {
+  border-color: rgba(255, 224, 154, 0.18);
+  background: linear-gradient(180deg, #f4c878, #a9652b 52%, #552618);
+  color: #1b0f09;
+}
+
+#reset-btn.ghost,
+.ghost {
+  color: #d5b987;
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(205, 151, 67, 0.24);
 }
 
 @keyframes handThrow {
