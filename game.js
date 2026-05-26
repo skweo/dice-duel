@@ -1301,14 +1301,16 @@ function renderThrowDice(values) {
 }
 
 function renderDieCube(value) {
+  const bottomValue = oppositeDieValue(value);
+  const sideValues = [1, 2, 3, 4, 5, 6].filter(faceValue => faceValue !== value && faceValue !== bottomValue);
   return `
     <span class="cube" data-value="${value}">
-      <i class="cube-face face-front">${renderPips(value)}</i>
-      <i class="cube-face face-back">${renderPips(oppositeDieValue(value))}</i>
-      <i class="cube-face face-right">${renderPips(((value + 1) % 6) + 1)}</i>
-      <i class="cube-face face-left">${renderPips(((value + 3) % 6) + 1)}</i>
-      <i class="cube-face face-top">${renderPips(((value + 4) % 6) + 1)}</i>
-      <i class="cube-face face-bottom">${renderPips(((value + 2) % 6) + 1)}</i>
+      <i class="cube-face face-front">${renderPips(sideValues[0])}</i>
+      <i class="cube-face face-back">${renderPips(sideValues[1])}</i>
+      <i class="cube-face face-right">${renderPips(sideValues[2])}</i>
+      <i class="cube-face face-left">${renderPips(sideValues[3])}</i>
+      <i class="cube-face face-top">${renderPips(value)}</i>
+      <i class="cube-face face-bottom">${renderPips(bottomValue)}</i>
     </span>
     <span class="physics-shadow"></span>
     <span class="die-impact"></span>
@@ -1334,8 +1336,26 @@ function playThrowAnimation(values) {
   const start = performance.now();
   let previous = start;
   let settledFrames = 0;
+  let settleStart = null;
+  let settleTargets = null;
 
   function frame(now) {
+    if (settleStart !== null) {
+      const t = Math.min(1, (now - settleStart) / 540);
+      bodies.forEach((body, index) => renderSettlingDice(dice[index], body, settleTargets[index], t));
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        els.diceTheater.classList.remove("settling");
+        els.diceTheater.classList.add("settled");
+        bodies.forEach((body, index) => {
+          settleDiceBody(body, index, settleTargets[index]);
+          renderDiceBody(dice[index], body);
+        });
+      }
+      return;
+    }
+
     const dt = Math.min(0.034, Math.max(0.012, (now - previous) / 1000));
     previous = now;
     stepDicePhysics(bodies, bounds, dt);
@@ -1346,12 +1366,11 @@ function playThrowAnimation(values) {
       requestAnimationFrame(frame);
     } else {
       els.diceTheater.classList.remove("throwing");
-      els.diceTheater.classList.add("settled");
+      els.diceTheater.classList.add("settling");
       relaxDiceBodies(bodies, bounds);
-      bodies.forEach((body, index) => {
-        settleDiceBody(body, index);
-        renderDiceBody(dice[index], body);
-      });
+      settleTargets = bodies.map((body, index) => createDiceRestTarget(body, index, bounds));
+      settleStart = now;
+      requestAnimationFrame(frame);
     }
   }
   requestAnimationFrame(frame);
@@ -1558,6 +1577,24 @@ function renderDiceBody(element, body) {
   element.style.setProperty("--impact-alpha", clamp(body.impact * 0.72, 0, 0.62));
 }
 
+function renderSettlingDice(element, body, target, t) {
+  const eased = easeOutCubic(t);
+  const wobble = Math.sin(t * Math.PI * 4.5) * (1 - t) * 8;
+  const bodyFrame = {
+    x: mix(target.startX, target.x, eased),
+    y: mix(target.startY, target.y, eased),
+    z: Math.max(0, mix(target.startZ, 0, eased) + Math.max(0, Math.sin(t * Math.PI * 2)) * (1 - t) * 5),
+    rx: mix(target.startRx, target.rx, eased) + wobble,
+    ry: mix(target.startRy, target.ry, eased) - wobble * 0.62,
+    rz: mix(target.startRz, target.rz, eased) + wobble * 0.34,
+    vx: 0,
+    vy: 0,
+    vz: 0,
+    impact: Math.max(0, body.impact * (1 - t) + Math.sin(t * Math.PI) * 0.18 * (1 - t))
+  };
+  renderDiceBody(element, bodyFrame);
+}
+
 function isDiceBodySettled(body) {
   return body.z === 0
     && Math.hypot(body.vx, body.vy) < 18
@@ -1567,11 +1604,37 @@ function isDiceBodySettled(body) {
     && Math.abs(body.avz) < 45;
 }
 
-function settleDiceBody(body, index) {
+function createDiceRestTarget(body, index, bounds) {
+  const baseRx = -58 + (index - 1) * 2.5;
+  const baseRy = index % 2 === 0 ? 16 : -14;
+  const baseRz = index * 12 - 10;
+  const driftScale = clamp(Math.hypot(body.vx, body.vy) / 90, 0, 1);
+  const driftX = clamp(body.vx * 0.11, -18, 18) * driftScale;
+  const driftY = clamp(body.vy * 0.11, -18, 18) * driftScale;
+  return {
+    startX: body.x,
+    startY: body.y,
+    startZ: body.z,
+    startRx: body.rx,
+    startRy: body.ry,
+    startRz: body.rz,
+    x: clamp(body.x + driftX, bounds.left + body.radius, bounds.right - body.radius),
+    y: clamp(body.y + driftY, bounds.top + body.radius, bounds.bottom - body.radius),
+    rx: nearestEquivalentAngle(body.rx, baseRx),
+    ry: nearestEquivalentAngle(body.ry, baseRy),
+    rz: nearestEquivalentAngle(body.rz, baseRz)
+  };
+}
+
+function settleDiceBody(body, index, target = null) {
   body.z = 0;
   if (Number.isFinite(body.tableLeft)) {
     body.x = clamp(body.x, body.radius + body.tableLeft, body.tableRight - body.radius);
     body.y = clamp(body.y, body.radius + body.tableTop, body.tableBottom - body.radius);
+  }
+  if (target) {
+    body.x = target.x;
+    body.y = target.y;
   }
   body.vx = 0;
   body.vy = 0;
@@ -1580,9 +1643,9 @@ function settleDiceBody(body, index) {
   body.avy = 0;
   body.avz = 0;
   body.impact = 0;
-  body.rx = 0;
-  body.ry = 0;
-  body.rz = index * 12 - 10;
+  body.rx = target ? target.rx : -58 + (index - 1) * 2.5;
+  body.ry = target ? target.ry : (index % 2 === 0 ? 16 : -14);
+  body.rz = target ? target.rz : index * 12 - 10;
 }
 
 function relaxDiceBodies(bodies, bounds) {
@@ -1627,6 +1690,18 @@ function seededRandom(seed) {
 
 function randomRange(random, min, max) {
   return min + (max - min) * random();
+}
+
+function mix(start, end, amount) {
+  return start + (end - start) * amount;
+}
+
+function easeOutCubic(value) {
+  return 1 - Math.pow(1 - value, 3);
+}
+
+function nearestEquivalentAngle(current, target) {
+  return target + Math.round((current - target) / 360) * 360;
 }
 
 function renderEnemyDice() {
