@@ -1,5 +1,16 @@
 const PLAYER_MAX_HP = 24;
 const FINAL_ROUND = 6;
+const ROUTE_CHOICE_ROUNDS = new Set([2, 4]);
+const SWITCH_BASE_COST = 3;
+const THEME_CLASSES = [
+  "theme-debt",
+  "theme-blood",
+  "theme-dream",
+  "boss-mode",
+  "boss-debt",
+  "boss-blood",
+  "boss-dream"
+];
 
 const PATH_LABELS = {
   debt: "债",
@@ -264,6 +275,8 @@ const state = {
   nextIntentBonus: 0,
   pathScores: { debt: 0, blood: 0, dream: 0 },
   routeHistory: [],
+  currentPath: null,
+  oathFracture: 0,
   routeChoicePending: false,
   roundOver: false,
   rolled: false,
@@ -274,6 +287,8 @@ const els = {
   turn: document.getElementById("turn"),
   wins: document.getElementById("wins"),
   roundIndicator: document.getElementById("round-indicator"),
+  currentPath: document.getElementById("current-path"),
+  fractureCount: document.getElementById("fracture-count"),
   debtScore: document.getElementById("debt-score"),
   bloodScore: document.getElementById("blood-score"),
   dreamScore: document.getElementById("dream-score"),
@@ -327,6 +342,40 @@ function chooseBossPath() {
     return state.routeHistory.lastIndexOf(b[0]) - state.routeHistory.lastIndexOf(a[0]);
   });
   return entries[0][0];
+}
+
+function updateTheme() {
+  const activePath = currentEnemy()?.boss ? currentEnemy().path : state.currentPath;
+  document.body.classList.remove(...THEME_CLASSES);
+  if (activePath) document.body.classList.add(`theme-${activePath}`);
+  if (currentEnemy()?.boss) {
+    document.body.classList.add("boss-mode", `boss-${currentEnemy().path}`);
+  }
+}
+
+function getRouteOptions() {
+  const options = routeRounds[state.round] || [];
+  if (state.round === 4 && state.currentPath) {
+    const current = options.find(enemy => enemy.path === state.currentPath);
+    const alternatives = options.filter(enemy => enemy.path !== state.currentPath);
+    return current ? [current, ...alternatives] : options;
+  }
+  return options;
+}
+
+function getRouteSwitchCost(path) {
+  if (!state.currentPath || path === state.currentPath) return 0;
+  return SWITCH_BASE_COST + state.oathFracture;
+}
+
+function canPayRouteCost(path) {
+  const cost = getRouteSwitchCost(path);
+  return cost === 0 || state.playerHp > cost;
+}
+
+function enemyForCurrentPath(round) {
+  const options = routeRounds[round] || [];
+  return options.find(enemy => enemy.path === state.currentPath) || options[0];
 }
 
 function setEnemy(enemy, round) {
@@ -412,10 +461,13 @@ function createTurnContext() {
 
 function render() {
   const enemy = currentEnemy();
+  updateTheme();
   const totals = getPreviewTotals();
   els.turn.textContent = state.turn;
   els.wins.textContent = state.wins;
   els.roundIndicator.textContent = `${state.round}/${FINAL_ROUND}`;
+  els.currentPath.textContent = state.currentPath ? `${PATH_LABELS[state.currentPath]}路` : "未定";
+  els.fractureCount.textContent = state.oathFracture;
   els.debtScore.textContent = state.pathScores.debt;
   els.bloodScore.textContent = state.pathScores.blood;
   els.dreamScore.textContent = state.pathScores.dream;
@@ -424,7 +476,9 @@ function render() {
   els.playerHp.textContent = `${state.playerHp}/${PLAYER_MAX_HP}`;
   els.playerHpBar.style.width = `${(state.playerHp / PLAYER_MAX_HP) * 100}%`;
   els.playerSkill.textContent = playerSkill.name;
-  els.enemyRank.textContent = enemy.boss ? "Boss" : `敌人 · ${PATH_LABELS[enemy.path]}路`;
+  els.enemyRank.textContent = enemy.boss
+    ? "Boss"
+    : state.currentPath ? `敌人 · ${PATH_LABELS[enemy.path]}路` : "敌人 · 初门";
   els.enemyName.textContent = enemy.name;
   els.enemyTrait.textContent = enemy.trait;
   els.enemyLore.textContent = enemy.lore;
@@ -471,15 +525,21 @@ function renderRoutes() {
   els.routePanel.classList.toggle("visible", state.routeChoicePending);
   els.routeOptions.innerHTML = "";
   if (!state.routeChoicePending) return;
-  const options = routeRounds[state.round] || [];
+  const options = getRouteOptions();
   for (const enemy of options) {
+    const cost = getRouteSwitchCost(enemy.path);
+    const isSwitch = cost > 0;
+    const isLocked = !canPayRouteCost(enemy.path);
     const btn = document.createElement("button");
-    btn.className = `route-card ${PATH_CLASSES[enemy.path]}`;
+    btn.className = `route-card ${PATH_CLASSES[enemy.path]} ${isSwitch ? "switch-route" : "same-route"}`;
+    btn.disabled = isLocked;
     btn.innerHTML = `
       <span>${PATH_LABELS[enemy.path]}路</span>
       <strong>${enemy.location}</strong>
       <small>${enemy.locationDesc}</small>
       <em>将遭遇：${enemy.name}</em>
+      <b class="route-cost">${cost > 0 ? `改道代价：-${cost} 生命，违誓 +1` : state.currentPath ? "沿誓深入：无代价" : "初立誓约：无代价"}</b>
+      ${isLocked ? "<i>生命不足，不能在这里撕毁旧路。</i>" : ""}
     `;
     btn.addEventListener("click", () => chooseRoute(enemy));
     els.routeOptions.appendChild(btn);
@@ -488,11 +548,24 @@ function renderRoutes() {
 
 function chooseRoute(enemy) {
   if (!state.routeChoicePending) return;
+  const cost = getRouteSwitchCost(enemy.path);
+  if (!canPayRouteCost(enemy.path)) {
+    addLog("你的生命不足以支付改道代价。礼拜堂拒绝这次反悔。");
+    render();
+    return;
+  }
+  const previousPath = state.currentPath;
+  if (cost > 0) {
+    state.playerHp = clamp(state.playerHp - cost, 1, PLAYER_MAX_HP);
+    state.oathFracture += 1;
+    addLog(`你从${PATH_LABELS[previousPath]}路改投${PATH_LABELS[enemy.path]}路，付出 ${cost} 点生命，违誓痕迹 +1。`);
+  }
   state.pathScores[enemy.path] += 1;
   state.routeHistory.push(enemy.path);
+  state.currentPath = enemy.path;
   state.routeChoicePending = false;
   setEnemy(enemy, state.round);
-  addLog(`你选择了${PATH_LABELS[enemy.path]}路：${enemy.location}。`);
+  addLog(`${previousPath && previousPath === enemy.path ? "你没有回头，继续沿" : "你选择了"}${PATH_LABELS[enemy.path]}路：${enemy.location}。`);
   addLog(enemy.intro);
   render();
 }
@@ -592,13 +665,27 @@ function winFight() {
   if (state.round === FINAL_ROUND) {
     const bossPath = chooseBossPath();
     const boss = bosses[bossPath];
+    state.routeChoicePending = false;
     setEnemy(boss, FINAL_ROUND);
     addLog(`五扇门同时关闭，只剩${PATH_LABELS[bossPath]}路的尽头还在呼吸。`);
     addLog(`你的岔路选择将你带向最终 Boss：${boss.name}。`);
     addLog(boss.intro);
-  } else {
+  } else if (ROUTE_CHOICE_ROUNDS.has(state.round)) {
     state.routeChoicePending = true;
-    addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。三条岔路在你面前打开。`);
+    const choiceText = state.currentPath
+      ? `裂隙路口只出现这一次：继续${PATH_LABELS[state.currentPath]}路，或付出生命改投别路。`
+      : "三条岔路在你面前打开。第一次立誓不需要代价。";
+    addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。${choiceText}`);
+  } else {
+    const nextEnemy = enemyForCurrentPath(state.round);
+    state.pathScores[nextEnemy.path] += 1;
+    state.routeHistory.push(nextEnemy.path);
+    state.currentPath = nextEnemy.path;
+    state.routeChoicePending = false;
+    setEnemy(nextEnemy, state.round);
+    addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。门在身后闭合，你只能继续深入${PATH_LABELS[nextEnemy.path]}路。`);
+    addLog(`${nextEnemy.location}接住了你的脚步。`);
+    addLog(nextEnemy.intro);
   }
   render();
 }
@@ -618,6 +705,8 @@ function resetGame() {
   state.turnInFight = 1;
   state.pathScores = { debt: 0, blood: 0, dream: 0 };
   state.routeHistory = [];
+  state.currentPath = null;
+  state.oathFracture = 0;
   state.routeChoicePending = false;
   state.roundOver = false;
   state.nextIntentBonus = 0;

@@ -15,7 +15,7 @@
       <div>
         <p class="eyebrow">黑礼拜堂 · 六轮赌局</p>
         <h1>骰誓</h1>
-        <p class="subtitle">黑礼拜堂不再只有一条走廊。每次胜利都会打开三扇岔门：债、血、梦。你选择的路，会决定最后坐在赌桌尽头的人。</p>
+        <p class="subtitle">黑礼拜堂不再只有一条走廊。第 2 轮立誓，第 4 轮才会出现一次裂隙改道；反悔需要付出生命，也会留下违誓痕迹。</p>
       </div>
     </section>
 
@@ -27,6 +27,8 @@
       </div>
       <div class="route-stats">
         <span>轮次 <strong id="round-indicator">1/6</strong></span>
+        <span>当前 <strong id="current-path">未定</strong></span>
+        <span>违誓 <strong id="fracture-count">0</strong></span>
         <span>债 <strong id="debt-score">0</strong></span>
         <span>血 <strong id="blood-score">0</strong></span>
         <span>梦 <strong id="dream-score">0</strong></span>
@@ -37,7 +39,7 @@
       <div class="route-panel-head">
         <p class="eyebrow">岔路已开启</p>
         <h2>选择下一处地点</h2>
-        <p>每条路会改变你遇到的敌人，也会把你推向不同的最终 Boss。</p>
+        <p>不是每次胜利都能改道。若你撕毁旧路，礼拜堂会先收走生命，再把痕迹刻进骰印。</p>
       </div>
       <div class="route-options" id="route-options"></div>
     </section>
@@ -127,7 +129,8 @@
 
       <article class="rules-card">
         <h2>残页</h2>
-        <p>第 1 轮固定在旧前厅。第 2 至第 5 轮，每次胜利后会出现三条岔路。第 6 轮的 Boss 由你此前偏向的道路决定。</p>
+        <p>第 1 轮固定在旧前厅。第 2 轮自由立誓；第 3 轮会沿当前路线深入；第 4 轮只有一次裂隙改道机会；第 5 轮承担选择后果。</p>
+        <p>改道会损失生命并留下违誓痕迹。生命不足时，礼拜堂不允许你反悔。</p>
         <p>敌人不只会变强，还会用不同规则逼迫你改变骰子分配。礼拜堂只承认选择，不承认借口。</p>
         <p>击败 Boss 即为胜利，并解锁对应结局。</p>
       </article>
