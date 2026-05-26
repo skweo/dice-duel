@@ -190,6 +190,41 @@ button:disabled {
   transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
+.character-card:nth-child(1) {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(244, 213, 138, 0.18), transparent 38%),
+    linear-gradient(155deg, rgba(76, 22, 20, 0.72), transparent 58%),
+    linear-gradient(180deg, rgba(28, 22, 18, 0.9), rgba(9, 8, 8, 0.92));
+}
+
+.character-card:nth-child(2) {
+  background:
+    linear-gradient(90deg, rgba(143, 166, 184, 0.14), transparent 46%),
+    repeating-linear-gradient(0deg, rgba(224, 173, 84, 0.045) 0 1px, transparent 1px 14px),
+    linear-gradient(180deg, rgba(17, 25, 30, 0.94), rgba(6, 8, 9, 0.94));
+}
+
+.character-card:nth-child(3) {
+  background:
+    linear-gradient(135deg, rgba(185, 138, 58, 0.18), transparent 46%),
+    repeating-linear-gradient(90deg, rgba(217, 193, 143, 0.045) 0 1px, transparent 1px 18px),
+    linear-gradient(180deg, rgba(42, 29, 12, 0.94), rgba(8, 6, 4, 0.94));
+}
+
+.character-card:nth-child(4) {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 91, 74, 0.2), transparent 42%),
+    linear-gradient(160deg, rgba(105, 12, 10, 0.5), transparent 54%),
+    linear-gradient(180deg, rgba(37, 8, 7, 0.95), rgba(7, 3, 3, 0.94));
+}
+
+.character-card:nth-child(5) {
+  background:
+    radial-gradient(circle at 82% 0%, rgba(116, 241, 212, 0.13), transparent 38%),
+    linear-gradient(135deg, rgba(156, 134, 232, 0.22), transparent 48%),
+    linear-gradient(180deg, rgba(23, 17, 45, 0.95), rgba(7, 7, 17, 0.94));
+}
+
 .character-card:not(:disabled):hover,
 .character-card.selected {
   transform: translateY(-3px);
@@ -208,6 +243,11 @@ button:disabled {
   border: 1px solid rgba(224, 173, 84, 0.4);
   border-radius: 24px;
   background: #0d0a09;
+}
+
+.character-mini-portrait,
+.player-portrait {
+  isolation: isolate;
 }
 
 .character-mini-portrait svg {
@@ -529,6 +569,7 @@ h2 {
 
 .relic-chip,
 .empty-relics {
+  position: relative;
   margin: 0;
   padding: 9px 11px;
   border: 1px solid rgba(199, 154, 85, 0.22);
@@ -540,8 +581,60 @@ h2 {
   text-align: left;
 }
 
+.relic-chip {
+  max-width: 260px;
+  transition: transform 140ms ease, border-color 140ms ease, filter 140ms ease;
+}
+
+.relic-chip:not(:disabled):hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.relic-chip.passive {
+  border-color: rgba(224, 173, 84, 0.32);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(224, 173, 84, 0.16), transparent 38%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 42%),
+    rgba(0, 0, 0, 0.26);
+}
+
+.relic-chip.consumable {
+  border-color: rgba(240, 90, 69, 0.38);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 90, 69, 0.18), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 42%),
+    rgba(39, 7, 6, 0.32);
+  box-shadow: inset 3px 0 0 rgba(240, 90, 69, 0.64);
+}
+
+.relic-chip.consumable::after,
+.relic-chip.passive::after {
+  content: "常驻";
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.relic-chip.consumable::after {
+  content: "一次";
+  color: #ffb0a2;
+}
+
+.relic-chip:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
 .relic-chip strong {
   display: block;
+  padding-right: 36px;
   color: #fff0c9;
   font-size: 13px;
 }
@@ -550,6 +643,64 @@ h2 {
 .empty-relics {
   color: var(--muted);
   font-size: 12px;
+  line-height: 1.45;
+}
+
+.reward-toast {
+  position: relative;
+  flex: 1 1 100%;
+  max-width: 100%;
+  padding: 12px 14px 12px 44px;
+  overflow: hidden;
+  border: 1px solid rgba(224, 173, 84, 0.42);
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, rgba(224, 173, 84, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(39, 28, 16, 0.96), rgba(11, 8, 6, 0.94));
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.28), 0 0 24px rgba(224, 173, 84, 0.08);
+  animation: rewardPulse 1100ms ease both;
+}
+
+.reward-toast::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%) rotate(45deg);
+  border: 2px solid #ffe5ad;
+  border-radius: 5px;
+  background: #d29a31;
+  box-shadow: inset 0 0 0 4px #2d160b;
+}
+
+.reward-toast.consumable {
+  border-color: rgba(240, 90, 69, 0.52);
+  background:
+    linear-gradient(90deg, rgba(240, 90, 69, 0.2), transparent 46%),
+    linear-gradient(180deg, rgba(49, 12, 10, 0.96), rgba(11, 5, 5, 0.94));
+}
+
+.reward-toast span,
+.reward-toast strong,
+.reward-toast small {
+  display: block;
+}
+
+.reward-toast span {
+  color: var(--route-accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.reward-toast strong {
+  color: #fff0c9;
+}
+
+.reward-toast small {
+  color: #d4b987;
   line-height: 1.45;
 }
 
@@ -874,6 +1025,81 @@ body.boss-dream .enemy-card {
   font-size: 13px;
 }
 
+.enemy-dice-row {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid rgba(240, 90, 69, 0.2);
+  border-radius: 14px;
+  background:
+    linear-gradient(90deg, rgba(240, 90, 69, 0.09), transparent 54%),
+    rgba(0, 0, 0, 0.22);
+}
+
+.enemy-dice-row > span {
+  color: #ffb0a2;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.enemy-dice-tray {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+}
+
+.enemy-dice-empty {
+  color: rgba(255, 176, 162, 0.65);
+  font-size: 12px;
+}
+
+.enemy-die {
+  position: relative;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 122, 100, 0.44);
+  border-radius: 11px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 105, 88, 0.42), transparent 22%),
+    linear-gradient(145deg, #211010, #070505 64%, #310c0b);
+  box-shadow:
+    inset 0 -7px 12px rgba(0, 0, 0, 0.54),
+    0 8px 16px rgba(0, 0, 0, 0.32);
+}
+
+.enemy-die .die-face {
+  width: 26px;
+  height: 26px;
+}
+
+.enemy-die .pip {
+  background: #ff9a87;
+  box-shadow: 0 0 8px rgba(240, 90, 69, 0.58);
+}
+
+.enemy-die b {
+  display: none;
+}
+
+.enemy-dice-bonus {
+  display: grid;
+  min-width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 176, 162, 0.38);
+  border-radius: 999px;
+  color: #ffb0a2;
+  background: rgba(95, 15, 12, 0.44);
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .portrait {
   position: relative;
   width: 128px;
@@ -1006,6 +1232,14 @@ body.theme-dream .enemy-card .hp-bar div {
   border-radius: 30px;
 }
 
+.board.route-locked {
+  border-color: rgba(240, 90, 69, 0.36);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 90, 69, 0.12), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 32%),
+    linear-gradient(180deg, var(--panel), rgba(13, 10, 9, 0.92));
+}
+
 .panel-heading,
 .actions {
   display: flex;
@@ -1016,6 +1250,14 @@ body.theme-dream .enemy-card .hp-bar div {
 
 .panel-heading h2 {
   margin-bottom: 0;
+}
+
+.panel-hint {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: #c7aa78;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 #roll-btn,
@@ -1070,6 +1312,8 @@ body.theme-dream .enemy-card .hp-bar div {
 
 .die {
   position: relative;
+  display: grid;
+  place-items: center;
   min-height: 92px;
   border: 1px solid rgba(255, 240, 201, 0.45);
   border-radius: 22px;
@@ -1112,6 +1356,71 @@ body.theme-dream .enemy-card .hp-bar div {
   transform: translateY(-4px);
 }
 
+.die-face {
+  position: relative;
+  display: block;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+}
+
+.die .die-face {
+  filter: drop-shadow(0 3px 1px rgba(255, 255, 255, 0.28));
+}
+
+.die b {
+  position: absolute;
+  left: 12px;
+  top: 9px;
+  color: rgba(37, 19, 6, 0.32);
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.pip {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #321707;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.24);
+}
+
+.pip.top-left {
+  left: 8px;
+  top: 8px;
+}
+
+.pip.top-right {
+  right: 8px;
+  top: 8px;
+}
+
+.pip.center {
+  left: calc(50% - 4.5px);
+  top: calc(50% - 4.5px);
+}
+
+.pip.middle-left {
+  left: 8px;
+  top: calc(50% - 4.5px);
+}
+
+.pip.middle-right {
+  right: 8px;
+  top: calc(50% - 4.5px);
+}
+
+.pip.bottom-left {
+  left: 8px;
+  bottom: 8px;
+}
+
+.pip.bottom-right {
+  right: 8px;
+  bottom: 8px;
+}
+
 .die-slot-badge {
   position: absolute;
   right: 10px;
@@ -1136,6 +1445,7 @@ body.theme-dream .enemy-card .hp-bar div {
 }
 
 .slot {
+  position: relative;
   display: grid;
   gap: 5px;
   min-height: 126px;
@@ -1150,6 +1460,33 @@ body.theme-dream .enemy-card .hp-bar div {
   transition: transform 130ms ease, border-color 130ms ease, background 130ms ease;
 }
 
+.slot::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.slot.attack {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 90, 69, 0.2), transparent 42%),
+    linear-gradient(145deg, rgba(80, 14, 12, 0.7), rgba(23, 14, 11, 0.92));
+}
+
+.slot.guard {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(166, 191, 210, 0.18), transparent 42%),
+    linear-gradient(145deg, rgba(27, 42, 54, 0.78), rgba(14, 14, 16, 0.92));
+}
+
+.slot.heal {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(155, 207, 132, 0.18), transparent 42%),
+    linear-gradient(145deg, rgba(23, 56, 32, 0.7), rgba(14, 15, 11, 0.92));
+}
+
 .slot:hover {
   transform: translateY(-2px);
   border-color: var(--line-bright);
@@ -1161,6 +1498,25 @@ body.theme-dream .enemy-card .hp-bar div {
   font-weight: 900;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.slot-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slot-label i {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(255, 237, 194, 0.2);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  color: #ffe5ad;
+  font-style: normal;
+  letter-spacing: 0;
 }
 
 .slot strong {
@@ -1186,6 +1542,24 @@ body.theme-dream .enemy-card .hp-bar div {
 
 .actions {
   margin-top: 14px;
+}
+
+.route-lock-banner {
+  display: none;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(240, 90, 69, 0.38);
+  border-radius: 16px;
+  color: #ffcfbf;
+  background:
+    linear-gradient(90deg, rgba(240, 90, 69, 0.18), transparent 52%),
+    rgba(0, 0, 0, 0.24);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.route-lock-banner.visible {
+  display: block;
 }
 
 .lower-grid {

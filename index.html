@@ -115,6 +115,10 @@
             <p class="skill-line"><span>技能</span><strong id="enemy-skill">木刺反扑</strong></p>
             <p class="skill-desc" id="enemy-skill-desc">若你本回合没有投入防御骰，造成伤害后受到 1 点反伤。</p>
             <p class="intent" id="enemy-intent">等待你掷骰</p>
+            <div class="enemy-dice-row" aria-label="敌人黑骰">
+              <span>敌方黑骰</span>
+              <div id="enemy-dice-tray" class="enemy-dice-tray"></div>
+            </div>
           </div>
         </div>
         <div class="hp-row">
@@ -131,27 +135,32 @@
           <div>
             <p class="eyebrow">本回合骰子</p>
             <h2>骨骰</h2>
+            <p class="panel-hint" id="board-hint">先掷骰。敌人也会掷出可见黑骰，再决定你的分配。</p>
           </div>
           <button id="roll-btn">掷骰</button>
         </div>
         <div id="dice-tray" class="dice-tray" aria-label="骰子列表"></div>
       </div>
 
+      <div class="route-lock-banner" id="route-lock-banner" aria-live="polite">
+        岔路正在等待选择：请先在上方选择下一处地点，战斗台会在立誓后重新开启。
+      </div>
+
       <div class="slots" aria-label="行动槽">
         <button class="slot attack" data-slot="attack">
-          <span>攻击</span>
+          <span class="slot-label"><i>刃</i>攻击</span>
           <strong id="attack-total">0</strong>
-          <small>造成等同点数的伤害。</small>
+          <small>破甲。投入 2 枚以上骰子时，攻击 +1。</small>
         </button>
         <button class="slot guard" data-slot="guard">
-          <span>防御</span>
+          <span class="slot-label"><i>盾</i>防御</span>
           <strong id="guard-total">0</strong>
-          <small>抵消敌人的本回合伤害。</small>
+          <small>格挡。若防御不低于敌方黑骰合计，反击 1 点。</small>
         </button>
         <button class="slot heal" data-slot="heal">
-          <span>恢复</span>
+          <span class="slot-label"><i>烛</i>恢复</span>
           <strong id="heal-total">0</strong>
-          <small>每 2 点恢复 1 点生命。</small>
+          <small>祷疗。每 2 点恢复 1 生命；投入 2 枚以上时额外 +1。</small>
         </button>
       </div>
 
@@ -172,8 +181,8 @@
         <p>第 1 轮固定在旧前厅。第 2 轮自由立誓；第 3 轮会沿当前路线深入；第 4 轮只有一次裂隙改道机会；第 5 轮承担选择后果。</p>
         <p>改道会损失生命并留下违誓痕迹。生命不足时，礼拜堂不允许你反悔。</p>
         <p>开局可选择不同入堂者。每名角色有独立生命、技能、性格和背景；击败特定 Boss 会解锁新角色。</p>
-        <p>击败普通敌人会夺取它的遗物。遗物会在后续战斗中自动触发，并会写入图鉴。</p>
-        <p>敌人不只会变强，还会用不同规则逼迫你改变骰子分配。礼拜堂只承认选择，不承认借口。</p>
+        <p>击败普通敌人会从其道具池中夺取 1 件遗物。金色为永久生效，红色为一次性物品，可在合适时机点击使用。</p>
+        <p>敌人每回合也会掷出可见黑骰。你看到点数后再分配骨骰，但敌人的特殊技能仍会改变最终伤害。</p>
         <p>击败 Boss 即为胜利，并解锁对应结局。</p>
       </article>
     </section>
