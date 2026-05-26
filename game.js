@@ -1354,24 +1354,16 @@ function renderThrowDice(values) {
 }
 
 function renderDieCube(value) {
-  const bottomValue = oppositeDieValue(value);
-  const sideValues = [1, 2, 3, 4, 5, 6].filter(faceValue => faceValue !== value && faceValue !== bottomValue);
   return `
     <span class="cube" data-value="${value}">
-      <i class="cube-face face-front">${renderPips(sideValues[0])}</i>
-      <i class="cube-face face-back">${renderPips(sideValues[1])}</i>
-      <i class="cube-face face-right">${renderPips(sideValues[2])}</i>
-      <i class="cube-face face-left">${renderPips(sideValues[3])}</i>
+      <i class="cube-side cube-side-right"></i>
+      <i class="cube-side cube-side-bottom"></i>
       <i class="cube-face face-top">${renderPips(value)}</i>
-      <i class="cube-face face-bottom">${renderPips(bottomValue)}</i>
+      <i class="cube-rim"></i>
     </span>
     <span class="physics-shadow"></span>
     <span class="die-impact"></span>
   `;
-}
-
-function oppositeDieValue(value) {
-  return 7 - value;
 }
 
 function playThrowAnimation(values) {
@@ -1618,11 +1610,13 @@ function renderDiceBody(element, body) {
   const lift = body.z;
   const cube = element.querySelector(".cube");
   const impactSquash = body.z === 0 ? body.impact : 0;
-  const squashX = 1 + impactSquash * 0.075;
-  const squashY = 1 - impactSquash * 0.055;
-  element.style.transform = `translate3d(${body.x}px, ${body.y - lift * 0.12}px, ${lift}px)`;
+  const squashX = 1 + impactSquash * 0.08;
+  const squashY = 1 - impactSquash * 0.06;
+  const flightScale = 1 + clamp(lift / 420, 0, 0.18);
+  const wobble = Math.sin((body.rx + body.ry) * Math.PI / 180) * clamp(lift / 180, 0, 1) * 5;
+  element.style.transform = `translate3d(${body.x}px, ${body.y - lift * 0.16}px, 0) scale(${flightScale})`;
   if (cube) {
-    cube.style.transform = `rotateX(${body.rx}deg) rotateY(${body.ry}deg) rotateZ(${body.rz}deg) scale3d(${squashX}, ${squashY}, 1)`;
+    cube.style.transform = `rotate(${body.rz + wobble}deg) scale(${squashX}, ${squashY})`;
   }
   element.style.setProperty("--shadow-scale", clamp(1 - body.z / 230, 0.44, 1.08));
   element.style.setProperty("--shadow-alpha", clamp(0.42 - body.z / 520, 0.08, 0.38));
@@ -1658,8 +1652,6 @@ function isDiceBodySettled(body) {
 }
 
 function createDiceRestTarget(body, index, bounds) {
-  const baseRx = -58 + (index - 1) * 2.5;
-  const baseRy = index % 2 === 0 ? 16 : -14;
   const baseRz = index * 12 - 10;
   const driftScale = clamp(Math.hypot(body.vx, body.vy) / 90, 0, 1);
   const driftX = clamp(body.vx * 0.11, -18, 18) * driftScale;
@@ -1673,8 +1665,8 @@ function createDiceRestTarget(body, index, bounds) {
     startRz: body.rz,
     x: clamp(body.x + driftX, bounds.left + body.radius, bounds.right - body.radius),
     y: clamp(body.y + driftY, bounds.top + body.radius, bounds.bottom - body.radius),
-    rx: nearestEquivalentAngle(body.rx, baseRx),
-    ry: nearestEquivalentAngle(body.ry, baseRy),
+    rx: body.rx,
+    ry: body.ry,
     rz: nearestEquivalentAngle(body.rz, baseRz)
   };
 }
@@ -1696,8 +1688,8 @@ function settleDiceBody(body, index, target = null) {
   body.avy = 0;
   body.avz = 0;
   body.impact = 0;
-  body.rx = target ? target.rx : -58 + (index - 1) * 2.5;
-  body.ry = target ? target.ry : (index % 2 === 0 ? 16 : -14);
+  body.rx = target ? target.rx : 0;
+  body.ry = target ? target.ry : 0;
   body.rz = target ? target.rz : index * 12 - 10;
 }
 

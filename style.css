@@ -2369,8 +2369,6 @@ body.theme-dream .enemy-card .hp-bar div {
     inset 0 0 0 1px rgba(255, 231, 180, 0.07),
     inset 0 -30px 60px rgba(0, 0, 0, 0.52),
     0 18px 36px rgba(0, 0, 0, 0.34);
-  perspective: 920px;
-  perspective-origin: 50% 34%;
 }
 
 .dice-theater::before {
@@ -2445,11 +2443,11 @@ body.theme-dream .enemy-card .hp-bar div {
   z-index: 5;
   width: 0;
   height: 0;
-  transform-style: preserve-3d;
 }
 
 .physics-die {
-  --die-size: 62px;
+  --die-size: 64px;
+  --die-depth: 14px;
   --die-offset: 0px;
   --shadow-scale: 0.7;
   --shadow-alpha: 0.18;
@@ -2460,8 +2458,7 @@ body.theme-dream .enemy-card .hp-bar div {
   top: calc(var(--die-size) * -0.5);
   width: var(--die-size);
   height: var(--die-size);
-  transform: translate3d(var(--die-offset), 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-  transform-style: preserve-3d;
+  transform: translate3d(var(--die-offset), 0, 0);
   will-change: transform;
 }
 
@@ -2470,10 +2467,10 @@ body.theme-dream .enemy-card .hp-bar div {
   inset: 0;
   z-index: 2;
   display: block;
-  transform-style: preserve-3d;
+  border-radius: 18px;
   will-change: transform;
   filter:
-    drop-shadow(0 18px 16px rgba(0, 0, 0, 0.48))
+    drop-shadow(0 16px 12px rgba(0, 0, 0, 0.44))
     drop-shadow(0 0 13px rgba(225, 141, 48, 0.12));
 }
 
@@ -2482,6 +2479,7 @@ body.theme-dream .enemy-card .hp-bar div {
   inset: 0;
   display: block;
   overflow: hidden;
+  z-index: 3;
   border: 2px solid rgba(73, 40, 14, 0.68);
   border-radius: 16px;
   background:
@@ -2496,7 +2494,6 @@ body.theme-dream .enemy-card .hp-bar div {
     inset -10px -14px 22px rgba(43, 19, 7, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.76),
     0 0 0 1px rgba(18, 7, 2, 0.18);
-  backface-visibility: hidden;
 }
 
 .cube-face::before {
@@ -2521,36 +2518,58 @@ body.theme-dream .enemy-card .hp-bar div {
   mix-blend-mode: screen;
 }
 
-.face-front {
-  transform: translateZ(calc(var(--die-size) / 2));
-}
-
-.face-back {
-  filter: brightness(0.5) saturate(0.84);
-  transform: rotateY(180deg) translateZ(calc(var(--die-size) / 2));
-}
-
-.face-right {
-  filter: brightness(0.68) saturate(0.92);
-  transform: rotateY(90deg) translateZ(calc(var(--die-size) / 2));
-}
-
-.face-left {
-  filter: brightness(0.58) saturate(0.88);
-  transform: rotateY(-90deg) translateZ(calc(var(--die-size) / 2));
-}
-
 .face-top {
-  filter: brightness(1.12) saturate(1.04);
-  transform: rotateX(90deg) translateZ(calc(var(--die-size) / 2));
+  transform: translate(calc(var(--die-depth) * -0.34), calc(var(--die-depth) * -0.42));
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 239, 194, 0.13),
+    inset 7px 7px 16px rgba(255, 246, 210, 0.18),
+    inset -10px -14px 22px rgba(43, 19, 7, 0.42),
+    0 var(--die-depth) 0 #6f3916,
+    calc(var(--die-depth) * 0.5) calc(var(--die-depth) * 0.42) 0 #3b1a0a,
+    0 0 0 1px rgba(18, 7, 2, 0.18);
 }
 
-.face-bottom {
-  filter: brightness(0.42) saturate(0.78);
-  transform: rotateX(-90deg) translateZ(calc(var(--die-size) / 2));
+.cube-side {
+  position: absolute;
+  z-index: 1;
+  border-radius: 14px;
+  pointer-events: none;
+  background:
+    linear-gradient(145deg, #9a5b22, #4a210c 62%, #1b0b05);
+  box-shadow: inset 0 1px 0 rgba(255, 221, 154, 0.1);
+}
+
+.cube-side-right {
+  right: calc(var(--die-depth) * -0.5);
+  top: calc(var(--die-depth) * 0.14);
+  width: var(--die-depth);
+  height: calc(100% - 2px);
+  transform: skewY(34deg);
+  transform-origin: left top;
+  filter: brightness(0.72);
+}
+
+.cube-side-bottom {
+  left: calc(var(--die-depth) * 0.1);
+  bottom: calc(var(--die-depth) * -0.62);
+  width: calc(100% - 1px);
+  height: var(--die-depth);
+  transform: skewX(34deg);
+  transform-origin: left top;
+  filter: brightness(0.56);
+}
+
+.cube-rim {
+  position: absolute;
+  inset: -4px -2px -1px -7px;
+  z-index: 4;
+  border: 1px solid rgba(255, 236, 179, 0.12);
+  border-radius: 21px;
+  pointer-events: none;
 }
 
 .cube-face .pip {
+  z-index: 2;
   width: 9px;
   height: 9px;
   background: #2b1608;
@@ -2598,10 +2617,10 @@ body.theme-dream .enemy-card .hp-bar div {
 .physics-shadow {
   position: absolute;
   z-index: 0;
-  left: -18px;
-  top: 38px;
-  width: 98px;
-  height: 31px;
+  left: -20px;
+  top: 43px;
+  width: 104px;
+  height: 34px;
   transform: scale(var(--shadow-scale));
   transform-origin: center;
   border-radius: 50%;
@@ -2617,7 +2636,7 @@ body.theme-dream .enemy-card .hp-bar div {
   top: 50%;
   width: 96px;
   height: 38px;
-  transform: translate(-50%, -30%) scale(var(--impact-scale));
+  transform: translate(-48%, -18%) scale(var(--impact-scale));
   border: 1px solid rgba(255, 219, 144, var(--impact-alpha));
   border-radius: 50%;
   background:
