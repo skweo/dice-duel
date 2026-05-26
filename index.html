@@ -11,9 +11,18 @@
 
   <section class="character-select" id="character-select" aria-label="角色选择">
     <div class="character-select-panel">
-      <p class="eyebrow">黑礼拜堂征召令</p>
-      <h1>选择入堂者</h1>
-      <p class="subtitle">不同角色拥有独立技能、生命上限、性格和背景。击败不同终局 Boss 后，会解锁新的幸存者档案。</p>
+      <div class="select-hero">
+        <div>
+          <p class="eyebrow">Dice Oath · Atelier Edition</p>
+          <h1>选择入局者</h1>
+          <p class="subtitle">一张角色卡就是一种下注方式。每名入局者拥有不同技能、生命上限与叙事身份；击败终局 Boss 后，会解锁新的收藏档案。</p>
+        </div>
+        <div class="hero-dice-showcase" aria-hidden="true">
+          <span class="showcase-die">1</span>
+          <span class="showcase-die">4</span>
+          <span class="showcase-die">6</span>
+        </div>
+      </div>
       <div class="character-options" id="character-options"></div>
       <div class="select-actions">
         <button id="start-run-btn">进入黑礼拜堂</button>
@@ -138,6 +147,19 @@
             <p class="panel-hint" id="board-hint">先掷骰。敌人也会掷出可见黑骰，再决定你的分配。</p>
           </div>
           <button id="roll-btn">掷骰</button>
+        </div>
+        <div class="dice-theater" id="dice-theater" aria-hidden="true">
+          <div class="throw-hand" id="throw-hand">
+            <span class="hand-sleeve"></span>
+            <span class="hand-palm"></span>
+            <span class="hand-finger finger-one"></span>
+            <span class="hand-finger finger-two"></span>
+            <span class="hand-finger finger-three"></span>
+          </div>
+          <div class="table-perspective">
+            <div class="dice-physics-layer" id="dice-physics-layer"></div>
+            <div class="table-impact-ring"></div>
+          </div>
         </div>
         <div id="dice-tray" class="dice-tray" aria-label="骰子列表"></div>
       </div>

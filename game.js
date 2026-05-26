@@ -35,202 +35,138 @@ const storyFragments = [
 ];
 
 const portraits = {
-  oathbound: oathboundPortraitSvg(),
-  ironConfessor: ironConfessorPortraitSvg(),
-  ledgerKnight: ledgerKnightPortraitSvg(),
-  redPilgrim: redPilgrimPortraitSvg(),
-  mirrorVagrant: mirrorVagrantPortraitSvg(),
-  wood: portraitSvg("#0f0d0a", "#211713", "#9a6c36", "#d0a25b", "朽木侍从"),
-  iron: portraitSvg("#0a0d10", "#1f2a31", "#424d56", "#e0ad54", "铁面赌徒"),
-  red: portraitSvg("#160908", "#35100f", "#9c2b29", "#ff5b4a", "赤眼典狱官"),
-  coin: portraitSvg("#130d07", "#4c3213", "#9e661d", "#e0ad54", "铸币魔像"),
-  violet: portraitSvg("#100817", "#241331", "#4b2a61", "#74f1d4", "黑礼拜堂庄家"),
-  pale: portraitSvg("#100f12", "#28232c", "#d8cbb0", "#8fd1ff", "镜中修女"),
-  green: portraitSvg("#07100b", "#18311e", "#446b35", "#9bcf84", "药园司祭"),
-  ash: portraitSvg("#11100d", "#2b2924", "#756c5d", "#c7aa78", "灰烬钟童"),
-  wax: portraitSvg("#160d0b", "#3a1813", "#b63b35", "#f0b36a", "封蜡书记"),
-  moth: portraitSvg("#0e0b14", "#251b32", "#5b4b78", "#d8c7ff", "梦蛾女仆"),
-  rabbit: portraitSvg("#101018", "#2c2c45", "#7f92a2", "#fff0c9", "白兔报时官"),
-  tax: portraitSvg("#120c07", "#3d2b18", "#85611f", "#f0d16d", "什一税审计员"),
-  butcher: portraitSvg("#160807", "#3d1110", "#8e2420", "#f05a45", "血槽屠户"),
-  child: portraitSvg("#0b1114", "#142d35", "#4e8791", "#a9f1ff", "潮湿圣童"),
-  judge: portraitSvg("#060507", "#17121d", "#3b2b4a", "#e0ad54", "空座审判官"),
-  hound: portraitSvg("#150707", "#391010", "#6e1f1d", "#f05a45", "赤犬主教"),
-  queen: portraitSvg("#0c0712", "#21102d", "#53356b", "#e7c6ff", "睡梦女王")
+  oathbound: playerCardPortrait("誓约者", "#faf0d7", "#8f2f20", "#e7b75d", "dice"),
+  ironConfessor: playerCardPortrait("铁赦修女", "#edf3f4", "#273b46", "#b9c8d6", "shield"),
+  ledgerKnight: playerCardPortrait("账册骑士", "#f5e4ba", "#6f4416", "#d0a24d", "ledger"),
+  redPilgrim: playerCardPortrait("赤烛朝圣者", "#ffe1cf", "#b63b35", "#ff8b62", "candle"),
+  mirrorVagrant: playerCardPortrait("镜隙流亡者", "#e8f9ff", "#2f4970", "#6dd7d2", "mirror"),
+  wood: enemyCardPortrait("朽木侍从", "#f0ddae", "#6b4a24", "#b98a3a", "wood"),
+  iron: enemyCardPortrait("铁面赌徒", "#dce5e8", "#25313a", "#d5a24e", "mask"),
+  red: enemyCardPortrait("赤眼典狱官", "#ffd8cc", "#7e1d18", "#f05a45", "bars"),
+  coin: enemyCardPortrait("铸币魔像", "#f2d283", "#7b5518", "#e0ad54", "coin"),
+  violet: enemyCardPortrait("黑礼拜堂庄家", "#e8d8ff", "#46305f", "#74d7c9", "dealer"),
+  pale: enemyCardPortrait("镜中修女", "#f4efe8", "#4c4b52", "#9edcff", "veil"),
+  green: enemyCardPortrait("药园司祭", "#e0f0c8", "#31502d", "#9bcf84", "leaf"),
+  ash: enemyCardPortrait("灰烬钟童", "#e3d4b7", "#565047", "#c7aa78", "bell"),
+  wax: enemyCardPortrait("封蜡书记", "#f2c39f", "#6b2b1f", "#f0b36a", "seal"),
+  moth: enemyCardPortrait("梦蛾女仆", "#eadcff", "#44325f", "#d8c7ff", "moth"),
+  rabbit: enemyCardPortrait("白兔报时官", "#fff1cb", "#405162", "#fff0c9", "clock"),
+  tax: enemyCardPortrait("什一税审计员", "#f1d890", "#684719", "#f0d16d", "abacus"),
+  butcher: enemyCardPortrait("血槽屠户", "#ffd4c8", "#6c1512", "#f05a45", "hook"),
+  child: enemyCardPortrait("潮湿圣童", "#d8f8ff", "#255060", "#a9f1ff", "choir"),
+  judge: enemyCardPortrait("空座审判官", "#f1e6c7", "#2a2230", "#e0ad54", "judge"),
+  hound: enemyCardPortrait("赤犬主教", "#ffd0c5", "#5d1514", "#f05a45", "hound"),
+  queen: enemyCardPortrait("睡梦女王", "#f1dbff", "#40255a", "#e7c6ff", "queen")
 };
 
-function oathboundPortraitSvg() {
+function playerCardPortrait(label, paper, ink, accent, motif) {
+  const gradientId = `player-${motif}-paper`;
+  const glowId = `player-${motif}-glow`;
   return `
-<svg viewBox="0 0 140 170" role="img" aria-label="誓约者">
-  <rect width="140" height="170" rx="28" fill="#160d0a"/>
-  <circle cx="70" cy="34" r="44" fill="#d6a95b" opacity=".22"/>
-  <path d="M18 164c6-50 23-77 52-77s46 27 52 77" fill="#080605"/>
-  <path d="M31 164c7-49 20-73 39-73s32 24 39 73" fill="#4c1614"/>
-  <path d="M32 70c5-38 19-58 38-58s33 20 38 58l-14 42H46z" fill="#090807"/>
-  <path d="M42 66c9-28 21-42 28-42s19 14 28 42c-20-11-36-11-56 0z" fill="#d6a95b"/>
-  <circle cx="70" cy="73" r="25" fill="#c89467"/>
-  <path d="M50 67h16M74 67h16" stroke="#261006" stroke-width="5" stroke-linecap="round"/>
-  <path d="M59 84c7 5 15 5 22 0" stroke="#5c1d16" stroke-width="4" stroke-linecap="round"/>
-  <path d="M47 104l23-14 23 14-7 60H54z" fill="#1b100c"/>
-  <path d="M47 116c-10 12-17 27-20 45" stroke="#f4d58a" stroke-width="7" stroke-linecap="round"/>
-  <path d="M93 116c10 12 17 27 20 45" stroke="#f4d58a" stroke-width="7" stroke-linecap="round"/>
-  <g transform="translate(54 112) rotate(45 16 16)">
-    <rect width="32" height="32" rx="6" fill="#f4e2bd"/>
-    <circle cx="10" cy="10" r="3" fill="#261408"/><circle cx="22" cy="10" r="3" fill="#261408"/>
-    <circle cx="16" cy="16" r="3" fill="#261408"/>
-    <circle cx="10" cy="22" r="3" fill="#261408"/><circle cx="22" cy="22" r="3" fill="#261408"/>
-  </g>
-  <path d="M70 4l9 20-18-2zM34 136l-14 21M106 136l14 21" stroke="#f4d58a" stroke-width="4" stroke-linecap="round"/>
+<svg class="card-portrait player-token" viewBox="0 0 160 210" role="img" aria-label="${label}">
+  <defs>
+    <linearGradient id="${gradientId}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset=".42" stop-color="${paper}"/>
+      <stop offset="1" stop-color="#c8a45f"/>
+    </linearGradient>
+    <radialGradient id="${glowId}" cx="50%" cy="34%" r="72%">
+      <stop offset="0" stop-color="${accent}" stop-opacity=".72"/>
+      <stop offset="1" stop-color="${accent}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="4" y="4" width="152" height="202" rx="24" fill="url(#${gradientId})"/>
+  <rect x="11" y="11" width="138" height="188" rx="19" fill="none" stroke="${ink}" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M20 35c32-18 88-18 120 0M20 174c32 18 88 18 120 0" fill="none" stroke="${ink}" stroke-width="2.5" opacity=".26"/>
+  <circle cx="80" cy="106" r="58" fill="url(#${glowId})"/>
+  <path d="M28 45c21-12 83-12 104 0v124c-21 12-83 12-104 0z" fill="#fffaf0" opacity=".28"/>
+  ${playerMotifSvg(motif, ink, accent, paper)}
+  <path d="M26 27h22M112 27h22M26 184h22M112 184h22" stroke="${ink}" stroke-width="3" stroke-linecap="round" opacity=".42"/>
 </svg>`;
 }
 
-function ironConfessorPortraitSvg() {
+function enemyCardPortrait(label, paper, ink, accent, motif) {
+  const gradientId = `enemy-${motif}-paper`;
   return `
-<svg viewBox="0 0 140 170" role="img" aria-label="铁赦修女">
-  <rect width="140" height="170" rx="28" fill="#081014"/>
-  <path d="M29 35c13-18 69-18 82 0" fill="none" stroke="#d8b36a" stroke-width="7" stroke-linecap="round"/>
-  <path d="M18 164c8-50 24-76 52-76s44 26 52 76" fill="#07090a"/>
-  <path d="M29 164c8-47 21-72 41-72s33 25 41 72" fill="#26323a"/>
-  <path d="M33 71c3-36 16-56 37-56s34 20 37 56l-10 42H43z" fill="#11171b"/>
-  <path d="M42 56h56v23H42z" fill="#c6d1dc"/>
-  <path d="M48 60h44v15H48z" fill="#1a2025"/>
-  <circle cx="70" cy="80" r="22" fill="#bd8f6a"/>
-  <path d="M44 75h52v13H44z" fill="#d6dde4"/>
-  <path d="M55 77h30" stroke="#11171b" stroke-width="5" stroke-linecap="round"/>
-  <path d="M54 108l16-16 16 16-5 56H59z" fill="#8fa6b8"/>
-  <path d="M31 116h34v39H31z" fill="#485661"/>
-  <path d="M35 122h26M48 116v39" stroke="#e0ad54" stroke-width="4"/>
-  <path d="M93 111l20 49" stroke="#e0ad54" stroke-width="8" stroke-linecap="round"/>
-  <path d="M70 18v22M59 29h22" stroke="#e0ad54" stroke-width="4" stroke-linecap="round"/>
+<svg class="card-portrait enemy-token" viewBox="0 0 160 210" role="img" aria-label="${label}">
+  <defs>
+    <linearGradient id="${gradientId}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6df"/>
+      <stop offset=".5" stop-color="${paper}"/>
+      <stop offset="1" stop-color="#9a7648"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="152" height="202" rx="24" fill="url(#${gradientId})"/>
+  <rect x="12" y="12" width="136" height="186" rx="18" fill="${ink}" opacity=".08"/>
+  <path d="M18 33c22-15 102-15 124 0v144c-22 15-102 15-124 0z" fill="${ink}" opacity=".88"/>
+  <path d="M28 50c17-11 87-11 104 0v110c-17 11-87 11-104 0z" fill="${paper}" opacity=".12"/>
+  ${enemyMotifSvg(motif, paper, ink, accent)}
+  <path d="M28 35h104M28 175h104" stroke="${accent}" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+  <path d="M42 27l-11 11M118 27l11 11M42 183l-11-11M118 183l11-11" stroke="#fff6d8" stroke-width="2.5" opacity=".55"/>
 </svg>`;
 }
 
-function ledgerKnightPortraitSvg() {
-  return `
-<svg viewBox="0 0 140 170" role="img" aria-label="账册骑士">
-  <rect width="140" height="170" rx="28" fill="#160f07"/>
-  <path d="M15 164c10-48 27-75 55-75s45 27 55 75" fill="#080604"/>
-  <path d="M35 165c8-50 20-76 35-76s27 26 35 76" fill="#3b2711"/>
-  <path d="M36 64c6-31 18-49 34-49s28 18 34 49l-12 46H48z" fill="#1b1208"/>
-  <path d="M44 56l26-35 26 35c-18-8-34-8-52 0z" fill="#b98a3a"/>
-  <circle cx="70" cy="72" r="25" fill="#c69a72"/>
-  <path d="M50 69h13M77 69h13" stroke="#211108" stroke-width="5" stroke-linecap="round"/>
-  <path d="M60 85h20" stroke="#5a2a18" stroke-width="4" stroke-linecap="round"/>
-  <path d="M44 108h52l-8 56H52z" fill="#22170c"/>
-  <rect x="47" y="113" width="45" height="42" rx="4" fill="#d9c18f"/>
-  <path d="M70 113v42M55 124h10M75 124h10M55 136h10M75 136h10" stroke="#5e3c16" stroke-width="3" stroke-linecap="round"/>
-  <path d="M30 120l18 42M107 106l-14 56" stroke="#b98a3a" stroke-width="7" stroke-linecap="round"/>
-  <path d="M106 101l10-20 4 23" fill="#f0d16d"/>
-</svg>`;
+function playerMotifSvg(motif, ink, accent, paper) {
+  const motifs = {
+    dice: `
+      <path d="M41 167c7-51 21-94 39-94s32 43 39 94z" fill="${ink}" opacity=".9"/>
+      <path d="M55 75c7-24 18-37 25-37s18 13 25 37c-15-7-35-7-50 0z" fill="${accent}"/>
+      <path d="M47 170c14-19 52-19 66 0" fill="none" stroke="#fff6dd" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+      <g transform="translate(30 104) rotate(-18)"><rect width="34" height="34" rx="8" fill="#fff7df" stroke="${ink}" stroke-width="4"/><circle cx="10" cy="10" r="3.3" fill="${ink}"/><circle cx="24" cy="10" r="3.3" fill="${ink}"/><circle cx="17" cy="17" r="3.3" fill="${ink}"/><circle cx="10" cy="24" r="3.3" fill="${ink}"/><circle cx="24" cy="24" r="3.3" fill="${ink}"/></g>
+      <g transform="translate(95 112) rotate(16)"><rect width="34" height="34" rx="8" fill="#fff7df" stroke="${ink}" stroke-width="4"/><circle cx="10" cy="10" r="3.3" fill="${ink}"/><circle cx="24" cy="24" r="3.3" fill="${ink}"/></g>
+      <g transform="translate(64 133) rotate(45)"><rect width="36" height="36" rx="8" fill="${accent}" stroke="#fff4d2" stroke-width="4"/><circle cx="11" cy="11" r="3.4" fill="${ink}"/><circle cx="25" cy="11" r="3.4" fill="${ink}"/><circle cx="11" cy="25" r="3.4" fill="${ink}"/><circle cx="25" cy="25" r="3.4" fill="${ink}"/></g>
+      <path d="M33 89c32 15 62 15 94 0" fill="none" stroke="${ink}" stroke-width="3" opacity=".32"/>`,
+    shield: `
+      <path d="M38 161c8-49 18-82 42-82s34 33 42 82z" fill="#263844"/>
+      <path d="M57 73l23-39 23 39-9 25H66z" fill="${paper}" stroke="${ink}" stroke-width="5"/>
+      <path d="M80 83l39 16c-4 41-18 68-39 83-21-15-35-42-39-83z" fill="#f8fbfb" stroke="${ink}" stroke-width="6"/>
+      <path d="M80 94v72M55 118h50" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>
+      <path d="M33 122l-16-28M127 122l16-28" stroke="${ink}" stroke-width="9" stroke-linecap="round"/>`,
+    ledger: `
+      <path d="M31 160c9-42 23-70 49-70s40 28 49 70z" fill="${ink}" opacity=".86"/>
+      <path d="M39 66c21-17 38-17 41 4v91c-17-12-30-13-41-4z" fill="#fff3ce" stroke="${ink}" stroke-width="5"/>
+      <path d="M80 70c3-21 20-21 41-4v91c-11-9-24-8-41 4z" fill="#f8df9a" stroke="${ink}" stroke-width="5"/>
+      <path d="M54 88h17M54 104h17M54 120h17M90 88h17M90 104h17M90 120h17" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 53l35-19M130 53L95 34" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M109 44l24 78" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>`,
+    candle: `
+      <path d="M46 168c3-43 17-69 34-69s31 26 34 69z" fill="${ink}" opacity=".86"/>
+      <path d="M80 32c23 26 29 48 0 75-29-27-23-49 0-75z" fill="${accent}" stroke="${ink}" stroke-width="5"/>
+      <path d="M80 52c10 15 11 27 0 41-11-14-10-26 0-41z" fill="#fff6c8"/>
+      <rect x="61" y="102" width="38" height="70" rx="9" fill="#fff0d8" stroke="${ink}" stroke-width="6"/>
+      <path d="M62 124c10 7 26 7 36 0M62 146c10 7 26 7 36 0" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M35 111c-14 24-12 43 7 58M125 111c14 24 12 43-7 58" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>`,
+    mirror: `
+      <path d="M35 160c13-39 27-62 45-62s32 23 45 62z" fill="${ink}" opacity=".82"/>
+      <path d="M80 37l42 28-16 101H54L38 65z" fill="#f1fcff" stroke="${ink}" stroke-width="6"/>
+      <path d="M81 44l-21 118M43 70l64 34M58 52l56 100M105 61l-57 55" stroke="${accent}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M36 73l-23 17 22 13M124 73l23 17-22 13" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M63 122c13 10 22 10 35 0" stroke="${ink}" stroke-width="5" stroke-linecap="round" opacity=".55"/>`
+  };
+  return motifs[motif] || motifs.dice;
 }
 
-function redPilgrimPortraitSvg() {
-  return `
-<svg viewBox="0 0 140 170" role="img" aria-label="赤烛朝圣者">
-  <rect width="140" height="170" rx="28" fill="#180606"/>
-  <path d="M34 30c6-18 15-18 22 0M62 26c6-20 15-20 22 0M88 30c6-18 15-18 22 0" stroke="#ffb08a" stroke-width="5" stroke-linecap="round"/>
-  <path d="M19 164c8-52 25-80 51-80s43 28 51 80" fill="#070303"/>
-  <path d="M32 164c7-50 20-77 38-77s31 27 38 77" fill="#43100e"/>
-  <path d="M39 65c4-32 16-50 31-50s27 18 31 50l-10 45H49z" fill="#220807"/>
-  <path d="M43 55c17-18 37-18 54 0l-8 16H51z" fill="#d34236"/>
-  <circle cx="70" cy="74" r="24" fill="#bd8062"/>
-  <path d="M48 66l44 14M48 83l44-11" stroke="#f3d4b0" stroke-width="5" stroke-linecap="round" opacity=".72"/>
-  <path d="M50 70h14M76 70h14" stroke="#2b0907" stroke-width="5" stroke-linecap="round"/>
-  <path d="M54 105c11 9 21 9 32 0l8 59H46z" fill="#2b0c0a"/>
-  <path d="M44 122h52M42 138h56" stroke="#ffb08a" stroke-width="5" stroke-linecap="round" opacity=".75"/>
-  <path d="M28 132c18 5 27 15 27 31M112 132c-18 5-27 15-27 31" stroke="#d34236" stroke-width="7" stroke-linecap="round"/>
-</svg>`;
-}
-
-function mirrorVagrantPortraitSvg() {
-  return `
-<svg viewBox="0 0 140 170" role="img" aria-label="镜隙流亡者">
-  <rect width="140" height="170" rx="28" fill="#0c0a16"/>
-  <path d="M18 164c8-51 25-78 52-78s44 27 52 78" fill="#06060b"/>
-  <path d="M31 164c8-48 21-73 39-73s31 25 39 73" fill="#211a3b"/>
-  <path d="M39 68c5-34 17-53 31-53s26 19 31 53L88 111H52z" fill="#110d20"/>
-  <path d="M41 58l30-39 29 43c-21-12-40-13-59-4z" fill="#9c86e8"/>
-  <path d="M70 45l21 11 5 37-26 18z" fill="#74f1d4" opacity=".28"/>
-  <path d="M70 45L49 56l-5 37 26 18z" fill="#d7c9ff" opacity=".2"/>
-  <circle cx="70" cy="74" r="25" fill="#b68c70"/>
-  <path d="M70 49v52" stroke="#f0e9ff" stroke-width="4" opacity=".68"/>
-  <path d="M50 70h14M78 68h14" stroke="#190e22" stroke-width="5" stroke-linecap="round"/>
-  <path d="M58 87c7 4 17 2 23-4" stroke="#4b2440" stroke-width="4" stroke-linecap="round"/>
-  <path d="M45 109l25-18 25 18-9 55H54z" fill="#181029"/>
-  <path d="M38 116l-18 13 25 7-10 25M102 112l20-16-7 26 17 16-25 4" fill="none" stroke="#74f1d4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M54 124l34-13M51 145l41-18" stroke="#9c86e8" stroke-width="4" stroke-linecap="round" opacity=".76"/>
-</svg>`;
-}
-
-function portraitSvg(bg, body, armor, accent, label) {
-  const motif = enemyMotifSvg(label, armor, accent);
-  return `
-<svg viewBox="0 0 140 170" role="img" aria-label="${label}">
-  <rect width="140" height="170" rx="30" fill="${bg}"/>
-  <path d="M16 162c10-48 29-75 54-75s44 27 54 75" fill="${body}"/>
-  <path d="M34 108l36-22 36 22-12 54H46z" fill="${armor}"/>
-  <path d="M37 66c5-33 18-51 33-51s28 18 33 51l-13 42H50z" fill="#120d0b"/>
-  <circle cx="70" cy="70" r="31" fill="#bc8f6d"/>
-  <path d="M37 65c11-31 52-40 66 0-20-12-46-12-66 0z" fill="#1a1010"/>
-  <circle cx="58" cy="72" r="5" fill="${accent}"/>
-  <circle cx="82" cy="72" r="5" fill="${accent}"/>
-  <path d="M60 88c7 5 14 5 21 0" stroke="#4f241f" stroke-width="5" stroke-linecap="round"/>
-  <path d="M44 125h52" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>
-  <rect x="59" y="103" width="22" height="22" rx="4" fill="#f4e2bd" transform="rotate(45 70 114)"/>
-  ${motif}
-</svg>`;
-}
-
-function enemyMotifSvg(label, armor, accent) {
-  if (label.includes("朽木")) {
-    return `<path d="M28 46l24 19M112 46L88 65M42 132l-18 20M98 132l18 20" stroke="${accent}" stroke-width="5" stroke-linecap="round"/><path d="M64 112h12v42H64z" fill="#3a2412"/>`;
-  }
-  if (label.includes("赌徒")) {
-    return `<rect x="48" y="58" width="44" height="26" rx="5" fill="#101418"/><circle cx="61" cy="71" r="4" fill="${accent}"/><circle cx="79" cy="71" r="4" fill="${accent}"/><path d="M100 116l18 34" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>`;
-  }
-  if (label.includes("典狱")) {
-    return `<path d="M37 46h66M45 44v58M60 42v60M80 42v60M95 44v58" stroke="${accent}" stroke-width="4" opacity=".75"/><path d="M43 132h54" stroke="#ff5b4a" stroke-width="8" stroke-linecap="round"/>`;
-  }
-  if (label.includes("铸币")) {
-    return `<circle cx="70" cy="122" r="19" fill="${accent}"/><circle cx="70" cy="122" r="10" fill="${armor}"/><path d="M46 99l-16 18M94 99l16 18" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>`;
-  }
-  if (label.includes("修女")) {
-    return `<path d="M39 53c18-20 44-20 62 0l-7 18H46z" fill="#e7dfcf"/><path d="M49 111l42 18M91 111l-42 18" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>`;
-  }
-  if (label.includes("药园")) {
-    return `<path d="M44 48c-14-17-21-27-20-38 15 4 24 14 27 31M96 48c14-17 21-27 20-38-15 4-24 14-27 31" fill="${accent}" opacity=".55"/><path d="M70 111c-12 16-13 31 0 45 13-14 12-29 0-45z" fill="#9bcf84"/>`;
-  }
-  if (label.includes("钟童")) {
-    return `<path d="M50 114h40l-7 36H57z" fill="${accent}"/><path d="M60 113c0-12 20-12 20 0" fill="none" stroke="${accent}" stroke-width="5"/><circle cx="70" cy="151" r="5" fill="#2b2924"/>`;
-  }
-  if (label.includes("封蜡")) {
-    return `<circle cx="70" cy="119" r="18" fill="#b63b35"/><path d="M57 119h26M70 106v26" stroke="#f0b36a" stroke-width="4" stroke-linecap="round"/><path d="M31 141h78" stroke="#b63b35" stroke-width="8" stroke-linecap="round"/>`;
-  }
-  if (label.includes("梦蛾")) {
-    return `<path d="M37 76c-16-27-8-49 25-30-4 19-12 28-25 30zM103 76c16-27 8-49-25-30 4 19 12 28 25 30z" fill="${accent}" opacity=".48"/><path d="M70 107v48" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>`;
-  }
-  if (label.includes("白兔")) {
-    return `<path d="M52 39c-9-25-7-35 2-36 13 10 18 23 15 40M88 39c9-25 7-35-2-36-13 10-18 23-15 40" fill="#fff0c9"/><circle cx="70" cy="121" r="18" fill="none" stroke="${accent}" stroke-width="5"/><path d="M70 121l8-9" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>`;
-  }
-  if (label.includes("审计")) {
-    return `<path d="M40 114h60M40 130h60M40 146h60" stroke="${accent}" stroke-width="4"/><circle cx="52" cy="114" r="4" fill="#f0d16d"/><circle cx="84" cy="130" r="4" fill="#f0d16d"/><circle cx="65" cy="146" r="4" fill="#f0d16d"/>`;
-  }
-  if (label.includes("屠户")) {
-    return `<path d="M103 103c21 18 17 36-3 43" fill="none" stroke="${accent}" stroke-width="7" stroke-linecap="round"/><path d="M37 118h66" stroke="#f05a45" stroke-width="7" stroke-linecap="round"/>`;
-  }
-  if (label.includes("圣童")) {
-    return `<path d="M22 130c19-12 37-12 56 0s37 12 56 0" fill="none" stroke="${accent}" stroke-width="5" opacity=".78"/><circle cx="70" cy="116" r="14" fill="#a9f1ff" opacity=".35"/>`;
-  }
-  if (label.includes("审判")) {
-    return `<path d="M38 70h64M70 32v104" stroke="${accent}" stroke-width="6" stroke-linecap="round"/><path d="M45 125h50l-9 35H54z" fill="#060507"/>`;
-  }
-  if (label.includes("犬")) {
-    return `<path d="M45 50l-18-21 5 40M95 50l18-21-5 40" fill="${armor}"/><path d="M50 82h40l-11 16H61z" fill="#f05a45"/><path d="M51 125h38" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`;
-  }
-  if (label.includes("女王")) {
-    return `<path d="M42 47l13-25 15 21 15-21 13 25z" fill="${accent}"/><path d="M46 113c18-12 30-12 48 0M42 130c22-12 34-12 56 0" stroke="#e7c6ff" stroke-width="4" stroke-linecap="round"/>`;
-  }
-  return `<path d="M31 136h78" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>`;
+function enemyMotifSvg(motif, paper, ink, accent) {
+  const motifs = {
+    wood: `<path d="M44 166c6-58 18-100 36-100s30 42 36 100z" fill="#1b120a"/><path d="M38 51l30 31M122 51L92 82M42 128l-24 34M118 128l24 34" stroke="${accent}" stroke-width="9" stroke-linecap="round"/><path d="M62 82c8 7 28 7 36 0M66 112c6 5 22 5 28 0M72 65h16v101H72z" stroke="#f1d28d" stroke-width="5" stroke-linecap="round"/>`,
+    mask: `<path d="M43 66c23-20 51-20 74 0v45c-9 20-65 20-74 0z" fill="#f5f0e2" stroke="${accent}" stroke-width="6"/><rect x="51" y="78" width="58" height="21" rx="6" fill="${ink}"/><circle cx="65" cy="88" r="5" fill="${accent}"/><circle cx="95" cy="88" r="5" fill="${accent}"/><path d="M37 145h86M49 164h62" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`,
+    bars: `<path d="M35 37h90v120H35z" fill="#180908" stroke="${accent}" stroke-width="6"/><path d="M50 38v118M66 38v118M82 38v118M98 38v118M114 38v118" stroke="#ffd4c8" stroke-width="7"/><path d="M37 77h86M37 119h86" stroke="${accent}" stroke-width="5"/><circle cx="80" cy="94" r="18" fill="#7e1d18"/>`,
+    coin: `<circle cx="80" cy="104" r="47" fill="${accent}" stroke="#fff0c4" stroke-width="8"/><circle cx="80" cy="104" r="27" fill="${ink}" opacity=".8"/><path d="M80 68v72M61 86h38M61 122h38" stroke="#fff0c4" stroke-width="7" stroke-linecap="round"/><path d="M42 166c22-19 54-19 76 0" fill="none" stroke="${accent}" stroke-width="9" stroke-linecap="round"/>`,
+    dealer: `<path d="M42 68c19-29 57-29 76 0l-14 37H56z" fill="#fff8e5" stroke="${accent}" stroke-width="6"/><path d="M36 151c23-38 65-38 88 0" fill="#130b10"/><g transform="translate(58 103) rotate(45 22 22)"><rect width="44" height="44" rx="9" fill="#fff8e5" stroke="${accent}" stroke-width="5"/><circle cx="13" cy="13" r="4" fill="${ink}"/><circle cx="31" cy="13" r="4" fill="${ink}"/><circle cx="22" cy="22" r="4" fill="${ink}"/><circle cx="13" cy="31" r="4" fill="${ink}"/><circle cx="31" cy="31" r="4" fill="${ink}"/></g>`,
+    veil: `<path d="M40 55c22-30 58-30 80 0l-15 99H55z" fill="#fff9ee" stroke="${accent}" stroke-width="6"/><path d="M55 70c17 15 33 15 50 0M57 114l46 37M103 114l-46 37" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M34 166c20-15 72-15 92 0" stroke="#fff9ee" stroke-width="8" stroke-linecap="round"/>`,
+    leaf: `<path d="M46 68c-26-38-25-60-12-72 27 12 39 37 34 77M114 68c26-38 25-60 12-72-27 12-39 37-34 77" fill="${accent}" opacity=".85"/><path d="M80 67c-29 41-29 78 0 112 29-34 29-71 0-112z" fill="#eef7d3" stroke="${ink}" stroke-width="6"/><path d="M80 79v78M58 108h44" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>`,
+    bell: `<path d="M50 91c0-31 60-31 60 0l12 68H38z" fill="${accent}" stroke="#fff2cc" stroke-width="6"/><path d="M65 87c0-15 30-15 30 0M44 159h72" fill="none" stroke="#fff2cc" stroke-width="6" stroke-linecap="round"/><circle cx="80" cy="169" r="9" fill="${ink}"/><path d="M51 48l-21-17M109 48l21-17" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`,
+    seal: `<path d="M43 65h74v89H43z" fill="#fff1d2" stroke="${accent}" stroke-width="6"/><circle cx="80" cy="114" r="34" fill="${accent}" stroke="#ffe6bc" stroke-width="7"/><path d="M59 114h42M80 93v42M64 78h32" stroke="${ink}" stroke-width="6" stroke-linecap="round"/><path d="M54 154l-13 28M106 154l13 28" stroke="${accent}" stroke-width="7" stroke-linecap="round"/>`,
+    moth: `<path d="M39 92c-26-50-8-84 41-42-8 37-22 51-41 42zM121 92c26-50 8-84-41-42 8 37 22 51 41 42z" fill="${accent}" opacity=".82"/><path d="M80 73c-16 28-16 67 0 97 16-30 16-69 0-97z" fill="#fff5df" stroke="${ink}" stroke-width="5"/><path d="M61 139h38M66 158h28" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>`,
+    clock: `<path d="M55 45c-17-39-11-58 4-58 20 18 26 39 19 67M105 45c17-39 11-58-4-58-20 18-26 39-19 67" fill="#fff6d0"/><circle cx="80" cy="119" r="42" fill="#1b2730" stroke="${accent}" stroke-width="7"/><path d="M80 119l18-21M80 119v27" stroke="#fff6d0" stroke-width="7" stroke-linecap="round"/><path d="M48 166h64" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`,
+    abacus: `<path d="M38 70h84v90H38z" fill="#2b1b0b" stroke="${accent}" stroke-width="6"/><path d="M50 91h60M50 113h60M50 135h60" stroke="#fff0c4" stroke-width="5"/><circle cx="62" cy="91" r="7" fill="${accent}"/><circle cx="96" cy="91" r="7" fill="${accent}"/><circle cx="75" cy="113" r="7" fill="${accent}"/><circle cx="104" cy="135" r="7" fill="${accent}"/><path d="M48 47h64" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`,
+    hook: `<path d="M111 53c34 31 27 76-13 88" fill="none" stroke="${accent}" stroke-width="12" stroke-linecap="round"/><path d="M42 127h64" stroke="#ffd6c8" stroke-width="10" stroke-linecap="round"/><path d="M49 83c14 20 14 64 0 84" fill="none" stroke="${ink}" stroke-width="9" stroke-linecap="round"/><path d="M31 164c25 12 73 12 98 0" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>`,
+    choir: `<path d="M28 128c20-20 35-20 52 0s32 20 52 0" fill="none" stroke="${accent}" stroke-width="8" stroke-linecap="round"/><circle cx="53" cy="96" r="18" fill="#f2ffff"/><circle cx="80" cy="85" r="22" fill="#f2ffff"/><circle cx="107" cy="96" r="18" fill="#f2ffff"/><path d="M45 145h70" stroke="#a9f1ff" stroke-width="9" stroke-linecap="round"/><path d="M68 84h24M43 96h20M97 96h20" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`,
+    judge: `<path d="M35 65h90M80 29v139" stroke="${accent}" stroke-width="9" stroke-linecap="round"/><path d="M53 126h54l-12 42H65z" fill="#fff1c6" stroke="${ink}" stroke-width="5"/><path d="M50 65l-18 43h36zM110 65l-18 43h36z" fill="#f1e6c7" stroke="${accent}" stroke-width="5"/><circle cx="80" cy="64" r="12" fill="${accent}"/>`,
+    hound: `<path d="M50 64l-31-40 9 67M110 64l31-40-9 67" fill="${accent}"/><path d="M47 82h66l-11 54H58z" fill="#ffd0c5" stroke="${ink}" stroke-width="6"/><path d="M58 106h44M66 125h28" stroke="#5d1514" stroke-width="6" stroke-linecap="round"/><path d="M42 154h76" stroke="${accent}" stroke-width="11" stroke-linecap="round"/>`,
+    queen: `<path d="M40 58l17-35 23 30 23-30 17 35z" fill="${accent}" stroke="#fff1ff" stroke-width="5"/><path d="M49 78c20-18 42-18 62 0v86H49z" fill="#fff1ff" opacity=".18"/><path d="M45 127c23-21 47-21 70 0M41 151c28-19 50-19 78 0" stroke="#fff1ff" stroke-width="6" stroke-linecap="round"/><circle cx="80" cy="96" r="24" fill="${accent}" opacity=".55"/>`
+  };
+  return motifs[motif] || motifs.wood;
 }
 
 function skill(id, name, desc, apply) {
@@ -886,6 +822,9 @@ const els = {
   resetBtn: document.getElementById("reset-btn"),
   board: document.querySelector(".board"),
   routeLockBanner: document.getElementById("route-lock-banner"),
+  diceTheater: document.getElementById("dice-theater"),
+  throwHand: document.getElementById("throw-hand"),
+  dicePhysicsLayer: document.getElementById("dice-physics-layer"),
   attackTotal: document.getElementById("attack-total"),
   guardTotal: document.getElementById("guard-total"),
   healTotal: document.getElementById("heal-total"),
@@ -1345,6 +1284,96 @@ function renderDice() {
   });
 }
 
+function renderThrowDice(values) {
+  if (!els.dicePhysicsLayer) return;
+  els.dicePhysicsLayer.innerHTML = "";
+  values.forEach((value, index) => {
+    const die = document.createElement("span");
+    die.className = "physics-die";
+    die.style.setProperty("--die-index", index);
+    die.style.setProperty("--die-offset", `${(index - 1) * 74}px`);
+    die.innerHTML = renderDieCube(value);
+    els.dicePhysicsLayer.appendChild(die);
+  });
+}
+
+function renderDieCube(value) {
+  return `
+    <span class="cube" data-value="${value}">
+      <i class="cube-face face-front">${renderPips(value)}</i>
+      <i class="cube-face face-back">${renderPips(oppositeDieValue(value))}</i>
+      <i class="cube-face face-right">${renderPips(((value + 1) % 6) + 1)}</i>
+      <i class="cube-face face-left">${renderPips(((value + 3) % 6) + 1)}</i>
+      <i class="cube-face face-top">${renderPips(((value + 4) % 6) + 1)}</i>
+      <i class="cube-face face-bottom">${renderPips(((value + 2) % 6) + 1)}</i>
+    </span>
+    <span class="physics-shadow"></span>
+  `;
+}
+
+function oppositeDieValue(value) {
+  return 7 - value;
+}
+
+function playThrowAnimation(values) {
+  if (!els.diceTheater || !els.dicePhysicsLayer) return;
+  renderThrowDice(values);
+  els.diceTheater.classList.remove("throwing", "settled");
+  void els.diceTheater.offsetWidth;
+  els.diceTheater.classList.add("throwing");
+  els.throwHand?.classList.remove("throwing");
+  void els.throwHand?.offsetWidth;
+  els.throwHand?.classList.add("throwing");
+
+  const dice = [...els.dicePhysicsLayer.querySelectorAll(".physics-die")];
+  const start = performance.now();
+  const duration = 1320;
+  const lanes = [
+    { sx: -230, sy: -74, fx: -118, fy: 142, arc: 96, spin: 780 },
+    { sx: -190, sy: -54, fx: 2, fy: 154, arc: 82, spin: -920 },
+    { sx: -150, sy: -68, fx: 126, fy: 132, arc: 106, spin: 1060 }
+  ];
+
+  function frame(now) {
+    const elapsed = now - start;
+    const t = Math.min(1, elapsed / duration);
+    dice.forEach((die, index) => {
+      const lane = lanes[index] || lanes[0];
+      let x = lerp(lane.sx, lane.fx, easeOutCubic(t));
+      let y = lerp(lane.sy, lane.fy, t) - Math.sin(Math.PI * t) * lane.arc;
+      const bounceOne = Math.max(0, Math.sin((t - 0.62) * Math.PI * 7)) * Math.max(0, 1 - t) * -38;
+      const bounceTwo = Math.max(0, Math.sin((t - 0.82) * Math.PI * 10)) * Math.max(0, 1 - t) * -18;
+      y += bounceOne + bounceTwo;
+      const scale = 1.05 - 0.08 * t;
+      const rx = 68 + lane.spin * t;
+      const ry = 42 + lane.spin * 0.74 * t;
+      const rz = -18 + lane.spin * 0.38 * t;
+      die.style.transform = `translate3d(${x}px, ${y}px, ${Math.sin(Math.PI * t) * 90}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
+      die.style.setProperty("--shadow-scale", 0.56 + t * 0.44);
+      die.style.setProperty("--shadow-alpha", 0.15 + t * 0.32);
+    });
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      els.diceTheater.classList.remove("throwing");
+      els.diceTheater.classList.add("settled");
+      dice.forEach((die, index) => {
+        const lane = lanes[index] || lanes[0];
+        die.style.transform = `translate3d(${lane.fx}px, ${lane.fy}px, 0) rotateX(720deg) rotateY(720deg) rotateZ(${index * 18 - 8}deg)`;
+      });
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function easeOutCubic(value) {
+  return 1 - Math.pow(1 - value, 3);
+}
+
+function lerp(start, end, amount) {
+  return start + (end - start) * amount;
+}
+
 function renderEnemyDice() {
   if (!els.enemyDiceTray) return;
   els.enemyDiceTray.innerHTML = "";
@@ -1467,6 +1496,7 @@ function rollDice() {
   state.rolled = true;
   addLog(`第 ${state.turn} 回合：${enemy.name} 掷出黑骰 ${state.enemyDice.join("、")}${state.enemyIntent > 0 ? `，修正 +${state.enemyIntent}` : ""}，合计 ${enemyRoll.total}。`);
   render();
+  playThrowAnimation(state.dice.map(die => die.value));
 }
 
 function resolveTurn() {
