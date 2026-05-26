@@ -252,6 +252,36 @@ h2 {
   font-size: 14px;
 }
 
+.skill-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 1px 0 6px;
+  padding: 6px 9px;
+  border: 1px solid rgba(199, 154, 85, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  color: #f1dfbd;
+  font-size: 12px;
+}
+
+.skill-line span {
+  color: var(--gold);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.skill-line strong {
+  font-weight: 900;
+}
+
+.skill-desc {
+  margin-bottom: 8px;
+  color: #c7aa78;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .intent {
   margin-bottom: 0;
   padding: 8px 10px;

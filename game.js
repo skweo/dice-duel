@@ -1,7 +1,20 @@
 const PLAYER_MAX_HP = 24;
 
+const playerSkill = {
+  name: "三相誓约",
+  desc: "若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。",
+  apply(ctx) {
+    if (ctx.attackDice > 0 && ctx.guardDice > 0 && ctx.healDice > 0) {
+      ctx.attack += 2;
+      ctx.guard += 2;
+      ctx.healPips += 2;
+      ctx.messages.push("三相誓约触发：攻击、防御、恢复点数各 +2。");
+    }
+  }
+};
+
 const playerPortrait = `
-<svg viewBox="0 0 140 170" role="img" aria-label="The Oathbound">
+<svg viewBox="0 0 140 170" role="img" aria-label="誓约者">
   <defs>
     <radialGradient id="pHalo" cx="50%" cy="18%" r="68%">
       <stop offset="0" stop-color="#f0c775" stop-opacity=".72"/>
@@ -38,13 +51,21 @@ const playerPortrait = `
 
 const enemies = [
   {
-    name: "Hollow Squire",
-    trait: "Splintered oath",
+    name: "朽木侍从",
+    trait: "裂誓木偶",
+    skillName: "木刺反扑",
+    skillDesc: "若你本回合没有投入防御骰，造成伤害后受到 1 点反伤。",
     hp: 18,
     min: 3,
     max: 5,
+    applySkill(ctx) {
+      if (ctx.guardDice === 0 && ctx.attack > 0) {
+        ctx.selfDamage += 1;
+        ctx.messages.push("木刺反扑：你没有防御，受到 1 点反伤。");
+      }
+    },
     portrait: `
-<svg viewBox="0 0 140 170" role="img" aria-label="Hollow Squire">
+<svg viewBox="0 0 140 170" role="img" aria-label="朽木侍从">
   <rect width="140" height="170" rx="30" fill="#0f0d0a"/>
   <path d="M16 160c10-46 26-70 54-70s44 24 54 70" fill="#211713"/>
   <path d="M32 102l38-22 38 22-13 59H45z" fill="#3a281d"/>
@@ -60,13 +81,21 @@ const enemies = [
 </svg>`
   },
   {
-    name: "Iron Gambler",
-    trait: "Rustbound cheat",
+    name: "铁面赌徒",
+    trait: "锈牌老千",
+    skillName: "作弊骰",
+    skillDesc: "若你的攻击骰总点数小于防御骰总点数，敌人本回合伤害 +2。",
     hp: 22,
     min: 4,
     max: 7,
+    applySkill(ctx) {
+      if (ctx.attack < ctx.guard) {
+        ctx.intent += 2;
+        ctx.messages.push("作弊骰：你的攻势太弱，敌人伤害 +2。");
+      }
+    },
     portrait: `
-<svg viewBox="0 0 140 170" role="img" aria-label="Iron Gambler">
+<svg viewBox="0 0 140 170" role="img" aria-label="铁面赌徒">
   <rect width="140" height="170" rx="30" fill="#0a0d10"/>
   <path d="M16 160c11-44 28-69 54-69s43 25 54 69" fill="#1f2a31"/>
   <path d="M35 66c3-32 17-50 35-50s32 18 35 50l-13 40H48z" fill="#424d56"/>
@@ -83,13 +112,21 @@ const enemies = [
 </svg>`
   },
   {
-    name: "Blood-Eye Warden",
-    trait: "Chapel executioner",
+    name: "赤眼典狱官",
+    trait: "礼拜堂刑吏",
+    skillName: "处刑目光",
+    skillDesc: "若你本回合没有造成至少 6 点伤害，敌人额外造成 3 点伤害。",
     hp: 28,
     min: 5,
     max: 8,
+    applySkill(ctx) {
+      if (ctx.attack < 6) {
+        ctx.intent += 3;
+        ctx.messages.push("处刑目光：本回合伤害不足 6，敌人额外伤害 +3。");
+      }
+    },
     portrait: `
-<svg viewBox="0 0 140 170" role="img" aria-label="Blood-Eye Warden">
+<svg viewBox="0 0 140 170" role="img" aria-label="赤眼典狱官">
   <rect width="140" height="170" rx="30" fill="#160908"/>
   <path d="M18 162c8-49 28-75 52-75s44 26 52 75" fill="#35100f"/>
   <path d="M35 68c3-36 17-55 35-55s32 19 35 55l-15 42H50z" fill="#2a0e0d"/>
@@ -104,13 +141,22 @@ const enemies = [
 </svg>`
   },
   {
-    name: "Coinforged Golem",
-    trait: "Living tithe engine",
+    name: "铸币魔像",
+    trait: "活体什一税机",
+    skillName: "金壳护体",
+    skillDesc: "每回合受到的前 2 点伤害会被抵消。",
     hp: 34,
     min: 6,
     max: 10,
+    applySkill(ctx) {
+      const blocked = Math.min(2, ctx.attack);
+      if (blocked > 0) {
+        ctx.attack -= blocked;
+        ctx.messages.push(`金壳护体：抵消了 ${blocked} 点伤害。`);
+      }
+    },
     portrait: `
-<svg viewBox="0 0 140 170" role="img" aria-label="Coinforged Golem">
+<svg viewBox="0 0 140 170" role="img" aria-label="铸币魔像">
   <rect width="140" height="170" rx="30" fill="#130d07"/>
   <path d="M16 162c10-51 29-74 54-74s44 23 54 74" fill="#4c3213"/>
   <rect x="39" y="34" width="62" height="62" rx="15" fill="#9e661d"/>
@@ -125,13 +171,26 @@ const enemies = [
 </svg>`
   },
   {
-    name: "Black Chapel Dealer",
-    trait: "Saint of crooked odds",
+    name: "黑礼拜堂庄家",
+    trait: "歪曲赔率的圣徒",
+    skillName: "终局赔率",
+    skillDesc: "若你的生命低于 10，敌人伤害 +2；若高于 18，敌人受到伤害 -2。",
     hp: 42,
     min: 7,
     max: 12,
+    applySkill(ctx) {
+      if (state.playerHp < 10) {
+        ctx.intent += 2;
+        ctx.messages.push("终局赔率：你生命低于 10，敌人伤害 +2。");
+      }
+      if (state.playerHp > 18) {
+        const reduced = Math.min(2, ctx.attack);
+        ctx.attack -= reduced;
+        if (reduced > 0) ctx.messages.push(`终局赔率：你状态太好，敌人减免 ${reduced} 点伤害。`);
+      }
+    },
     portrait: `
-<svg viewBox="0 0 140 170" role="img" aria-label="Black Chapel Dealer">
+<svg viewBox="0 0 140 170" role="img" aria-label="黑礼拜堂庄家">
   <defs>
     <radialGradient id="dGlow" cx="50%" cy="22%" r="72%">
       <stop offset="0" stop-color="#5b315f"/>
@@ -174,8 +233,11 @@ const els = {
   wins: document.getElementById("wins"),
   playerHp: document.getElementById("player-hp"),
   playerHpBar: document.getElementById("player-hp-bar"),
+  playerSkill: document.getElementById("player-skill"),
   enemyName: document.getElementById("enemy-name"),
   enemyTrait: document.getElementById("enemy-trait"),
+  enemySkill: document.getElementById("enemy-skill"),
+  enemySkillDesc: document.getElementById("enemy-skill-desc"),
   enemyIntent: document.getElementById("enemy-intent"),
   playerPortrait: document.getElementById("player-portrait"),
   enemyPortrait: document.getElementById("enemy-portrait"),
@@ -207,6 +269,10 @@ function sumSlot(slotName) {
   return state.slots[slotName].reduce((total, dieIndex) => total + state.dice[dieIndex].value, 0);
 }
 
+function slotCount(slotName) {
+  return state.slots[slotName].length;
+}
+
 function allDiceAssigned() {
   return state.dice.length > 0 && state.dice.every(die => die.used);
 }
@@ -233,23 +299,51 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function getPreviewTotals() {
+  const ctx = createTurnContext();
+  playerSkill.apply(ctx);
+  return {
+    attack: ctx.attack,
+    guard: ctx.guard,
+    heal: Math.floor(ctx.healPips / 2)
+  };
+}
+
+function createTurnContext() {
+  return {
+    attack: sumSlot("attack"),
+    guard: sumSlot("guard"),
+    healPips: sumSlot("heal"),
+    attackDice: slotCount("attack"),
+    guardDice: slotCount("guard"),
+    healDice: slotCount("heal"),
+    intent: state.enemyIntent,
+    selfDamage: 0,
+    messages: []
+  };
+}
+
 function render() {
   const enemy = currentEnemy();
+  const totals = getPreviewTotals();
   els.turn.textContent = state.turn;
   els.wins.textContent = state.wins;
   els.playerHp.textContent = `${state.playerHp}/${PLAYER_MAX_HP}`;
   els.playerHpBar.style.width = `${(state.playerHp / PLAYER_MAX_HP) * 100}%`;
+  els.playerSkill.textContent = playerSkill.name;
   els.enemyName.textContent = enemy.name;
   els.enemyTrait.textContent = enemy.trait;
+  els.enemySkill.textContent = enemy.skillName;
+  els.enemySkillDesc.textContent = enemy.skillDesc;
   els.playerPortrait.innerHTML = playerPortrait;
   els.enemyPortrait.innerHTML = enemy.portrait;
-  els.enemyIntent.textContent = state.enemyIntent > 0 ? `Intent: deal ${state.enemyIntent} damage` : "Waiting for your cast";
+  els.enemyIntent.textContent = state.enemyIntent > 0 ? `意图：造成 ${state.enemyIntent} 点伤害` : "等待你掷骰";
   els.enemyHp.textContent = `${state.enemyHp}/${enemy.hp}`;
   els.enemyHpBar.style.width = `${(state.enemyHp / enemy.hp) * 100}%`;
 
-  els.attackTotal.textContent = sumSlot("attack");
-  els.guardTotal.textContent = sumSlot("guard");
-  els.healTotal.textContent = Math.floor(sumSlot("heal") / 2);
+  els.attackTotal.textContent = totals.attack;
+  els.guardTotal.textContent = totals.guard;
+  els.healTotal.textContent = totals.heal;
 
   els.rollBtn.disabled = state.rolled || state.roundOver;
   els.resolveBtn.disabled = !allDiceAssigned() || state.roundOver;
@@ -263,7 +357,7 @@ function render() {
     if (state.selectedDie === index) btn.classList.add("selected");
     if (die.used) {
       btn.classList.add("used");
-      btn.title = "Click to reclaim this die";
+      btn.title = "点击撤回这个骰子";
       const badge = document.createElement("span");
       badge.className = "die-slot-badge";
       badge.textContent = slotLabel(slotForDie(index));
@@ -294,7 +388,7 @@ function assignSelectedDie(slotName) {
 }
 
 function slotLabel(slotName) {
-  const labels = { attack: "STR", guard: "WRD", heal: "MND" };
+  const labels = { attack: "攻", guard: "防", heal: "愈" };
   return labels[slotName] || "";
 }
 
@@ -305,20 +399,25 @@ function rollDice() {
   state.selectedDie = null;
   state.enemyIntent = randomIntent(enemy);
   state.rolled = true;
-  addLog(`Turn ${state.turn}. ${enemy.name} prepares to deal ${state.enemyIntent} damage.`);
+  addLog(`第 ${state.turn} 回合：${enemy.name} 准备造成 ${state.enemyIntent} 点伤害。`);
   render();
 }
 
 function resolveTurn() {
-  const attack = sumSlot("attack");
-  const guard = sumSlot("guard");
-  const heal = Math.floor(sumSlot("heal") / 2);
-  const incoming = Math.max(0, state.enemyIntent - guard);
+  const enemy = currentEnemy();
+  const ctx = createTurnContext();
+  playerSkill.apply(ctx);
+  enemy.applySkill(ctx);
 
-  state.enemyHp = clamp(state.enemyHp - attack, 0, currentEnemy().hp);
-  state.playerHp = clamp(state.playerHp + heal - incoming, 0, PLAYER_MAX_HP);
+  const heal = Math.floor(ctx.healPips / 2);
+  const incoming = Math.max(0, ctx.intent - ctx.guard);
+  const totalSelfDamage = incoming + ctx.selfDamage;
 
-  addLog(`You strike for ${attack}, ward ${guard}, mend ${heal}, and suffer ${incoming}.`);
+  state.enemyHp = clamp(state.enemyHp - ctx.attack, 0, enemy.hp);
+  state.playerHp = clamp(state.playerHp + heal - totalSelfDamage, 0, PLAYER_MAX_HP);
+
+  for (const msg of ctx.messages) addLog(msg);
+  addLog(`你造成 ${ctx.attack} 点伤害，防御 ${ctx.guard} 点，恢复 ${heal} 点，受到 ${totalSelfDamage} 点伤害。`);
 
   if (state.enemyHp <= 0) {
     winFight();
@@ -343,19 +442,18 @@ function winFight() {
   state.enemyIndex = Math.min(state.enemyIndex + 1, enemies.length - 1);
   const enemy = currentEnemy();
   state.enemyHp = enemy.hp;
-  state.playerHp = clamp(state.playerHp + 4, 0, PLAYER_MAX_HP);
   state.turn += 1;
   state.rolled = false;
   state.dice = [];
   state.slots = { attack: [], guard: [], heal: [] };
   state.enemyIntent = 0;
-  addLog(`Victory. You restore 4 vigor. A new foe enters: ${enemy.name}.`);
+  addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。下一名敌人：${enemy.name}。`);
   render();
 }
 
 function loseRun() {
   state.roundOver = true;
-  addLog(`The oath breaks. Final streak: ${state.wins}. Begin again to challenge the chapel.`);
+  addLog(`誓约破碎。最终连胜：${state.wins}。点击重新开始再次挑战。`);
   render();
 }
 
@@ -372,7 +470,7 @@ function resetGame() {
   state.rolled = false;
   state.roundOver = false;
   els.log.innerHTML = "";
-  addLog("A new oath is sworn. Cast the dice.");
+  addLog("新的誓约开始。点击掷骰。");
   render();
 }
 
