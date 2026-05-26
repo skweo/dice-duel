@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>骰誓 - 暗骰决斗</title>
+  <title>骰誓 - 黑礼拜堂岔路</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,10 +13,33 @@
     <section class="title-card">
       <div class="title-sigil" aria-hidden="true">D6</div>
       <div>
-        <p class="eyebrow">黑礼拜堂 · 失名赌局</p>
+        <p class="eyebrow">黑礼拜堂 · 六轮赌局</p>
         <h1>骰誓</h1>
-        <p class="subtitle">据说黑礼拜堂只在午夜开门。进去的人押上姓名、血债与记忆，掷出的每一面骨骰，都会被账册记住。</p>
+        <p class="subtitle">黑礼拜堂不再只有一条走廊。每次胜利都会打开三扇岔门：债、血、梦。你选择的路，会决定最后坐在赌桌尽头的人。</p>
       </div>
+    </section>
+
+    <section class="run-map" aria-label="路线状态">
+      <div>
+        <p class="eyebrow">当前位置</p>
+        <h2 id="location-name">旧前厅</h2>
+        <p id="location-desc">第一盏烛火永远不会熄灭，像在替后来者数数。</p>
+      </div>
+      <div class="route-stats">
+        <span>轮次 <strong id="round-indicator">1/6</strong></span>
+        <span>债 <strong id="debt-score">0</strong></span>
+        <span>血 <strong id="blood-score">0</strong></span>
+        <span>梦 <strong id="dream-score">0</strong></span>
+      </div>
+    </section>
+
+    <section class="route-panel" id="route-panel" aria-label="岔路选择">
+      <div class="route-panel-head">
+        <p class="eyebrow">岔路已开启</p>
+        <h2>选择下一处地点</h2>
+        <p>每条路会改变你遇到的敌人，也会把你推向不同的最终 Boss。</p>
+      </div>
+      <div class="route-options" id="route-options"></div>
     </section>
 
     <section class="status-grid" aria-label="战斗状态">
@@ -43,7 +66,7 @@
         <div class="fighter-head">
           <div class="portrait enemy-portrait" id="enemy-portrait" aria-label="敌人画像"></div>
           <div class="fighter-copy">
-            <p class="role-label">敌人</p>
+            <p class="role-label" id="enemy-rank">敌人</p>
             <h2 id="enemy-name">朽木侍从</h2>
             <p class="fighter-lore" id="enemy-trait">裂誓木偶</p>
             <p class="lore-fragment" id="enemy-lore">它曾是练习用的侍从木桩。后来有人把输家的名字钉进木纹里。</p>
@@ -104,9 +127,9 @@
 
       <article class="rules-card">
         <h2>残页</h2>
-        <p>黑礼拜堂没有门牌。只要你欠下某种无法偿还的东西，它就会出现在你回家的路上。</p>
-        <p>击败敌人后不会自动回血。礼拜堂只承认结果，不承认怜悯。</p>
-        <p>已经分配的骰子可以点击撤回。骰子允许反悔，账册不允许。</p>
+        <p>第 1 轮固定在旧前厅。第 2 至第 5 轮，每次胜利后会出现三条岔路。第 6 轮的 Boss 由你此前偏向的道路决定。</p>
+        <p>敌人不只会变强，还会用不同规则逼迫你改变骰子分配。礼拜堂只承认选择，不承认借口。</p>
+        <p>击败 Boss 即为胜利，并解锁对应结局。</p>
       </article>
     </section>
   </main>
