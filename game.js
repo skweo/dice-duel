@@ -1,129 +1,156 @@
 const PLAYER_MAX_HP = 24;
 
 const playerPortrait = `
-<svg viewBox="0 0 120 144" role="img" aria-label="骰誓者">
+<svg viewBox="0 0 140 170" role="img" aria-label="The Oathbound">
   <defs>
-    <linearGradient id="playerBg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3f2a14"/>
-      <stop offset="1" stop-color="#15120d"/>
+    <radialGradient id="pHalo" cx="50%" cy="18%" r="68%">
+      <stop offset="0" stop-color="#f0c775" stop-opacity=".72"/>
+      <stop offset=".46" stop-color="#49301f" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#080706"/>
+    </radialGradient>
+    <linearGradient id="pSteel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8c19a"/>
+      <stop offset=".45" stop-color="#6e7881"/>
+      <stop offset="1" stop-color="#20242a"/>
     </linearGradient>
-    <linearGradient id="playerCoat" x1="0" y1="16" x2="0" y2="130" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f1b84b"/>
-      <stop offset="1" stop-color="#8b4e22"/>
+    <linearGradient id="pCloak" x1="0" y1="34" x2="0" y2="162" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4c1614"/>
+      <stop offset=".55" stop-color="#20110f"/>
+      <stop offset="1" stop-color="#080605"/>
     </linearGradient>
   </defs>
-  <rect width="120" height="144" rx="26" fill="url(#playerBg)"/>
-  <path d="M18 128C26 94 37 76 60 76s34 18 42 52" fill="#2b2017"/>
-  <path d="M30 126c6-31 16-46 30-46s24 15 30 46" fill="url(#playerCoat)"/>
-  <path d="M38 48c4-18 16-28 22-28s18 10 22 28l-7 31H45z" fill="#201812"/>
-  <circle cx="60" cy="55" r="25" fill="#d9a86a"/>
-  <path d="M38 54c4-22 14-33 22-33s20 12 23 32c-10-9-25-9-45 1z" fill="#17110d"/>
-  <path d="M43 46c15 7 29 7 42-2-3-13-12-24-25-24-10 0-18 9-17 26z" fill="#f1b84b"/>
-  <circle cx="51" cy="58" r="3" fill="#23150c"/>
-  <circle cx="69" cy="58" r="3" fill="#23150c"/>
-  <path d="M53 70c5 4 10 4 15 0" fill="none" stroke="#6c321e" stroke-width="3" stroke-linecap="round"/>
-  <path d="M59 13l10 18-18-2z" fill="#f1b84b"/>
-  <rect x="52" y="88" width="16" height="16" rx="4" fill="#fff0c2" transform="rotate(45 60 96)"/>
-  <circle cx="60" cy="96" r="3" fill="#2b2017"/>
+  <rect width="140" height="170" rx="30" fill="url(#pHalo)"/>
+  <path d="M13 162c9-47 26-73 57-73s48 26 57 73" fill="#090706"/>
+  <path d="M27 164c8-43 22-64 43-64s35 21 43 64" fill="url(#pCloak)"/>
+  <path d="M34 101l36-20 36 20-10 63H44z" fill="#2b1d16"/>
+  <path d="M48 104h44l-10 60H58z" fill="url(#pSteel)"/>
+  <path d="M40 62c4-28 17-45 30-45s26 17 30 45l-12 35H52z" fill="#16100d"/>
+  <circle cx="70" cy="66" r="28" fill="#c99b6f"/>
+  <path d="M38 64c8-35 25-52 32-52s24 17 32 52c-20-13-43-13-64 0z" fill="#0d0908"/>
+  <path d="M45 55c10-16 40-20 50 0-4-26-15-42-25-42S49 29 45 55z" fill="#d6a95b"/>
+  <path d="M52 68h14M74 68h14" stroke="#24130d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M61 82c6 5 12 5 18 0" fill="none" stroke="#6b2b21" stroke-width="4" stroke-linecap="round"/>
+  <path d="M70 6l10 22-20-2z" fill="#f4d58a"/>
+  <rect x="58" y="112" width="24" height="24" rx="5" fill="#f4e2bd" transform="rotate(45 70 124)"/>
+  <circle cx="70" cy="124" r="3.8" fill="#261408"/>
+  <path d="M42 130l-18 28M98 130l18 28" stroke="#c79a55" stroke-width="5" stroke-linecap="round"/>
 </svg>`;
 
 const enemies = [
   {
-    name: "训练木偶",
+    name: "Hollow Squire",
+    trait: "Splintered oath",
     hp: 18,
     min: 3,
     max: 5,
     portrait: `
-<svg viewBox="0 0 120 144" role="img" aria-label="训练木偶">
-  <rect width="120" height="144" rx="26" fill="#1a1712"/>
-  <path d="M22 126c8-36 19-52 38-52s30 16 38 52" fill="#3d2c1c"/>
-  <rect x="36" y="34" width="48" height="48" rx="12" fill="#b8894b"/>
-  <path d="M36 48h48M45 34v48M75 34v48" stroke="#6c4326" stroke-width="4" opacity=".7"/>
-  <circle cx="51" cy="58" r="4" fill="#21140c"/>
-  <circle cx="69" cy="58" r="4" fill="#21140c"/>
-  <path d="M50 72h20" stroke="#21140c" stroke-width="4" stroke-linecap="round"/>
-  <path d="M32 94h56" stroke="#f1b84b" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="36" cy="94" r="7" fill="#d6ae72"/>
-  <circle cx="84" cy="94" r="7" fill="#d6ae72"/>
+<svg viewBox="0 0 140 170" role="img" aria-label="Hollow Squire">
+  <rect width="140" height="170" rx="30" fill="#0f0d0a"/>
+  <path d="M16 160c10-46 26-70 54-70s44 24 54 70" fill="#211713"/>
+  <path d="M32 102l38-22 38 22-13 59H45z" fill="#3a281d"/>
+  <rect x="43" y="36" width="54" height="55" rx="13" fill="#9a6c36"/>
+  <path d="M43 51h54M53 36v55M87 36v55" stroke="#59351f" stroke-width="5" opacity=".72"/>
+  <circle cx="59" cy="62" r="5" fill="#16100b"/>
+  <circle cx="81" cy="62" r="5" fill="#16100b"/>
+  <path d="M57 77h26" stroke="#16100b" stroke-width="5" stroke-linecap="round"/>
+  <path d="M33 111h74" stroke="#d0a25b" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="37" cy="111" r="8" fill="#c19a62"/>
+  <circle cx="103" cy="111" r="8" fill="#c19a62"/>
+  <path d="M31 28l18 7M109 28l-18 7" stroke="#c79a55" stroke-width="5" stroke-linecap="round"/>
 </svg>`
   },
   {
-    name: "铁皮赌徒",
+    name: "Iron Gambler",
+    trait: "Rustbound cheat",
     hp: 22,
     min: 4,
     max: 7,
     portrait: `
-<svg viewBox="0 0 120 144" role="img" aria-label="铁皮赌徒">
-  <rect width="120" height="144" rx="26" fill="#12161a"/>
-  <path d="M18 126c9-35 22-54 42-54s33 19 42 54" fill="#29343d"/>
-  <path d="M33 51c3-22 14-34 27-34s24 12 27 34l-9 30H42z" fill="#59636a"/>
-  <circle cx="60" cy="56" r="25" fill="#9ea8a9"/>
-  <path d="M36 53c10-18 39-24 53-4-6-24-17-35-29-35S41 26 36 53z" fill="#1c252d"/>
-  <circle cx="50" cy="58" r="4" fill="#f1b84b"/>
-  <circle cx="70" cy="58" r="4" fill="#f1b84b"/>
-  <path d="M52 72c5 3 11 3 16 0" stroke="#263139" stroke-width="4" stroke-linecap="round"/>
-  <rect x="45" y="90" width="30" height="30" rx="6" fill="#f1b84b" transform="rotate(45 60 105)"/>
-  <circle cx="60" cy="105" r="3" fill="#263139"/>
-  <circle cx="50" cy="95" r="2.5" fill="#263139"/>
-  <circle cx="70" cy="115" r="2.5" fill="#263139"/>
+<svg viewBox="0 0 140 170" role="img" aria-label="Iron Gambler">
+  <rect width="140" height="170" rx="30" fill="#0a0d10"/>
+  <path d="M16 160c11-44 28-69 54-69s43 25 54 69" fill="#1f2a31"/>
+  <path d="M35 66c3-32 17-50 35-50s32 18 35 50l-13 40H48z" fill="#424d56"/>
+  <circle cx="70" cy="69" r="31" fill="#9ba6aa"/>
+  <path d="M37 66c12-26 51-31 66-5-6-33-19-49-33-49S44 29 37 66z" fill="#151c22"/>
+  <circle cx="58" cy="70" r="5" fill="#e0ad54"/>
+  <circle cx="82" cy="70" r="5" fill="#e0ad54"/>
+  <path d="M60 87c6 4 14 4 20 0" stroke="#20272d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M39 110l31-18 31 18-31 20z" fill="#293844"/>
+  <rect x="54" y="108" width="32" height="32" rx="6" fill="#e0ad54" transform="rotate(45 70 124)"/>
+  <circle cx="70" cy="124" r="3.6" fill="#1a2228"/>
+  <circle cx="58" cy="112" r="2.8" fill="#1a2228"/>
+  <circle cx="82" cy="136" r="2.8" fill="#1a2228"/>
 </svg>`
   },
   {
-    name: "红眼卫兵",
+    name: "Blood-Eye Warden",
+    trait: "Chapel executioner",
     hp: 28,
     min: 5,
     max: 8,
     portrait: `
-<svg viewBox="0 0 120 144" role="img" aria-label="红眼卫兵">
-  <rect width="120" height="144" rx="26" fill="#1b0f0d"/>
-  <path d="M20 128c6-36 20-56 40-56s34 20 40 56" fill="#3a1514"/>
-  <path d="M32 54c2-25 14-39 28-39s26 14 28 39L78 85H42z" fill="#4a2220"/>
-  <circle cx="60" cy="57" r="26" fill="#68413a"/>
-  <path d="M34 52c9-28 43-31 52-1-13-8-38-8-52 1z" fill="#2b1210"/>
-  <path d="M45 58h13" stroke="#ff574a" stroke-width="6" stroke-linecap="round"/>
-  <path d="M62 58h13" stroke="#ff574a" stroke-width="6" stroke-linecap="round"/>
-  <path d="M51 74h18" stroke="#e05a47" stroke-width="4" stroke-linecap="round"/>
-  <path d="M31 96l29-16 29 16-29 18z" fill="#c33a32"/>
-  <path d="M60 79v42" stroke="#f1b84b" stroke-width="5" stroke-linecap="round"/>
+<svg viewBox="0 0 140 170" role="img" aria-label="Blood-Eye Warden">
+  <rect width="140" height="170" rx="30" fill="#160908"/>
+  <path d="M18 162c8-49 28-75 52-75s44 26 52 75" fill="#35100f"/>
+  <path d="M35 68c3-36 17-55 35-55s32 19 35 55l-15 42H50z" fill="#2a0e0d"/>
+  <circle cx="70" cy="70" r="32" fill="#6b4038"/>
+  <path d="M36 66c12-38 55-42 68-2-18-12-49-12-68 2z" fill="#170807"/>
+  <path d="M50 70h17" stroke="#ff5b4a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M73 70h17" stroke="#ff5b4a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M58 89h25" stroke="#e05a47" stroke-width="5" stroke-linecap="round"/>
+  <path d="M35 112l35-22 35 22-35 24z" fill="#9c2b29"/>
+  <path d="M70 90v60" stroke="#d6a95b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M48 123h44" stroke="#d6a95b" stroke-width="5" stroke-linecap="round"/>
 </svg>`
   },
   {
-    name: "铸币魔像",
+    name: "Coinforged Golem",
+    trait: "Living tithe engine",
     hp: 34,
     min: 6,
     max: 10,
     portrait: `
-<svg viewBox="0 0 120 144" role="img" aria-label="铸币魔像">
-  <rect width="120" height="144" rx="26" fill="#181209"/>
-  <path d="M17 126c9-38 23-56 43-56s34 18 43 56" fill="#5a3c15"/>
-  <rect x="34" y="30" width="52" height="54" rx="14" fill="#b87922"/>
-  <path d="M44 40h32v34H44z" fill="#e0a23a"/>
-  <circle cx="52" cy="57" r="5" fill="#2b1808"/>
-  <circle cx="68" cy="57" r="5" fill="#2b1808"/>
-  <path d="M49 72h22" stroke="#2b1808" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="60" cy="104" r="24" fill="#f1b84b"/>
-  <circle cx="60" cy="104" r="16" fill="#7a4b18"/>
-  <path d="M52 104h16M60 96v16" stroke="#f1b84b" stroke-width="4" stroke-linecap="round"/>
+<svg viewBox="0 0 140 170" role="img" aria-label="Coinforged Golem">
+  <rect width="140" height="170" rx="30" fill="#130d07"/>
+  <path d="M16 162c10-51 29-74 54-74s44 23 54 74" fill="#4c3213"/>
+  <rect x="39" y="34" width="62" height="62" rx="15" fill="#9e661d"/>
+  <path d="M51 46h38v38H51z" fill="#d69835"/>
+  <circle cx="60" cy="66" r="6" fill="#231207"/>
+  <circle cx="80" cy="66" r="6" fill="#231207"/>
+  <path d="M57 84h27" stroke="#231207" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="70" cy="125" r="31" fill="#e0ad54"/>
+  <circle cx="70" cy="125" r="20" fill="#674015"/>
+  <path d="M60 125h20M70 115v20" stroke="#e0ad54" stroke-width="5" stroke-linecap="round"/>
+  <path d="M36 109l-13 32M104 109l13 32" stroke="#8f5c20" stroke-width="8" stroke-linecap="round"/>
 </svg>`
   },
   {
-    name: "夜场庄家",
+    name: "Black Chapel Dealer",
+    trait: "Saint of crooked odds",
     hp: 42,
     min: 7,
     max: 12,
     portrait: `
-<svg viewBox="0 0 120 144" role="img" aria-label="夜场庄家">
-  <rect width="120" height="144" rx="26" fill="#100d16"/>
-  <path d="M18 128c8-39 22-61 42-61s34 22 42 61" fill="#22172d"/>
-  <path d="M32 47c5-23 16-35 28-35s23 12 28 35l-9 35H41z" fill="#17101f"/>
-  <circle cx="60" cy="55" r="25" fill="#d0a078"/>
-  <path d="M36 52c7-24 40-37 52 0-15-9-36-9-52 0z" fill="#2d183f"/>
-  <circle cx="50" cy="59" r="4" fill="#6ff0d2"/>
-  <circle cx="70" cy="59" r="4" fill="#e05a47"/>
-  <path d="M52 73c6 4 12 4 18 0" stroke="#5c2732" stroke-width="4" stroke-linecap="round"/>
-  <path d="M36 91l24-14 24 14v34H36z" fill="#4b2d60"/>
-  <path d="M45 103h30" stroke="#f1b84b" stroke-width="5" stroke-linecap="round"/>
-  <rect x="54" y="86" width="12" height="12" rx="2" fill="#fff0c2" transform="rotate(45 60 92)"/>
+<svg viewBox="0 0 140 170" role="img" aria-label="Black Chapel Dealer">
+  <defs>
+    <radialGradient id="dGlow" cx="50%" cy="22%" r="72%">
+      <stop offset="0" stop-color="#5b315f"/>
+      <stop offset=".46" stop-color="#1a1022"/>
+      <stop offset="1" stop-color="#060408"/>
+    </radialGradient>
+  </defs>
+  <rect width="140" height="170" rx="30" fill="url(#dGlow)"/>
+  <path d="M16 162c10-52 29-80 54-80s44 28 54 80" fill="#160b1d"/>
+  <path d="M34 61c6-32 20-49 36-49s30 17 36 49l-14 48H48z" fill="#0d0711"/>
+  <circle cx="70" cy="67" r="31" fill="#c69a78"/>
+  <path d="M37 64c9-32 52-50 66 0-20-13-45-13-66 0z" fill="#2b1736"/>
+  <circle cx="58" cy="70" r="5" fill="#74f1d4"/>
+  <circle cx="82" cy="70" r="5" fill="#f05a45"/>
+  <path d="M60 88c7 5 14 5 21 0" stroke="#5b2732" stroke-width="5" stroke-linecap="round"/>
+  <path d="M38 112l32-20 32 20v46H38z" fill="#3c224d"/>
+  <path d="M49 128h42" stroke="#e0ad54" stroke-width="6" stroke-linecap="round"/>
+  <rect x="59" y="103" width="22" height="22" rx="4" fill="#f4e2bd" transform="rotate(45 70 114)"/>
+  <circle cx="70" cy="114" r="3.4" fill="#2b1736"/>
 </svg>`
   }
 ];
@@ -148,6 +175,7 @@ const els = {
   playerHp: document.getElementById("player-hp"),
   playerHpBar: document.getElementById("player-hp-bar"),
   enemyName: document.getElementById("enemy-name"),
+  enemyTrait: document.getElementById("enemy-trait"),
   enemyIntent: document.getElementById("enemy-intent"),
   playerPortrait: document.getElementById("player-portrait"),
   enemyPortrait: document.getElementById("enemy-portrait"),
@@ -212,9 +240,10 @@ function render() {
   els.playerHp.textContent = `${state.playerHp}/${PLAYER_MAX_HP}`;
   els.playerHpBar.style.width = `${(state.playerHp / PLAYER_MAX_HP) * 100}%`;
   els.enemyName.textContent = enemy.name;
+  els.enemyTrait.textContent = enemy.trait;
   els.playerPortrait.innerHTML = playerPortrait;
   els.enemyPortrait.innerHTML = enemy.portrait;
-  els.enemyIntent.textContent = state.enemyIntent > 0 ? `意图：造成 ${state.enemyIntent} 点伤害` : "等待你掷骰";
+  els.enemyIntent.textContent = state.enemyIntent > 0 ? `Intent: deal ${state.enemyIntent} damage` : "Waiting for your cast";
   els.enemyHp.textContent = `${state.enemyHp}/${enemy.hp}`;
   els.enemyHpBar.style.width = `${(state.enemyHp / enemy.hp) * 100}%`;
 
@@ -234,7 +263,7 @@ function render() {
     if (state.selectedDie === index) btn.classList.add("selected");
     if (die.used) {
       btn.classList.add("used");
-      btn.title = "点击撤回这个骰子";
+      btn.title = "Click to reclaim this die";
       const badge = document.createElement("span");
       badge.className = "die-slot-badge";
       badge.textContent = slotLabel(slotForDie(index));
@@ -265,7 +294,7 @@ function assignSelectedDie(slotName) {
 }
 
 function slotLabel(slotName) {
-  const labels = { attack: "攻", guard: "防", heal: "疗" };
+  const labels = { attack: "STR", guard: "WRD", heal: "MND" };
   return labels[slotName] || "";
 }
 
@@ -276,7 +305,7 @@ function rollDice() {
   state.selectedDie = null;
   state.enemyIntent = randomIntent(enemy);
   state.rolled = true;
-  addLog(`第 ${state.turn} 回合开始。敌人准备造成 ${state.enemyIntent} 点伤害。`);
+  addLog(`Turn ${state.turn}. ${enemy.name} prepares to deal ${state.enemyIntent} damage.`);
   render();
 }
 
@@ -289,7 +318,7 @@ function resolveTurn() {
   state.enemyHp = clamp(state.enemyHp - attack, 0, currentEnemy().hp);
   state.playerHp = clamp(state.playerHp + heal - incoming, 0, PLAYER_MAX_HP);
 
-  addLog(`你造成 ${attack} 伤害，格挡 ${guard}，治疗 ${heal}，受到 ${incoming} 伤害。`);
+  addLog(`You strike for ${attack}, ward ${guard}, mend ${heal}, and suffer ${incoming}.`);
 
   if (state.enemyHp <= 0) {
     winFight();
@@ -320,13 +349,13 @@ function winFight() {
   state.dice = [];
   state.slots = { attack: [], guard: [], heal: [] };
   state.enemyIntent = 0;
-  addLog(`胜利！你恢复 4 HP。新的对手：${enemy.name}。`);
+  addLog(`Victory. You restore 4 vigor. A new foe enters: ${enemy.name}.`);
   render();
 }
 
 function loseRun() {
   state.roundOver = true;
-  addLog(`失败。最终连胜：${state.wins}。点击重新开始再来一局。`);
+  addLog(`The oath breaks. Final streak: ${state.wins}. Begin again to challenge the chapel.`);
   render();
 }
 
@@ -343,7 +372,7 @@ function resetGame() {
   state.rolled = false;
   state.roundOver = false;
   els.log.innerHTML = "";
-  addLog("新的决斗开始。先点击掷骰。");
+  addLog("A new oath is sworn. Cast the dice.");
   render();
 }
 

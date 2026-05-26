@@ -3,28 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>骰子决斗 - Dice Duel</title>
+  <title>Dice Oath - Dark Dice Duel</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="world-glow" aria-hidden="true"></div>
+
   <main class="game-shell">
     <section class="title-card">
-      <p class="eyebrow">Prototype 01</p>
-      <h1>骰子决斗</h1>
-      <p class="subtitle">掷骰、分配、预判敌人，用最简单的规则打出漂亮的连胜。</p>
+      <div class="title-sigil" aria-hidden="true">D6</div>
+      <div>
+        <p class="eyebrow">Dark Medieval Prototype</p>
+        <h1>Dice Oath</h1>
+        <p class="subtitle">Cast bone dice, bind them to attack, guard, or mend, and survive the cursed wager.</p>
+      </div>
     </section>
 
-    <section class="status-grid" aria-label="战斗状态">
+    <section class="status-grid" aria-label="combat status">
       <article class="fighter player-card">
         <div class="fighter-head">
-          <div class="portrait player-portrait" id="player-portrait" aria-label="玩家画像"></div>
-          <div>
-            <h2>玩家</h2>
-            <p>回合 <span id="turn">1</span> · 连胜 <span id="wins">0</span></p>
+          <div class="portrait player-portrait" id="player-portrait" aria-label="player portrait"></div>
+          <div class="fighter-copy">
+            <p class="role-label">Player</p>
+            <h2>The Oathbound</h2>
+            <p class="fighter-lore">Turn <span id="turn">1</span> · Streak <span id="wins">0</span></p>
           </div>
         </div>
         <div class="hp-row">
-          <span>HP</span>
+          <span>Vigor</span>
           <div class="hp-bar"><div id="player-hp-bar"></div></div>
           <strong id="player-hp">24/24</strong>
         </div>
@@ -32,14 +38,16 @@
 
       <article class="fighter enemy-card">
         <div class="fighter-head">
-          <div class="portrait enemy-portrait" id="enemy-portrait" aria-label="敌人画像"></div>
-          <div>
-            <h2 id="enemy-name">训练木偶</h2>
-            <p id="enemy-intent">正在观察你</p>
+          <div class="portrait enemy-portrait" id="enemy-portrait" aria-label="enemy portrait"></div>
+          <div class="fighter-copy">
+            <p class="role-label">Opponent</p>
+            <h2 id="enemy-name">Hollow Squire</h2>
+            <p class="fighter-lore" id="enemy-trait">Splintered oath</p>
+            <p class="intent" id="enemy-intent">Waiting for your cast</p>
           </div>
         </div>
         <div class="hp-row">
-          <span>HP</span>
+          <span>Vigor</span>
           <div class="hp-bar"><div id="enemy-hp-bar"></div></div>
           <strong id="enemy-hp">18/18</strong>
         </div>
@@ -49,45 +57,50 @@
     <section class="board">
       <div class="dice-panel">
         <div class="panel-heading">
-          <h2>本回合骰子</h2>
-          <button id="roll-btn">掷骰</button>
+          <div>
+            <p class="eyebrow">Round Cast</p>
+            <h2>Bone Dice</h2>
+          </div>
+          <button id="roll-btn">Cast Dice</button>
         </div>
-        <div id="dice-tray" class="dice-tray" aria-label="骰子列表"></div>
+        <div id="dice-tray" class="dice-tray" aria-label="dice tray"></div>
       </div>
 
-      <div class="slots" aria-label="行动槽">
+      <div class="slots" aria-label="action slots">
         <button class="slot attack" data-slot="attack">
-          <span>攻击</span>
+          <span>Strike</span>
           <strong id="attack-total">0</strong>
-          <small>造成等同点数的伤害</small>
+          <small>Deal damage equal to bound pips.</small>
         </button>
         <button class="slot guard" data-slot="guard">
-          <span>防御</span>
+          <span>Ward</span>
           <strong id="guard-total">0</strong>
-          <small>抵消敌人伤害</small>
+          <small>Block incoming damage this turn.</small>
         </button>
         <button class="slot heal" data-slot="heal">
-          <span>治疗</span>
+          <span>Mend</span>
           <strong id="heal-total">0</strong>
-          <small>每 2 点恢复 1 HP</small>
+          <small>Restore 1 vigor for every 2 pips.</small>
         </button>
       </div>
 
       <div class="actions">
-        <button id="resolve-btn" disabled>执行回合</button>
-        <button id="reset-btn" class="ghost">重新开始</button>
+        <button id="resolve-btn" disabled>Seal the Turn</button>
+        <button id="reset-btn" class="ghost">Begin Again</button>
       </div>
     </section>
 
-    <section class="log-card">
-      <h2>战斗记录</h2>
-      <div id="battle-log" class="battle-log"></div>
-    </section>
+    <section class="lower-grid">
+      <article class="log-card">
+        <h2>Battle Chronicle</h2>
+        <div id="battle-log" class="battle-log"></div>
+      </article>
 
-    <section class="rules-card">
-      <h2>玩法</h2>
-      <p>每回合掷 3 个骰子。点击骰子选择它，再点击攻击、防御或治疗槽。三个骰子都分配后执行回合。</p>
-      <p>敌人会提前显示意图。赢下一场会遇到更强的敌人。</p>
+      <article class="rules-card">
+        <h2>Rules</h2>
+        <p>Cast 3 dice each turn. Select a die, then bind it to Strike, Ward, or Mend. Click a bound die to reclaim it before sealing the turn.</p>
+        <p>The enemy reveals its intent before you act. Defeat one foe to face the next cursed challenger.</p>
+      </article>
     </section>
   </main>
 
