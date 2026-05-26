@@ -13,9 +13,9 @@
     <section class="title-card">
       <div class="title-sigil" aria-hidden="true">D6</div>
       <div>
-        <p class="eyebrow">暗黑中世纪骰子决斗</p>
+        <p class="eyebrow">黑礼拜堂 · 失名赌局</p>
         <h1>骰誓</h1>
-        <p class="subtitle">掷出骨骰，将点数分配给攻击、防御与恢复，在诅咒赌局中撑过一名又一名敌人。</p>
+        <p class="subtitle">据说黑礼拜堂只在午夜开门。进去的人押上姓名、血债与记忆，掷出的每一面骨骰，都会被账册记住。</p>
       </div>
     </section>
 
@@ -27,6 +27,7 @@
             <p class="role-label">玩家</p>
             <h2>誓约者</h2>
             <p class="fighter-lore">回合 <span id="turn">1</span> · 连胜 <span id="wins">0</span></p>
+            <p class="lore-fragment">左腕烙着三枚骰印。你不记得自己输掉了什么，只记得必须把它赢回来。</p>
             <p class="skill-line"><span>技能</span><strong id="player-skill">三相誓约</strong></p>
             <p class="skill-desc">若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。</p>
           </div>
@@ -45,6 +46,7 @@
             <p class="role-label">敌人</p>
             <h2 id="enemy-name">朽木侍从</h2>
             <p class="fighter-lore" id="enemy-trait">裂誓木偶</p>
+            <p class="lore-fragment" id="enemy-lore">它曾是练习用的侍从木桩。后来有人把输家的名字钉进木纹里。</p>
             <p class="skill-line"><span>技能</span><strong id="enemy-skill">木刺反扑</strong></p>
             <p class="skill-desc" id="enemy-skill-desc">若你本回合没有投入防御骰，造成伤害后受到 1 点反伤。</p>
             <p class="intent" id="enemy-intent">等待你掷骰</p>
@@ -101,9 +103,10 @@
       </article>
 
       <article class="rules-card">
-        <h2>规则</h2>
-        <p>每回合掷 3 个骰子。点击骰子选择它，再点击攻击、防御或恢复槽。已经分配的骰子可以点击撤回。</p>
-        <p>敌人会提前显示意图。击败敌人后不会自动回血，当前血量会保留并继续挑战下一名敌人。</p>
+        <h2>残页</h2>
+        <p>黑礼拜堂没有门牌。只要你欠下某种无法偿还的东西，它就会出现在你回家的路上。</p>
+        <p>击败敌人后不会自动回血。礼拜堂只承认结果，不承认怜悯。</p>
+        <p>已经分配的骰子可以点击撤回。骰子允许反悔，账册不允许。</p>
       </article>
     </section>
   </main>

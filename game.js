@@ -1,5 +1,12 @@
 const PLAYER_MAX_HP = 24;
 
+const storyFragments = [
+  "门外的雨没有声音。只有骰子在掌心里轻轻敲响。",
+  "墙上的圣像都被蒙住眼睛，像是不愿替谁作证。",
+  "账册翻开了一页，墨迹还湿，姓名栏却被刮空。",
+  "烛火朝着你倒伏。礼拜堂在等待下一次下注。"
+];
+
 const playerSkill = {
   name: "三相誓约",
   desc: "若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。",
@@ -8,7 +15,7 @@ const playerSkill = {
       ctx.attack += 2;
       ctx.guard += 2;
       ctx.healPips += 2;
-      ctx.messages.push("三相誓约触发：攻击、防御、恢复点数各 +2。");
+      ctx.messages.push("三相誓约触发：三枚骰印同时发烫，攻击、防御、恢复点数各 +2。");
     }
   }
 };
@@ -53,6 +60,9 @@ const enemies = [
   {
     name: "朽木侍从",
     trait: "裂誓木偶",
+    lore: "它曾是练习用的侍从木桩。后来有人把输家的名字钉进木纹里。",
+    intro: "朽木侍从拖着钉满姓名的木臂走来。它不会说话，只会模仿上一位输家的姿势。",
+    defeat: "木纹裂开，一枚生锈钉子掉在地上。钉帽上刻着一个被磨掉的姓。",
     skillName: "木刺反扑",
     skillDesc: "若你本回合没有投入防御骰，造成伤害后受到 1 点反伤。",
     hp: 18,
@@ -61,7 +71,7 @@ const enemies = [
     applySkill(ctx) {
       if (ctx.guardDice === 0 && ctx.attack > 0) {
         ctx.selfDamage += 1;
-        ctx.messages.push("木刺反扑：你没有防御，受到 1 点反伤。");
+        ctx.messages.push("木刺反扑：你没有防御，木刺从伤口里弹回，受到 1 点反伤。");
       }
     },
     portrait: `
@@ -83,6 +93,9 @@ const enemies = [
   {
     name: "铁面赌徒",
     trait: "锈牌老千",
+    lore: "他的铁面具焊死在脸上。面具内侧刻满了他没有兑现的赔率。",
+    intro: "铁面赌徒把一枚骰子藏进袖口。礼拜堂没有阻止他，像是默认作弊也是规矩的一部分。",
+    defeat: "铁面具里滚出三颗假骰。每一颗都只有一面。",
     skillName: "作弊骰",
     skillDesc: "若你的攻击骰总点数小于防御骰总点数，敌人本回合伤害 +2。",
     hp: 22,
@@ -91,7 +104,7 @@ const enemies = [
     applySkill(ctx) {
       if (ctx.attack < ctx.guard) {
         ctx.intent += 2;
-        ctx.messages.push("作弊骰：你的攻势太弱，敌人伤害 +2。");
+        ctx.messages.push("作弊骰：你守得太深，他趁空换骰，本回合伤害 +2。");
       }
     },
     portrait: `
@@ -114,6 +127,9 @@ const enemies = [
   {
     name: "赤眼典狱官",
     trait: "礼拜堂刑吏",
+    lore: "他负责处置赖账者。赤眼不是眼睛，是两枚烧红的债印。",
+    intro: "赤眼典狱官翻开刑簿。你的名字没有出现，只有一段空白被红线圈住。",
+    defeat: "刑簿合上时发出骨头折断的声音。红线从纸面渗进你的骰印。",
     skillName: "处刑目光",
     skillDesc: "若你本回合没有造成至少 6 点伤害，敌人额外造成 3 点伤害。",
     hp: 28,
@@ -122,7 +138,7 @@ const enemies = [
     applySkill(ctx) {
       if (ctx.attack < 6) {
         ctx.intent += 3;
-        ctx.messages.push("处刑目光：本回合伤害不足 6，敌人额外伤害 +3。");
+        ctx.messages.push("处刑目光：伤害不足 6，典狱官判定你迟疑，额外伤害 +3。");
       }
     },
     portrait: `
@@ -143,6 +159,9 @@ const enemies = [
   {
     name: "铸币魔像",
     trait: "活体什一税机",
+    lore: "它由输家的金币、牙齿和忏悔税铸成。胸口的空洞像一只永远张开的钱袋。",
+    intro: "铸币魔像踩碎一地铜币。每一枚都在尖叫，声音却像掌声。",
+    defeat: "魔像崩塌后，金币没有散开，而是排成一行，指向礼拜堂更深处。",
     skillName: "金壳护体",
     skillDesc: "每回合受到的前 2 点伤害会被抵消。",
     hp: 34,
@@ -152,7 +171,7 @@ const enemies = [
       const blocked = Math.min(2, ctx.attack);
       if (blocked > 0) {
         ctx.attack -= blocked;
-        ctx.messages.push(`金壳护体：抵消了 ${blocked} 点伤害。`);
+        ctx.messages.push(`金壳护体：硬币鳞片合拢，抵消了 ${blocked} 点伤害。`);
       }
     },
     portrait: `
@@ -173,6 +192,9 @@ const enemies = [
   {
     name: "黑礼拜堂庄家",
     trait: "歪曲赔率的圣徒",
+    lore: "没人见过他的真脸。有人说庄家不是人，而是整座礼拜堂学会了微笑。",
+    intro: "黑礼拜堂庄家替你拉开椅子。桌面上摆着一张旧契约，签名处与你的笔迹一模一样。",
+    defeat: "庄家的影子没有倒下。它只是把账册推到你面前，像是在邀请你翻到第一页。",
     skillName: "终局赔率",
     skillDesc: "若你的生命低于 10，敌人伤害 +2；若高于 18，敌人受到伤害 -2。",
     hp: 42,
@@ -181,12 +203,12 @@ const enemies = [
     applySkill(ctx) {
       if (state.playerHp < 10) {
         ctx.intent += 2;
-        ctx.messages.push("终局赔率：你生命低于 10，敌人伤害 +2。");
+        ctx.messages.push("终局赔率：你生命低于 10，庄家提高赔率，敌人伤害 +2。");
       }
       if (state.playerHp > 18) {
         const reduced = Math.min(2, ctx.attack);
         ctx.attack -= reduced;
-        if (reduced > 0) ctx.messages.push(`终局赔率：你状态太好，敌人减免 ${reduced} 点伤害。`);
+        if (reduced > 0) ctx.messages.push(`终局赔率：你状态太好，赔率被压低，敌人减免 ${reduced} 点伤害。`);
       }
     },
     portrait: `
@@ -236,6 +258,7 @@ const els = {
   playerSkill: document.getElementById("player-skill"),
   enemyName: document.getElementById("enemy-name"),
   enemyTrait: document.getElementById("enemy-trait"),
+  enemyLore: document.getElementById("enemy-lore"),
   enemySkill: document.getElementById("enemy-skill"),
   enemySkillDesc: document.getElementById("enemy-skill-desc"),
   enemyIntent: document.getElementById("enemy-intent"),
@@ -333,6 +356,7 @@ function render() {
   els.playerSkill.textContent = playerSkill.name;
   els.enemyName.textContent = enemy.name;
   els.enemyTrait.textContent = enemy.trait;
+  els.enemyLore.textContent = enemy.lore;
   els.enemySkill.textContent = enemy.skillName;
   els.enemySkillDesc.textContent = enemy.skillDesc;
   els.playerPortrait.innerHTML = playerPortrait;
@@ -438,8 +462,18 @@ function resolveTurn() {
 }
 
 function winFight() {
+  const defeated = currentEnemy();
+  addLog(defeated.defeat);
   state.wins += 1;
-  state.enemyIndex = Math.min(state.enemyIndex + 1, enemies.length - 1);
+
+  if (state.enemyIndex >= enemies.length - 1) {
+    addLog("你走到赌桌尽头，却发现庄家的座位空着。椅背上刻着：第一局，现在开始。");
+    state.roundOver = true;
+    render();
+    return;
+  }
+
+  state.enemyIndex += 1;
   const enemy = currentEnemy();
   state.enemyHp = enemy.hp;
   state.turn += 1;
@@ -447,13 +481,15 @@ function winFight() {
   state.dice = [];
   state.slots = { attack: [], guard: [], heal: [] };
   state.enemyIntent = 0;
-  addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。下一名敌人：${enemy.name}。`);
+  addLog(`胜利！当前生命保持为 ${state.playerHp}/${PLAYER_MAX_HP}。`);
+  addLog(enemy.intro);
   render();
 }
 
 function loseRun() {
   state.roundOver = true;
-  addLog(`誓约破碎。最终连胜：${state.wins}。点击重新开始再次挑战。`);
+  addLog("誓约破碎。账册合上时，你听见有人用你的声音说：再来一局。");
+  addLog(`最终连胜：${state.wins}。`);
   render();
 }
 
@@ -471,6 +507,8 @@ function resetGame() {
   state.roundOver = false;
   els.log.innerHTML = "";
   addLog("新的誓约开始。点击掷骰。");
+  for (const text of storyFragments.slice(0, 2).reverse()) addLog(text);
+  addLog(currentEnemy().intro);
   render();
 }
 

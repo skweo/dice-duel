@@ -252,6 +252,14 @@ h2 {
   font-size: 14px;
 }
 
+.lore-fragment {
+  margin-bottom: 8px;
+  color: #d4b987;
+  font-size: 13px;
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
 .skill-line {
   display: inline-flex;
   align-items: center;
