@@ -1066,6 +1066,7 @@ function allDiceAssigned() {
 
 function enemyArchetype(enemy = currentEnemy()) {
   if (enemy?.boss) return enemy.path === "blood" ? "aggressive" : enemy.path === "dream" ? "trickster" : "counter";
+  if (["hollow-squire", "iron-gambler"].includes(enemy?.id)) return "balanced";
   if (enemy?.path === "blood") return "aggressive";
   if (enemy?.path === "dream") return "trickster";
   return "counter";
@@ -1089,35 +1090,74 @@ function getPlayerDiceRead() {
   };
 }
 
+function enemyPlanProfile(archetype, hpRatio) {
+  const lowHp = hpRatio <= 0.45;
+  const profiles = {
+    aggressive: { attack: lowHp ? 1.85 : 2.05, guard: 0.65, heal: lowHp ? 0.65 : 0.35, attackBias: 0.96, guardBias: 0.34, healBias: lowHp ? 0.55 : 0.22 },
+    counter: { attack: 1.25, guard: lowHp ? 1.15 : 1.35, heal: lowHp ? 0.6 : 0.4, attackBias: 0.72, guardBias: 0.9, healBias: lowHp ? 0.55 : 0.22 },
+    trickster: { attack: 1.25, guard: 0.65, heal: lowHp ? 1.1 : 0.85, attackBias: 0.7, guardBias: 0.35, healBias: lowHp ? 0.9 : 0.58 },
+    balanced: { attack: 1.55, guard: 0.95, heal: lowHp ? 0.75 : 0.5, attackBias: 0.82, guardBias: 0.55, healBias: lowHp ? 0.65 : 0.32 }
+  };
+  return profiles[archetype] || profiles.balanced;
+}
+
 function scoreEnemyPlan(plan, values, playerRead, archetype) {
   const enemyAttack = sumValues(plan.attack.map(index => values[index]));
   const enemyGuard = sumValues(plan.guard.map(index => values[index]));
   const enemyHeal = sumValues(plan.heal.map(index => values[index]));
-  const expectedPlayerAttack = archetype === "aggressive"
+  const attackDice = plan.attack.length;
+  const guardDice = plan.guard.length;
+  const healDice = plan.heal.length;
+  const hpRatio = state.enemy?.hp ? state.enemyHp / state.enemy.hp : 1;
+  const profile = enemyPlanProfile(archetype, hpRatio);
+  const expectedPlayerAttack = archetype === "counter"
+    ? playerRead.high + Math.ceil(playerRead.mid / 3)
+    : archetype === "trickster"
+      ? playerRead.mid + Math.floor(playerRead.low / 2)
+      : playerRead.high;
+  const expectedPlayerGuard = archetype === "aggressive"
     ? playerRead.high
     : archetype === "counter"
-      ? playerRead.high + Math.floor(playerRead.mid / 2)
-      : playerRead.mid + Math.floor(playerRead.low / 2);
-  const expectedPlayerGuard = archetype === "aggressive"
-    ? playerRead.mid
-    : archetype === "counter"
-      ? playerRead.high
+      ? playerRead.mid
       : playerRead.mid;
   const expectedPlayerHeal = Math.floor((archetype === "trickster" ? playerRead.high : playerRead.low) / 2);
   const expectedDamage = Math.max(0, expectedPlayerAttack - enemyGuard);
   const expectedIncoming = Math.max(0, enemyAttack - expectedPlayerGuard);
   const heal = Math.floor(enemyHeal / 2);
-  let score = expectedIncoming * 2.2 - expectedDamage * 2 + heal * 1.05;
-  if (archetype === "aggressive") score += enemyAttack * 0.85 - enemyGuard * 0.15;
-  if (archetype === "counter") score += enemyGuard * 0.75 + Math.max(0, enemyGuard - expectedPlayerAttack) * 0.7;
+  const usefulGuard = Math.min(enemyGuard, expectedPlayerAttack);
+  const overGuard = Math.max(0, enemyGuard - expectedPlayerAttack - 1);
+  let score = 0;
+  score += expectedIncoming * 1.75;
+  score -= expectedDamage * 1.05;
+  score += usefulGuard * profile.guardBias;
+  score -= overGuard * 1.05;
+  score += enemyAttack * profile.attackBias;
+  score += heal * (0.45 + profile.healBias);
+  score += healDice * profile.healBias;
+  score -= Math.abs(attackDice - profile.attack) * 1.15;
+  score -= Math.abs(guardDice - profile.guard) * 0.9;
+  score -= Math.abs(healDice - profile.heal) * 0.7;
+  if (archetype === "aggressive") score += attackDice * 0.65 - guardDice * 0.12;
+  if (archetype === "counter") score += guardDice * 0.55 + attackDice * 0.35;
   if (archetype === "trickster") {
     score += Math.abs(enemyAttack - expectedPlayerGuard) * 0.25;
-    score += expectedPlayerHeal > 0 ? enemyAttack * 0.25 : enemyHeal * 0.45;
+    score += expectedPlayerHeal > 0 ? enemyAttack * 0.22 : enemyHeal * 0.5;
   }
-  if (playerRead.pairs > 0 && plan.guard.length > 0) score += 0.35;
-  if (playerRead.spread >= 4 && plan.attack.length > 0) score += 0.45;
+  if (archetype === "balanced") {
+    score += Math.min(enemyAttack, expectedPlayerGuard + 2) * 0.55;
+    score += Math.min(enemyGuard, expectedPlayerAttack) * 0.25;
+  }
+  if (playerRead.pairs > 0 && guardDice > 0) score += 0.35;
+  if (playerRead.spread >= 4 && attackDice > 0) score += 0.45;
   if (expectedPlayerAttack >= enemyGuard && enemyGuard > 0) score += 0.8;
   if (expectedPlayerGuard >= enemyAttack && enemyAttack > 0) score -= 0.55;
+  if (attackDice === 0) score -= 9 + playerRead.total * 0.18;
+  if (guardDice === values.length) score -= 9;
+  if (attackDice === values.length) score -= archetype === "aggressive" ? 1.8 : 4.2;
+  if (healDice === values.length) score -= 7;
+  if (guardDice > attackDice + 1) score -= (guardDice - attackDice - 1) * 3.2;
+  if (attackDice > guardDice + 2 && archetype !== "aggressive") score -= 2.4;
+  if (attackDice > 0 && guardDice > 0 && healDice > 0) score += archetype === "trickster" ? 1 : 0.45;
   return score;
 }
 
