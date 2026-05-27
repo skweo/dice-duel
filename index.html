@@ -13,14 +13,28 @@
     <div class="character-select-panel">
       <div class="select-hero">
         <div>
-          <p class="eyebrow">Dice Oath · Black Chapel Edition</p>
-          <h1>选择入局者</h1>
-          <p class="subtitle">一张角色卡就是一种下注方式。每名入局者拥有不同技能、生命上限与叙事身份；击败终局 Boss 后，会解锁新的收藏档案。</p>
+          <p class="eyebrow select-kicker"><span>Black Chapel Registry</span><i></i><span>候选人档案</span></p>
+          <h1 class="select-title">
+            <span>誓约候选档案</span>
+            <small>Choose the hand that will cast the bone dice.</small>
+          </h1>
+          <p class="subtitle select-subtitle">黑礼拜堂只允许一名入局者签下封蜡。每张契约都改变生命上限、技能节奏与遗物路线；击败终局 Boss 后，新的档案会被拆封。</p>
+          <div class="select-ledger" aria-label="入局档案状态">
+            <span>档案 06</span>
+            <span>封蜡准入</span>
+            <span>遗物继承</span>
+          </div>
         </div>
         <div class="hero-dice-showcase" aria-hidden="true">
-          <span class="showcase-die">1</span>
-          <span class="showcase-die">4</span>
-          <span class="showcase-die">6</span>
+          <div class="hero-sigil">
+            <span class="sigil-core"></span>
+            <span class="sigil-ring sigil-ring-1"></span>
+            <span class="sigil-ring sigil-ring-2"></span>
+            <span class="sigil-mark sigil-mark-1"></span>
+            <span class="sigil-mark sigil-mark-2"></span>
+            <span class="sigil-mark sigil-mark-3"></span>
+            <span class="sigil-mark sigil-mark-4"></span>
+          </div>
         </div>
       </div>
       <div class="character-options" id="character-options"></div>
@@ -51,6 +65,11 @@
 
   <main class="game-shell">
     <section class="title-card">
+      <div class="scene-banner-copy" aria-live="polite">
+        <p class="eyebrow" id="scene-path-label">当前场景</p>
+        <h2 id="scene-location-name">旧前厅</h2>
+        <p id="scene-location-desc">第一盏烛火永远不会熄灭，像在替后来者数数。</p>
+      </div>
       <div class="title-sigil" aria-hidden="true">
         <svg viewBox="0 0 120 120" role="img">
           <path class="sigil-ring" d="M60 8 104 33v54l-44 25L16 87V33z"/>
@@ -86,20 +105,9 @@
       </div>
       <div class="route-stats">
         <span>轮次 <strong id="round-indicator">1/6</strong></span>
-        <span>当前 <strong id="current-path">未定</strong></span>
         <span>违誓 <strong id="fracture-count">0</strong></span>
-        <span>债 <strong id="debt-score">0</strong></span>
-        <span>血 <strong id="blood-score">0</strong></span>
-        <span>梦 <strong id="dream-score">0</strong></span>
+        <span class="sealed-stat">岔路 <strong>封存</strong></span>
       </div>
-    </section>
-
-    <section class="relic-inventory empty" id="relic-inventory" aria-label="遗物">
-      <div>
-        <p class="eyebrow">夺取的遗物</p>
-        <h2>随身圣匣</h2>
-      </div>
-      <div class="relic-list" id="relic-list"></div>
     </section>
 
     <section class="route-panel" id="route-panel" aria-label="岔路选择">
@@ -115,6 +123,7 @@
       <article class="fighter player-card">
         <div class="fighter-head">
           <div class="portrait player-portrait" id="player-portrait" aria-label="玩家画像"></div>
+          <div class="buff-list" id="buff-list" aria-label="永久遗物加成"></div>
           <div class="fighter-copy">
             <p class="role-label">玩家</p>
             <h2 id="player-name">誓约者</h2>
@@ -124,6 +133,13 @@
             <p class="skill-desc" id="player-skill-desc">若本回合攻击、防御、恢复三个槽都有骰子，则攻击、防御、恢复点数各 +2。</p>
           </div>
         </div>
+        <section class="relic-inventory empty" id="relic-inventory" aria-label="遗物">
+          <div class="relic-vault-head">
+            <p class="eyebrow">夺取的遗物</p>
+            <h2>随身圣匣</h2>
+          </div>
+          <div class="relic-list" id="relic-list"></div>
+        </section>
         <div class="hp-row">
           <span>生命</span>
           <div class="hp-bar"><div id="player-hp-bar"></div></div>
@@ -141,7 +157,6 @@
             <p class="lore-fragment" id="enemy-lore">它曾是练习用的侍从木桩。后来有人把输家的名字钉进木纹里。</p>
             <p class="skill-line"><span>技能</span><strong id="enemy-skill">木刺反扑</strong></p>
             <p class="skill-desc" id="enemy-skill-desc">若你本回合没有投入防御骰，造成伤害后受到 1 点反伤。</p>
-            <p class="intent" id="enemy-intent">等待你掷骰</p>
             <div class="enemy-dice-row" aria-label="敌人黑骰">
               <span>敌方黑骰</span>
               <div id="enemy-dice-tray" class="enemy-dice-tray"></div>
@@ -176,22 +191,25 @@
       </div>
 
       <div class="route-lock-banner" id="route-lock-banner" aria-live="polite">
-        岔路正在等待选择：请先在上方选择下一处地点，战斗台会在立誓后重新开启。
+        岔路正在等待选择：点选下方一张路线牌，再按确认前往。
       </div>
 
       <div class="slots" aria-label="行动槽">
         <button class="slot attack" data-slot="attack">
           <span class="slot-label"><i>刃</i>攻击</span>
+          <span class="slot-art attack-art" aria-hidden="true"><i></i><b></b></span>
           <strong id="attack-total">0</strong>
           <small>破甲。投入 2 枚以上骰子时，攻击 +1。</small>
         </button>
         <button class="slot guard" data-slot="guard">
           <span class="slot-label"><i>盾</i>防御</span>
+          <span class="slot-art guard-art" aria-hidden="true"><i></i><b></b></span>
           <strong id="guard-total">0</strong>
-          <small>格挡。若防御不低于敌方黑骰合计，反击 1 点。</small>
+          <small>格挡。若防御不低于敌方攻击，反击 1 点。</small>
         </button>
         <button class="slot heal" data-slot="heal">
           <span class="slot-label"><i>烛</i>恢复</span>
+          <span class="slot-art heal-art" aria-hidden="true"><i></i><b></b></span>
           <strong id="heal-total">0</strong>
           <small>祷疗。每 2 点恢复 1 生命；投入 2 枚以上时额外 +1。</small>
         </button>
@@ -205,18 +223,13 @@
 
     <section class="lower-grid">
       <article class="log-card">
-        <h2>战斗记录</h2>
-        <div id="battle-log" class="battle-log"></div>
+        <h2>数值统计</h2>
+        <div id="battle-log" class="battle-log" data-empty="尚无战斗统计。"></div>
       </article>
 
       <article class="rules-card">
-        <h2>残页</h2>
-        <p>第 1 轮固定在旧前厅。第 2 轮自由立誓；第 3 轮会沿当前路线深入；第 4 轮只有一次裂隙改道机会；第 5 轮承担选择后果。</p>
-        <p>改道会损失生命并留下违誓痕迹。生命不足时，礼拜堂不允许你反悔。</p>
-        <p>开局可选择不同入堂者。每名角色有独立生命、技能、性格和背景；击败特定 Boss 会解锁新角色。</p>
-        <p>击败普通敌人会从其道具池中夺取 1 件遗物。金色为永久生效，红色为一次性物品，可在合适时机点击使用。</p>
-        <p>敌人每回合也会掷出可见黑骰。你看到点数后再分配骨骰，但敌人的特殊技能仍会改变最终伤害。</p>
-        <p>击败 Boss 即为胜利，并解锁对应结局。</p>
+        <h2>剧情残响</h2>
+        <div id="story-log" class="battle-log story-log" data-empty="碎片尚未显现。"></div>
       </article>
     </section>
   </main>
